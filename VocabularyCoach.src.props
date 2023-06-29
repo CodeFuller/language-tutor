@@ -1,0 +1,15 @@
+<Project>
+
+  <ImportGroup Label="Properties">
+    <Import Project="VocabularyCoach.props" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <CrossCuttingPackagesVersion>7.0.0</CrossCuttingPackagesVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\..\VocabularyCoach.src.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+</Project>
