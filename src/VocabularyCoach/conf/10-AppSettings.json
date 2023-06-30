@@ -1,0 +1,18 @@
+{
+  "logging": {
+    "defaultLogLevel": "Debug",
+    "targets": [
+      {
+        "type": "RollingFile",
+        "logLevel": "Debug",
+        "settings": {
+          "logPath": "logs",
+          "firstFileNamePattern": "VocabularyCoach - {YYYY}_{MM}_{DD} - {HH}_{mm}_{SS} - {PID} - START",
+          "fileNamePattern": "VocabularyCoach - {YYYY}_{MM}_{DD} - {HH}_{mm}_{SS} - {PID}",
+          "rollSize": 4194304,
+          "messageFormat": "{Timestamp:yyyy.MM.dd HH:mm:ss.fff} [{Level:u3}] [TID: {PrettyThreadId}] {Message}{NewLine}{Exception}"
+        }
+      }
+    ]
+  }
+}

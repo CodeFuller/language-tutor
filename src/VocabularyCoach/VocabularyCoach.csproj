@@ -12,9 +12,22 @@
 
   <ItemGroup>
     <None Include="../../LICENSE.txt" />
+    <PackageReference Include="CodeFuller.Library.Logging" Version="8.0.0" />
+    <PackageReference Include="CodeFuller.Library.Wpf" Version="8.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
     <None Update="../../LICENSE.txt" Link="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="conf/**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="conf\" />
   </ItemGroup>
 
 </Project>

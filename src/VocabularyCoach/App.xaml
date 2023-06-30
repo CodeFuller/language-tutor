@@ -1,9 +1,9 @@
-﻿<Application x:Class="VocabularyCoach.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:VocabularyCoach"
-             StartupUri="MainWindow.xaml">
+<wpf:WpfApplication x:TypeArguments="vm:ApplicationViewModel"
+                    x:Class="VocabularyCoach.App"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:VocabularyCoach.ViewModels"
+                    xmlns:wpf="clr-namespace:CodeFuller.Library.Wpf;assembly=CodeFuller.Library.Wpf">
     <Application.Resources>
-         
     </Application.Resources>
-</Application>
+</wpf:WpfApplication>
