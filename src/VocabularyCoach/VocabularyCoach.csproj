@@ -11,13 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../../LICENSE.txt" />
     <PackageReference Include="CodeFuller.Library.Logging" Version="8.0.0" />
     <PackageReference Include="CodeFuller.Library.Wpf" Version="8.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
-    <None Update="../../LICENSE.txt" Link="LICENSE.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="conf\" />
+    <None Include="../../LICENSE.txt" />
+    <None Update="../../LICENSE.txt" Link="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
