@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using VocabularyCoach.Abstractions;
 using VocabularyCoach.ViewModels;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -16,6 +17,8 @@ namespace VocabularyCoach
 			RegisterViewModels(services);
 
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
+			services.AddVocabularyCoachServices();
 		}
 
 		private static void RegisterViewModels(IServiceCollection services)

@@ -4,7 +4,7 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1EF69776-D3FD-4A58-AE1B-949A404E1EEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocabularyCoach", "src\VocabularyCoach\VocabularyCoach.csproj", "{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach", "src\VocabularyCoach\VocabularyCoach.csproj", "{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4971490B-6E6E-45FB-8833-0ADBA303DBB6}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		VocabularyCoach.src.ruleset = VocabularyCoach.src.ruleset
 		VocabularyCoach.tests.ruleset = VocabularyCoach.tests.ruleset
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocabularyCoach.Abstractions", "src\VocabularyCoach.Abstractions\VocabularyCoach.Abstractions.csproj", "{589ADA60-F20D-4911-9729-B708D8F9DC42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,12 +26,17 @@ Global
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{589ADA60-F20D-4911-9729-B708D8F9DC42} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1E5A42E-55DC-45BE-BA73-507E66AA59AA}

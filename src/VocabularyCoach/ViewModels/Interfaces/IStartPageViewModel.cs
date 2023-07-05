@@ -1,11 +1,23 @@
+using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using VocabularyCoach.Abstractions.Models;
 
 namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IStartPageViewModel : IPageViewModel
 	{
-		public ICommand StudyVocabularyCommand { get; }
+		ObservableCollection<Language> AvailableLanguages { get; }
 
-		public ICommand EditVocabularyCommand { get; }
+		Language SelectedStudiedLanguage { get; set; }
+
+		Language SelectedKnownLanguage { get; set; }
+
+		ICommand StudyVocabularyCommand { get; }
+
+		ICommand EditVocabularyCommand { get; }
+
+		Task Load(CancellationToken cancellationToken);
 	}
 }

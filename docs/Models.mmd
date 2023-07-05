@@ -1,0 +1,55 @@
+---
+title: Vocabular Coach
+---
+
+classDiagram
+direction BT
+
+class Language {
+    +string Id
+    +string Name
+}
+
+class WordOrPhrase {
+    +string Id
+    +Language Lanugage
+    +string Text
+    +string Note
+}
+
+class Translation {
+    +WordOrPhrase WordOrPhrase1
+    +WordOrPhrase WordOrPhrase2
+}
+
+class StudiedWordOrPhrase {
+    +WordOrPhrase WordOrPhrase
+    +CheckResult[] CheckResults
+}
+
+class CheckResult {
+    +DateTimeOffset DateTime
+    +CheckResultType CheckResultType
+}
+
+class CheckResultType {
+    <<enumeration>>
+    Ok
+    Misspelled
+    Incorrect
+    Skipped
+}
+
+class StudiedWordOrPhraseWithTranslation {
+    +StudiedWordOrPhrase StudiedWordOrPhrase
+    +WordOrPhrase WordOrPhraseInKnownLanguage
+}
+
+WordOrPhrase o-- Language
+Translation o-- WordOrPhrase
+StudiedWordOrPhrase o-- WordOrPhrase
+StudiedWordOrPhrase *-- CheckResult
+CheckResult *-- CheckResultType
+
+StudiedWordOrPhraseWithTranslation o-- StudiedWordOrPhrase
+StudiedWordOrPhraseWithTranslation o-- WordOrPhrase

@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VocabularyCoach.Abstractions\VocabularyCoach.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="conf/**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

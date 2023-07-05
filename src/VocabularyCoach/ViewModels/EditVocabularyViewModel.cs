@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -12,6 +13,8 @@ namespace VocabularyCoach.ViewModels
 
 		public EditVocabularyViewModel(IMessenger messenger)
 		{
+			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
+
 			GoToStartCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
 		}
 	}

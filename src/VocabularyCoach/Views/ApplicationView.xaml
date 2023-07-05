@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:views="clr-namespace:VocabularyCoach.Views"
         xmlns:viewModels="clr-namespace:VocabularyCoach.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Regular"
@@ -26,6 +27,12 @@
             <views:EditVocabularyView />
         </DataTemplate>
     </Window.Resources>
+
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding LoadCommand}" />
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
 
     <ContentControl Content="{Binding CurrentPage}" Margin="5" />
 </Window>
