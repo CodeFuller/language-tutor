@@ -4,13 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:views="clr-namespace:VocabularyCoach.Views"
+        xmlns:viewModels="clr-namespace:VocabularyCoach.ViewModels"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         FontFamily="{materialDesign:MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="ApplicationView" Height="450" Width="800">
-    <Grid>
-    </Grid>
+        Title="Vocabulary Coach" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance viewModels:ApplicationViewModel}">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:StartPageViewModel}">
+            <views:StartPageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:StudyVocabularyViewModel}">
+            <views:StudyVocabularyView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:EditVocabularyViewModel}">
+            <views:EditVocabularyView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <ContentControl Content="{Binding CurrentPage}" Margin="5" />
 </Window>
