@@ -5,7 +5,6 @@ namespace VocabularyCoach.Abstractions.Models
 		Unknown,
 		Ok,
 		Misspelled,
-		Incorrect,
 		Skipped,
 	}
 }

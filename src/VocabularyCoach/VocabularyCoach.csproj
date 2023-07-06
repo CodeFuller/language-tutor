@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeFuller.Library.Logging" Version="8.0.0" />
-    <PackageReference Include="CodeFuller.Library.Wpf" Version="8.0.0" />
+    <PackageReference Include="CodeFuller.Library.Logging" Version="8.1.0" />
+    <PackageReference Include="CodeFuller.Library.Wpf" Version="8.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
   </ItemGroup>

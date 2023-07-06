@@ -32,6 +32,9 @@ namespace VocabularyCoach.Abstractions
 
 		public Task<IReadOnlyCollection<StudiedWordOrPhraseWithTranslation>> GetStudiedWords(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
+			var polishLanguage = languages.Single(x => x.Name == "Polish");
+			var russianLanguage = languages.Single(x => x.Name == "Russian");
+
 			var result = new[]
 			{
 				new StudiedWordOrPhraseWithTranslation
@@ -41,7 +44,7 @@ namespace VocabularyCoach.Abstractions
 						WordOrPhrase = new WordOrPhrase
 						{
 							Id = "44ccc4c5-f504-42b6-86fb-c35671e0722d",
-							Language = languages.Single(x => x.Name == "Polish"),
+							Language = polishLanguage,
 							Text = "dziękuję",
 						},
 
@@ -58,13 +61,58 @@ namespace VocabularyCoach.Abstractions
 					WordOrPhraseInKnownLanguage = new WordOrPhrase
 					{
 						Id = "620399f4-4c7a-4aa2-87d2-8caf303a425c",
-						Language = languages.Single(x => x.Name == "Russian"),
+						Language = russianLanguage,
 						Text = "спасибо",
+					},
+				},
+
+				new StudiedWordOrPhraseWithTranslation
+				{
+					StudiedWordOrPhrase = new StudiedWordOrPhrase
+					{
+						WordOrPhrase = new WordOrPhrase
+						{
+							Id = "942d7063-4a35-4ca1-837f-9157fde72555",
+							Language = polishLanguage,
+							Text = "cześć",
+						},
+					},
+
+					WordOrPhraseInKnownLanguage = new WordOrPhrase
+					{
+						Id = "76660146-9c25-447f-be17-3bf2aa341eb4",
+						Language = russianLanguage,
+						Text = "привет",
 					},
 				},
 			};
 
 			return Task.FromResult<IReadOnlyCollection<StudiedWordOrPhraseWithTranslation>>(result);
+		}
+
+		public Task<CheckResultType> CheckTypedWordOrPhrase(StudiedWordOrPhrase studiedWordOrPhrase, string typedWordOrPhrase, CancellationToken cancellationToken)
+		{
+			var checkResult = new CheckResult
+			{
+				DateTime = DateTimeOffset.Now,
+				CheckResultType = GetCheckResultType(studiedWordOrPhrase.WordOrPhrase, typedWordOrPhrase),
+			};
+
+			studiedWordOrPhrase.AddCheckResult(checkResult);
+
+			return Task.FromResult(checkResult.CheckResultType);
+		}
+
+		private static CheckResultType GetCheckResultType(WordOrPhrase wordOrPhrase, string typedWordOrPhrase)
+		{
+			if (String.IsNullOrEmpty(typedWordOrPhrase))
+			{
+				return CheckResultType.Skipped;
+			}
+
+			return String.Equals(wordOrPhrase.Text, typedWordOrPhrase, StringComparison.OrdinalIgnoreCase)
+				? CheckResultType.Ok
+				: CheckResultType.Misspelled;
 		}
 	}
 }

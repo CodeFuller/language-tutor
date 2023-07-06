@@ -10,5 +10,7 @@ namespace VocabularyCoach.Abstractions.Interfaces
 		Task<IReadOnlyCollection<Language>> GetLanguages(CancellationToken cancellationToken);
 
 		Task<IReadOnlyCollection<StudiedWordOrPhraseWithTranslation>> GetStudiedWords(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
+
+		Task<CheckResultType> CheckTypedWordOrPhrase(StudiedWordOrPhrase studiedWordOrPhrase, string typedWordOrPhrase, CancellationToken cancellationToken);
 	}
 }

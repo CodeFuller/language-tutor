@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,12 +18,16 @@ namespace VocabularyCoach.ViewModels
 	{
 		private readonly IVocabularyService vocabularyService;
 
-		private WordOrPhrase currentKnownWord;
+		private IReadOnlyList<StudiedWordOrPhraseWithTranslation> StudiedWords { get; set; }
 
-		public WordOrPhrase CurrentKnownWord
+		private int CurrentWordIndex { get; set; }
+
+		private StudiedWordOrPhraseWithTranslation currentStudiedWordOrPhraseWithTranslation;
+
+		public StudiedWordOrPhraseWithTranslation CurrentStudiedWordOrPhraseWithTranslation
 		{
-			get => currentKnownWord;
-			set => SetProperty(ref currentKnownWord, value);
+			get => currentStudiedWordOrPhraseWithTranslation;
+			private set => SetProperty(ref currentStudiedWordOrPhraseWithTranslation, value);
 		}
 
 		private bool isTypedWordOrPhraseFocused;
@@ -41,7 +46,36 @@ namespace VocabularyCoach.ViewModels
 			set => SetProperty(ref typedWordOrPhrase, value);
 		}
 
+		private bool checkResultIsShown;
+
+		public bool CheckResultIsShown
+		{
+			get => checkResultIsShown;
+			private set => SetProperty(ref checkResultIsShown, value);
+		}
+
+		// We use a pair of properties - WordIsTypedCorrectly and WordIsTypedIncorrectly, because they are no actually inverted.
+		// When word was not yet checked, both properties are set to false. This state could be expressed as null value of bool? property,
+		// however this requires custom visibility value converter which converts null value to collapsed result.
+		private bool wordIsTypedCorrectly;
+
+		public bool WordIsTypedCorrectly
+		{
+			get => wordIsTypedCorrectly;
+			private set => SetProperty(ref wordIsTypedCorrectly, value);
+		}
+
+		private bool wordIsTypedIncorrectly;
+
+		public bool WordIsTypedIncorrectly
+		{
+			get => wordIsTypedIncorrectly;
+			private set => SetProperty(ref wordIsTypedIncorrectly, value);
+		}
+
 		public ICommand CheckTypedWordOrPhraseCommand { get; }
+
+		public ICommand SwitchToNextWordOrPhraseCommand { get; }
 
 		public ICommand FinishStudyCommand { get; }
 
@@ -51,35 +85,52 @@ namespace VocabularyCoach.ViewModels
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			CheckTypedWordOrPhraseCommand = new AsyncRelayCommand(CheckTypedWordOrPhrase);
+			SwitchToNextWordOrPhraseCommand = new RelayCommand(SwitchToNextWordOrPhrase);
 			FinishStudyCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
 		}
 
 		public async Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var studiedWords = await vocabularyService.GetStudiedWords(studiedLanguage, knownLanguage, cancellationToken);
+			StudiedWords = (await vocabularyService.GetStudiedWords(studiedLanguage, knownLanguage, cancellationToken)).ToList();
+			CurrentWordIndex = -1;
 
-			SetFocusToTypedWordOrPhrase();
-			TypedWordOrPhrase = String.Empty;
-
-			// TODO: Remove.
-			var firstWord = studiedWords.First();
-
-			CurrentKnownWord = firstWord.WordOrPhraseInKnownLanguage;
+			SwitchToNextWord();
 		}
 
-		private Task CheckTypedWordOrPhrase(CancellationToken cancellationToken)
+		private async Task CheckTypedWordOrPhrase(CancellationToken cancellationToken)
 		{
-			SetFocusToTypedWordOrPhrase();
-			TypedWordOrPhrase = String.Empty;
+			var checkResult = await vocabularyService.CheckTypedWordOrPhrase(CurrentStudiedWordOrPhraseWithTranslation.StudiedWordOrPhrase, TypedWordOrPhrase, cancellationToken);
 
-			return Task.CompletedTask;
+			CheckResultIsShown = true;
+			WordIsTypedCorrectly = checkResult == CheckResultType.Ok;
+			WordIsTypedIncorrectly = !WordIsTypedCorrectly;
 		}
 
-		private void SetFocusToTypedWordOrPhrase()
+		private void SwitchToNextWordOrPhrase()
 		{
+			SwitchToNextWord();
+		}
+
+		private void SwitchToNextWord()
+		{
+			++CurrentWordIndex;
+			if (CurrentWordIndex >= StudiedWords.Count)
+			{
+				// TODO: Complete the lesson if all words are checked.
+				CurrentWordIndex = 0;
+			}
+
+			CurrentStudiedWordOrPhraseWithTranslation = StudiedWords[CurrentWordIndex];
+
 			// We set property to false and true, so that PropertyChanged event is triggered.
 			IsTypedWordOrPhraseFocused = false;
 			IsTypedWordOrPhraseFocused = true;
+
+			TypedWordOrPhrase = String.Empty;
+
+			CheckResultIsShown = false;
+			WordIsTypedCorrectly = false;
+			WordIsTypedIncorrectly = false;
 		}
 	}
 }
