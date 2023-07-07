@@ -5,7 +5,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using VocabularyCoach.Abstractions.Interfaces;
 using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
 using VocabularyCoach.ViewModels.Interfaces;
@@ -14,8 +13,6 @@ namespace VocabularyCoach.ViewModels
 {
 	public class ApplicationViewModel : ObservableObject
 	{
-		private readonly IMessenger messenger;
-
 		public IStartPageViewModel StartPageViewModel { get; }
 
 		public IStudyVocabularyViewModel StudyVocabularyViewModel { get; }
@@ -39,13 +36,12 @@ namespace VocabularyCoach.ViewModels
 			StudyVocabularyViewModel = studyVocabularyViewModel ?? throw new ArgumentNullException(nameof(studyVocabularyViewModel));
 			EditVocabularyViewModel = editVocabularyViewModel ?? throw new ArgumentNullException(nameof(editVocabularyViewModel));
 
-			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
-
 			LoadCommand = new AsyncRelayCommand(Load);
 
-			this.messenger.Register<SwitchToStartPageEventArgs>(this, (_, _) => SwitchToStartPage(CancellationToken.None));
-			this.messenger.Register<SwitchToStudyVocabularyPageEventArgs>(this, (_, e) => SwitchToStudyVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
-			this.messenger.Register<SwitchToEditVocabularyPageEventArgs>(this, (_, _) => CurrentPage = EditVocabularyViewModel);
+			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			messenger.Register<SwitchToStartPageEventArgs>(this, (_, _) => SwitchToStartPage(CancellationToken.None));
+			messenger.Register<SwitchToStudyVocabularyPageEventArgs>(this, (_, e) => SwitchToStudyVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
+			messenger.Register<SwitchToEditVocabularyPageEventArgs>(this, (_, _) => CurrentPage = EditVocabularyViewModel);
 		}
 
 		private async Task Load(CancellationToken cancellationToken)
