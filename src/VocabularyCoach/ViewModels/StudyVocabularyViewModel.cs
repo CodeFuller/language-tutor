@@ -18,32 +18,32 @@ namespace VocabularyCoach.ViewModels
 	{
 		private readonly IVocabularyService vocabularyService;
 
-		private IReadOnlyList<StudiedWordOrPhraseWithTranslation> StudiedWords { get; set; }
+		private IReadOnlyList<StudiedTextWithTranslation> StudiedText { get; set; }
 
-		private int CurrentWordIndex { get; set; }
+		private int CurrentTextIndex { get; set; }
 
-		private StudiedWordOrPhraseWithTranslation currentStudiedWordOrPhraseWithTranslation;
+		private StudiedTextWithTranslation currentStudiedTextWithTranslation;
 
-		public StudiedWordOrPhraseWithTranslation CurrentStudiedWordOrPhraseWithTranslation
+		public StudiedTextWithTranslation CurrentStudiedTextWithTranslation
 		{
-			get => currentStudiedWordOrPhraseWithTranslation;
-			private set => SetProperty(ref currentStudiedWordOrPhraseWithTranslation, value);
+			get => currentStudiedTextWithTranslation;
+			private set => SetProperty(ref currentStudiedTextWithTranslation, value);
 		}
 
-		private bool isTypedWordOrPhraseFocused;
+		private bool isTypedTextFocused;
 
-		public bool IsTypedWordOrPhraseFocused
+		public bool IsTypedTextFocused
 		{
-			get => isTypedWordOrPhraseFocused;
-			set => SetProperty(ref isTypedWordOrPhraseFocused, value);
+			get => isTypedTextFocused;
+			set => SetProperty(ref isTypedTextFocused, value);
 		}
 
-		private string typedWordOrPhrase;
+		private string typedText;
 
-		public string TypedWordOrPhrase
+		public string TypedText
 		{
-			get => typedWordOrPhrase;
-			set => SetProperty(ref typedWordOrPhrase, value);
+			get => typedText;
+			set => SetProperty(ref typedText, value);
 		}
 
 		private bool checkResultIsShown;
@@ -54,30 +54,30 @@ namespace VocabularyCoach.ViewModels
 			private set => SetProperty(ref checkResultIsShown, value);
 		}
 
-		// We use a pair of properties - WordIsTypedCorrectly and WordIsTypedIncorrectly, because they are no actually inverted.
-		// When word was not yet checked, both properties are set to false. This state could be expressed as null value of bool? property,
+		// We use a pair of properties - TextIsTypedCorrectly and TextIsTypedIncorrectly, because they are no actually inverted.
+		// When text was not yet checked, both properties are set to false. This state could be expressed as null value of bool? property,
 		// however this requires custom visibility value converter which converts null value to collapsed result.
-		private bool wordIsTypedCorrectly;
+		private bool textIsTypedCorrectly;
 
-		public bool WordIsTypedCorrectly
+		public bool TextIsTypedCorrectly
 		{
-			get => wordIsTypedCorrectly;
-			private set => SetProperty(ref wordIsTypedCorrectly, value);
+			get => textIsTypedCorrectly;
+			private set => SetProperty(ref textIsTypedCorrectly, value);
 		}
 
-		private bool wordIsTypedIncorrectly;
+		private bool textIsTypedIncorrectly;
 
-		public bool WordIsTypedIncorrectly
+		public bool TextIsTypedIncorrectly
 		{
-			get => wordIsTypedIncorrectly;
-			private set => SetProperty(ref wordIsTypedIncorrectly, value);
+			get => textIsTypedIncorrectly;
+			private set => SetProperty(ref textIsTypedIncorrectly, value);
 		}
 
-		public ICommand CheckTypedWordOrPhraseCommand { get; }
+		public ICommand CheckTypedTextCommand { get; }
 
-		public ICommand SwitchToNextWordOrPhraseCommand { get; }
+		public ICommand SwitchToNextTextCommand { get; }
 
-		public ICommand CheckOrSwitchToNextWordCommand { get; }
+		public ICommand CheckOrSwitchToNextTextCommand { get; }
 
 		public ICommand FinishStudyCommand { get; }
 
@@ -86,65 +86,60 @@ namespace VocabularyCoach.ViewModels
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			CheckTypedWordOrPhraseCommand = new AsyncRelayCommand(CheckTypedWordOrPhrase);
-			SwitchToNextWordOrPhraseCommand = new RelayCommand(SwitchToNextWordOrPhrase);
-			CheckOrSwitchToNextWordCommand = new AsyncRelayCommand(CheckOrSwitchToNextWord);
+			CheckTypedTextCommand = new AsyncRelayCommand(CheckTypedText);
+			SwitchToNextTextCommand = new RelayCommand(SwitchToNextText);
+			CheckOrSwitchToNextTextCommand = new AsyncRelayCommand(CheckOrSwitchToNextText);
 			FinishStudyCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
 		}
 
 		public async Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			StudiedWords = (await vocabularyService.GetStudiedWords(studiedLanguage, knownLanguage, cancellationToken)).ToList();
-			CurrentWordIndex = -1;
+			StudiedText = (await vocabularyService.GetStudiedTexts(studiedLanguage, knownLanguage, cancellationToken)).ToList();
+			CurrentTextIndex = -1;
 
-			SwitchToNextWord();
+			SwitchToNextText();
 		}
 
-		private async Task CheckTypedWordOrPhrase(CancellationToken cancellationToken)
+		private async Task CheckTypedText(CancellationToken cancellationToken)
 		{
-			var checkResult = await vocabularyService.CheckTypedWordOrPhrase(CurrentStudiedWordOrPhraseWithTranslation.StudiedWordOrPhrase, TypedWordOrPhrase, cancellationToken);
+			var checkResult = await vocabularyService.CheckTypedText(CurrentStudiedTextWithTranslation.StudiedText, TypedText, cancellationToken);
 
 			CheckResultIsShown = true;
-			WordIsTypedCorrectly = checkResult == CheckResultType.Ok;
-			WordIsTypedIncorrectly = !WordIsTypedCorrectly;
+			TextIsTypedCorrectly = checkResult == CheckResultType.Ok;
+			TextIsTypedIncorrectly = !TextIsTypedCorrectly;
 		}
 
-		private void SwitchToNextWordOrPhrase()
+		private void SwitchToNextText()
 		{
-			SwitchToNextWord();
-		}
-
-		private void SwitchToNextWord()
-		{
-			++CurrentWordIndex;
-			if (CurrentWordIndex >= StudiedWords.Count)
+			++CurrentTextIndex;
+			if (CurrentTextIndex >= StudiedText.Count)
 			{
-				// TODO: Complete the lesson if all words are checked.
-				CurrentWordIndex = 0;
+				// TODO: Complete the lesson if all texts are checked.
+				CurrentTextIndex = 0;
 			}
 
-			CurrentStudiedWordOrPhraseWithTranslation = StudiedWords[CurrentWordIndex];
+			CurrentStudiedTextWithTranslation = StudiedText[CurrentTextIndex];
 
 			// We set property to false and true, so that PropertyChanged event is triggered.
-			IsTypedWordOrPhraseFocused = false;
-			IsTypedWordOrPhraseFocused = true;
+			IsTypedTextFocused = false;
+			IsTypedTextFocused = true;
 
-			TypedWordOrPhrase = String.Empty;
+			TypedText = String.Empty;
 
 			CheckResultIsShown = false;
-			WordIsTypedCorrectly = false;
-			WordIsTypedIncorrectly = false;
+			TextIsTypedCorrectly = false;
+			TextIsTypedIncorrectly = false;
 		}
 
-		private async Task CheckOrSwitchToNextWord(CancellationToken cancellationToken)
+		private async Task CheckOrSwitchToNextText(CancellationToken cancellationToken)
 		{
 			if (!CheckResultIsShown)
 			{
-				await CheckTypedWordOrPhrase(cancellationToken);
+				await CheckTypedText(cancellationToken);
 			}
 			else
 			{
-				SwitchToNextWordOrPhrase();
+				SwitchToNextText();
 			}
 		}
 	}

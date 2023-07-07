@@ -1,6 +1,6 @@
 namespace VocabularyCoach.Abstractions.Models
 {
-	public sealed class WordOrPhrase
+	public sealed class LanguageText
 	{
 		public string Id { get; init; }
 

@@ -1,5 +1,5 @@
 ---
-title: Vocabular Coach
+title: Vocabulary Coach
 ---
 
 classDiagram
@@ -10,20 +10,20 @@ class Language {
     +string Name
 }
 
-class WordOrPhrase {
+class LanguageText {
     +string Id
-    +Language Lanugage
+    +Language Language
     +string Text
     +string Note
 }
 
 class Translation {
-    +WordOrPhrase WordOrPhrase1
-    +WordOrPhrase WordOrPhrase2
+    +LanguageText LanguageText1
+    +LanguageText LanguageText2
 }
 
-class StudiedWordOrPhrase {
-    +WordOrPhrase WordOrPhrase
+class StudiedText {
+    +LanguageText LanguageText
     +CheckResult[] CheckResults
 }
 
@@ -36,20 +36,19 @@ class CheckResultType {
     <<enumeration>>
     Ok
     Misspelled
-    Incorrect
     Skipped
 }
 
-class StudiedWordOrPhraseWithTranslation {
-    +StudiedWordOrPhrase StudiedWordOrPhrase
-    +WordOrPhrase WordOrPhraseInKnownLanguage
+class StudiedTextWithTranslation {
+    +StudiedText StudiedText
+    +LanguageText TextInKnownLanguage
 }
 
-WordOrPhrase o-- Language
-Translation o-- WordOrPhrase
-StudiedWordOrPhrase o-- WordOrPhrase
-StudiedWordOrPhrase *-- CheckResult
+LanguageText o-- Language
+Translation o-- LanguageText
+StudiedText o-- LanguageText
+StudiedText *-- CheckResult
 CheckResult *-- CheckResultType
 
-StudiedWordOrPhraseWithTranslation o-- StudiedWordOrPhrase
-StudiedWordOrPhraseWithTranslation o-- WordOrPhrase
+StudiedTextWithTranslation o-- StudiedText
+StudiedTextWithTranslation o-- LanguageText

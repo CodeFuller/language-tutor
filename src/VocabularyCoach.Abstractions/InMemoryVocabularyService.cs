@@ -30,35 +30,26 @@ namespace VocabularyCoach.Abstractions
 			return Task.FromResult(languages);
 		}
 
-		public Task<IReadOnlyCollection<StudiedWordOrPhraseWithTranslation>> GetStudiedWords(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		public Task<IReadOnlyCollection<StudiedTextWithTranslation>> GetStudiedTexts(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
 			var polishLanguage = languages.Single(x => x.Name == "Polish");
 			var russianLanguage = languages.Single(x => x.Name == "Russian");
 
 			var result = new[]
 			{
-				new StudiedWordOrPhraseWithTranslation
+				new StudiedTextWithTranslation
 				{
-					StudiedWordOrPhrase = new StudiedWordOrPhrase
+					StudiedText = new StudiedText
 					{
-						WordOrPhrase = new WordOrPhrase
+						LanguageText = new LanguageText
 						{
 							Id = "44ccc4c5-f504-42b6-86fb-c35671e0722d",
 							Language = polishLanguage,
 							Text = "dziękuję",
 						},
-
-						CheckResults = new[]
-						{
-							new CheckResult
-							{
-								DateTime = new DateTime(2023, 07, 04, 8, 19, 36, DateTimeKind.Local),
-								CheckResultType = CheckResultType.Ok,
-							},
-						},
 					},
 
-					WordOrPhraseInKnownLanguage = new WordOrPhrase
+					TextInKnownLanguage = new LanguageText
 					{
 						Id = "620399f4-4c7a-4aa2-87d2-8caf303a425c",
 						Language = russianLanguage,
@@ -66,11 +57,11 @@ namespace VocabularyCoach.Abstractions
 					},
 				},
 
-				new StudiedWordOrPhraseWithTranslation
+				new StudiedTextWithTranslation
 				{
-					StudiedWordOrPhrase = new StudiedWordOrPhrase
+					StudiedText = new StudiedText
 					{
-						WordOrPhrase = new WordOrPhrase
+						LanguageText = new LanguageText
 						{
 							Id = "942d7063-4a35-4ca1-837f-9157fde72555",
 							Language = polishLanguage,
@@ -78,7 +69,7 @@ namespace VocabularyCoach.Abstractions
 						},
 					},
 
-					WordOrPhraseInKnownLanguage = new WordOrPhrase
+					TextInKnownLanguage = new LanguageText
 					{
 						Id = "76660146-9c25-447f-be17-3bf2aa341eb4",
 						Language = russianLanguage,
@@ -87,30 +78,36 @@ namespace VocabularyCoach.Abstractions
 				},
 			};
 
-			return Task.FromResult<IReadOnlyCollection<StudiedWordOrPhraseWithTranslation>>(result);
+			result[0].StudiedText.AddCheckResult(new CheckResult
+			{
+				DateTime = new DateTime(2023, 07, 04, 8, 19, 36, DateTimeKind.Local),
+				CheckResultType = CheckResultType.Ok,
+			});
+
+			return Task.FromResult<IReadOnlyCollection<StudiedTextWithTranslation>>(result);
 		}
 
-		public Task<CheckResultType> CheckTypedWordOrPhrase(StudiedWordOrPhrase studiedWordOrPhrase, string typedWordOrPhrase, CancellationToken cancellationToken)
+		public Task<CheckResultType> CheckTypedText(StudiedText studiedText, string typedText, CancellationToken cancellationToken)
 		{
 			var checkResult = new CheckResult
 			{
 				DateTime = DateTimeOffset.Now,
-				CheckResultType = GetCheckResultType(studiedWordOrPhrase.WordOrPhrase, typedWordOrPhrase),
+				CheckResultType = GetCheckResultType(studiedText.LanguageText, typedText),
 			};
 
-			studiedWordOrPhrase.AddCheckResult(checkResult);
+			studiedText.AddCheckResult(checkResult);
 
 			return Task.FromResult(checkResult.CheckResultType);
 		}
 
-		private static CheckResultType GetCheckResultType(WordOrPhrase wordOrPhrase, string typedWordOrPhrase)
+		private static CheckResultType GetCheckResultType(LanguageText languageText, string typedText)
 		{
-			if (String.IsNullOrEmpty(typedWordOrPhrase))
+			if (String.IsNullOrEmpty(typedText))
 			{
 				return CheckResultType.Skipped;
 			}
 
-			return String.Equals(wordOrPhrase.Text, typedWordOrPhrase, StringComparison.OrdinalIgnoreCase)
+			return String.Equals(languageText.Text, typedText, StringComparison.OrdinalIgnoreCase)
 				? CheckResultType.Ok
 				: CheckResultType.Misspelled;
 		}

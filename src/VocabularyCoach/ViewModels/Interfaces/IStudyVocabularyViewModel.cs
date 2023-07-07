@@ -7,23 +7,23 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IStudyVocabularyViewModel : IPageViewModel
 	{
-		StudiedWordOrPhraseWithTranslation CurrentStudiedWordOrPhraseWithTranslation { get; }
+		StudiedTextWithTranslation CurrentStudiedTextWithTranslation { get; }
 
-		bool IsTypedWordOrPhraseFocused { get; }
+		bool IsTypedTextFocused { get; }
 
-		string TypedWordOrPhrase { get; set; }
+		string TypedText { get; set; }
 
 		bool CheckResultIsShown { get; }
 
-		bool WordIsTypedCorrectly { get; }
+		bool TextIsTypedCorrectly { get; }
 
-		bool WordIsTypedIncorrectly { get; }
+		bool TextIsTypedIncorrectly { get; }
 
-		ICommand CheckTypedWordOrPhraseCommand { get; }
+		ICommand CheckTypedTextCommand { get; }
 
-		ICommand SwitchToNextWordOrPhraseCommand { get; }
+		ICommand SwitchToNextTextCommand { get; }
 
-		ICommand CheckOrSwitchToNextWordCommand { get; }
+		ICommand CheckOrSwitchToNextTextCommand { get; }
 
 		ICommand FinishStudyCommand { get; }
 
