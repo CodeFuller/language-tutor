@@ -77,6 +77,8 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand SwitchToNextWordOrPhraseCommand { get; }
 
+		public ICommand CheckOrSwitchToNextWordCommand { get; }
+
 		public ICommand FinishStudyCommand { get; }
 
 		public StudyVocabularyViewModel(IVocabularyService vocabularyService, IMessenger messenger)
@@ -86,6 +88,7 @@ namespace VocabularyCoach.ViewModels
 
 			CheckTypedWordOrPhraseCommand = new AsyncRelayCommand(CheckTypedWordOrPhrase);
 			SwitchToNextWordOrPhraseCommand = new RelayCommand(SwitchToNextWordOrPhrase);
+			CheckOrSwitchToNextWordCommand = new AsyncRelayCommand(CheckOrSwitchToNextWord);
 			FinishStudyCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
 		}
 
@@ -131,6 +134,18 @@ namespace VocabularyCoach.ViewModels
 			CheckResultIsShown = false;
 			WordIsTypedCorrectly = false;
 			WordIsTypedIncorrectly = false;
+		}
+
+		private async Task CheckOrSwitchToNextWord(CancellationToken cancellationToken)
+		{
+			if (!CheckResultIsShown)
+			{
+				await CheckTypedWordOrPhrase(cancellationToken);
+			}
+			else
+			{
+				SwitchToNextWordOrPhrase();
+			}
 		}
 	}
 }

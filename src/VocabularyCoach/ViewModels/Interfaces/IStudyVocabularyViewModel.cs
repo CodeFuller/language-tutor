@@ -23,6 +23,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		ICommand SwitchToNextWordOrPhraseCommand { get; }
 
+		ICommand CheckOrSwitchToNextWordCommand { get; }
+
 		ICommand FinishStudyCommand { get; }
 
 		Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);

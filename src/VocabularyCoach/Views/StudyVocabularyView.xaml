@@ -33,8 +33,12 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="1" FontSize="32" HorizontalContentAlignment="Center" VerticalAlignment="Center"
-                     Text="{Binding TypedWordOrPhrase}" IsReadOnly="{Binding CheckResultIsShown}" IsReadOnlyCaretVisible="True"
-                     helpers:FocusHelper.IsFocused="{Binding IsTypedWordOrPhraseFocused}" />
+                     Text="{Binding TypedWordOrPhrase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding CheckResultIsShown}" IsReadOnlyCaretVisible="True"
+                     helpers:FocusHelper.IsFocused="{Binding IsTypedWordOrPhraseFocused}">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding CheckOrSwitchToNextWordCommand}" Key="Enter" />
+                </TextBox.InputBindings>
+            </TextBox>
             <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <materialDesign:PackIcon Width="48" Height="48" Kind="CheckCircle" Foreground="Green" 
                                          Visibility="{Binding WordIsTypedCorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
