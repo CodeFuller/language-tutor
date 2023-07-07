@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Abstractions.Interfaces;
 using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
+using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels
@@ -18,9 +19,21 @@ namespace VocabularyCoach.ViewModels
 	{
 		private readonly IVocabularyService vocabularyService;
 
+		private readonly IMessenger messenger;
+
 		private IReadOnlyList<StudiedTextWithTranslation> StudiedText { get; set; }
 
-		private int CurrentTextIndex { get; set; }
+		private int currentTextIndex;
+
+		private int CurrentTextIndex
+		{
+			get => currentTextIndex;
+			set
+			{
+				currentTextIndex = value;
+				OnPropertyChanged(nameof(CanSwitchToNextText));
+			}
+		}
 
 		private StudiedTextWithTranslation currentStudiedTextWithTranslation;
 
@@ -51,7 +64,12 @@ namespace VocabularyCoach.ViewModels
 		public bool CheckResultIsShown
 		{
 			get => checkResultIsShown;
-			private set => SetProperty(ref checkResultIsShown, value);
+			private set
+			{
+				SetProperty(ref checkResultIsShown, value);
+
+				OnPropertyChanged(nameof(CanSwitchToNextText));
+			}
 		}
 
 		// We use a pair of properties - TextIsTypedCorrectly and TextIsTypedIncorrectly, because they are no actually inverted.
@@ -73,6 +91,10 @@ namespace VocabularyCoach.ViewModels
 			private set => SetProperty(ref textIsTypedIncorrectly, value);
 		}
 
+		public bool CanSwitchToNextText => CheckResultIsShown && CurrentTextIndex + 1 < StudiedText.Count;
+
+		private CheckResults CheckResults { get; set; }
+
 		public ICommand CheckTypedTextCommand { get; }
 
 		public ICommand SwitchToNextTextCommand { get; }
@@ -84,18 +106,20 @@ namespace VocabularyCoach.ViewModels
 		public StudyVocabularyViewModel(IVocabularyService vocabularyService, IMessenger messenger)
 		{
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
-			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			CheckTypedTextCommand = new AsyncRelayCommand(CheckTypedText);
 			SwitchToNextTextCommand = new RelayCommand(SwitchToNextText);
 			CheckOrSwitchToNextTextCommand = new AsyncRelayCommand(CheckOrSwitchToNextText);
-			FinishStudyCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
+			FinishStudyCommand = new RelayCommand(FinishStudy);
 		}
 
 		public async Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
 			StudiedText = (await vocabularyService.GetStudiedTexts(studiedLanguage, knownLanguage, cancellationToken)).ToList();
 			CurrentTextIndex = -1;
+
+			CheckResults = new CheckResults();
 
 			SwitchToNextText();
 		}
@@ -107,6 +131,8 @@ namespace VocabularyCoach.ViewModels
 			CheckResultIsShown = true;
 			TextIsTypedCorrectly = checkResult == CheckResultType.Ok;
 			TextIsTypedIncorrectly = !TextIsTypedCorrectly;
+
+			CheckResults.AddResult(checkResult);
 		}
 
 		private void SwitchToNextText()
@@ -114,8 +140,8 @@ namespace VocabularyCoach.ViewModels
 			++CurrentTextIndex;
 			if (CurrentTextIndex >= StudiedText.Count)
 			{
-				// TODO: Complete the lesson if all texts are checked.
-				CurrentTextIndex = 0;
+				FinishStudy();
+				return;
 			}
 
 			CurrentStudiedTextWithTranslation = StudiedText[CurrentTextIndex];
@@ -141,6 +167,11 @@ namespace VocabularyCoach.ViewModels
 			{
 				SwitchToNextText();
 			}
+		}
+
+		private void FinishStudy()
+		{
+			messenger.Send(new SwitchToCheckResultsPageEventArgs(CheckResults));
 		}
 	}
 }

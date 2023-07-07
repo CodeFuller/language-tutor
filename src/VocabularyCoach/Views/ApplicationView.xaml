@@ -23,6 +23,9 @@
         <DataTemplate DataType="{x:Type viewModels:StudyVocabularyViewModel}">
             <views:StudyVocabularyView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:CheckResultsViewModel}">
+            <views:CheckResultsView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:EditVocabularyViewModel}">
             <views:EditVocabularyView />
         </DataTemplate>

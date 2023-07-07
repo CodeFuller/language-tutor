@@ -1,0 +1,54 @@
+<UserControl x:Class="VocabularyCoach.Views.CheckResultsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:interfaces="clr-namespace:VocabularyCoach.ViewModels.Interfaces"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance interfaces:ICheckResultsViewModel}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Check results" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Checked:" />
+                <Label Grid.Row="1" Grid.Column="1" Content="{Binding CheckedTextsStatistics}" HorizontalAlignment="Right" />
+
+                <Label Grid.Row="2" Grid.Column="0" Foreground="Green" Content="Correct:" />
+                <Label Grid.Row="2" Grid.Column="1" Foreground="Green" Content="{Binding CorrectTextStatistics}" HorizontalAlignment="Right" />
+
+                <Label Grid.Row="3" Grid.Column="0" Foreground="Red" Content="Incorrect:" />
+                <Label Grid.Row="3" Grid.Column="1" Foreground="Red" Content="{Binding IncorrectTextStatistics}" HorizontalAlignment="Right" />
+
+                <Label Grid.Row="4" Grid.Column="0" Foreground="Red" Content="Skipped:" />
+                <Label Grid.Row="4" Grid.Column="1" Foreground="Red" Content="{Binding SkippedTextStatistics}" HorizontalAlignment="Right" />
+            </Grid>
+        </Grid>
+        <Button  Grid.Row="1" HorizontalAlignment="Center" Content="Go to Start" Command="{Binding GoToStartPageCommand}" />
+    </Grid>
+</UserControl>

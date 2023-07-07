@@ -4,6 +4,6 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IEditVocabularyViewModel : IPageViewModel
 	{
-		ICommand GoToStartCommand { get; }
+		ICommand GoToStartPageCommand { get; }
 	}
 }

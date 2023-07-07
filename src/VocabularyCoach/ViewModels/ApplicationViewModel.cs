@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
+using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels
@@ -16,6 +17,8 @@ namespace VocabularyCoach.ViewModels
 		public IStartPageViewModel StartPageViewModel { get; }
 
 		public IStudyVocabularyViewModel StudyVocabularyViewModel { get; }
+
+		public ICheckResultsViewModel CheckResultsViewModel { get; }
 
 		public IEditVocabularyViewModel EditVocabularyViewModel { get; }
 
@@ -30,10 +33,11 @@ namespace VocabularyCoach.ViewModels
 		public ICommand LoadCommand { get; }
 
 		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IStudyVocabularyViewModel studyVocabularyViewModel,
-			IEditVocabularyViewModel editVocabularyViewModel, IMessenger messenger)
+			ICheckResultsViewModel checkResultsViewModel, IEditVocabularyViewModel editVocabularyViewModel, IMessenger messenger)
 		{
 			StartPageViewModel = startPageViewModel ?? throw new ArgumentNullException(nameof(startPageViewModel));
 			StudyVocabularyViewModel = studyVocabularyViewModel ?? throw new ArgumentNullException(nameof(studyVocabularyViewModel));
+			CheckResultsViewModel = checkResultsViewModel ?? throw new ArgumentNullException(nameof(checkResultsViewModel));
 			EditVocabularyViewModel = editVocabularyViewModel ?? throw new ArgumentNullException(nameof(editVocabularyViewModel));
 
 			LoadCommand = new AsyncRelayCommand(Load);
@@ -42,6 +46,7 @@ namespace VocabularyCoach.ViewModels
 			messenger.Register<SwitchToStartPageEventArgs>(this, (_, _) => SwitchToStartPage(CancellationToken.None));
 			messenger.Register<SwitchToStudyVocabularyPageEventArgs>(this, (_, e) => SwitchToStudyVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 			messenger.Register<SwitchToEditVocabularyPageEventArgs>(this, (_, _) => CurrentPage = EditVocabularyViewModel);
+			messenger.Register<SwitchToCheckResultsPageEventArgs>(this, (_, e) => SwitchToCheckResultsPage(e.CheckResults));
 		}
 
 		private async Task Load(CancellationToken cancellationToken)
@@ -66,6 +71,13 @@ namespace VocabularyCoach.ViewModels
 			await StudyVocabularyViewModel.Load(studiedLanguage, knownLanguage, cancellationToken);
 
 			CurrentPage = StudyVocabularyViewModel;
+		}
+
+		private void SwitchToCheckResultsPage(CheckResults checkResults)
+		{
+			CheckResultsViewModel.Load(checkResults);
+
+			CurrentPage = CheckResultsViewModel;
 		}
 	}
 }

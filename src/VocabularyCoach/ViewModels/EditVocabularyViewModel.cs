@@ -9,13 +9,13 @@ namespace VocabularyCoach.ViewModels
 {
 	public class EditVocabularyViewModel : IEditVocabularyViewModel
 	{
-		public ICommand GoToStartCommand { get; }
+		public ICommand GoToStartPageCommand { get; }
 
 		public EditVocabularyViewModel(IMessenger messenger)
 		{
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			GoToStartCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
+			GoToStartPageCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
 		}
 	}
 }

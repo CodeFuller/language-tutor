@@ -53,11 +53,11 @@
         </StackPanel>
 
         <UniformGrid Grid.Row="3" Margin="20" Rows="1" Columns="2" HorizontalAlignment="Center">
-            <Button Margin="0,0,20,0" Content="Check" Command="{Binding CheckTypedTextCommand}"
+            <Button Margin="0,0,20,0" Width="80" Content="Check" Command="{Binding CheckTypedTextCommand}"
                     Visibility="{Binding CheckResultIsShown, Converter={StaticResource InvertedVisibilityCollapsedValueConverter}}" />
-            <Button Margin="0,0,20,0" Content="Next" Command="{Binding SwitchToNextTextCommand}"
+            <Button Margin="0,0,20,0" Width="80" Content="Next" Command="{Binding SwitchToNextTextCommand}" IsEnabled="{Binding CanSwitchToNextText}"
                     Visibility="{Binding CheckResultIsShown, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <Button Margin="20,0,0,0" Content="Finish" Command="{Binding FinishStudyCommand}" />
+            <Button Margin="20,0,0,0" Width="80" Content="Finish" Command="{Binding FinishStudyCommand}" />
         </UniformGrid>
     </Grid>
 </UserControl>
