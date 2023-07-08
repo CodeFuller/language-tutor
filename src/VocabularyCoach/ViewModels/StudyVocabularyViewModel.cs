@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Abstractions.Interfaces;
 using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
+using VocabularyCoach.Interfaces;
 using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -18,6 +19,8 @@ namespace VocabularyCoach.ViewModels
 	public class StudyVocabularyViewModel : ObservableObject, IStudyVocabularyViewModel
 	{
 		private readonly IVocabularyService vocabularyService;
+
+		private readonly IPronunciationRecordPlayer pronunciationRecordPlayer;
 
 		private readonly IMessenger messenger;
 
@@ -42,6 +45,8 @@ namespace VocabularyCoach.ViewModels
 			get => currentStudiedTextWithTranslation;
 			private set => SetProperty(ref currentStudiedTextWithTranslation, value);
 		}
+
+		private PronunciationRecord CurrentPronunciationRecord { get; set; }
 
 		private bool isTypedTextFocused;
 
@@ -101,16 +106,20 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand CheckOrSwitchToNextTextCommand { get; }
 
+		public ICommand PlayPronunciationRecordCommand { get; }
+
 		public ICommand FinishStudyCommand { get; }
 
-		public StudyVocabularyViewModel(IVocabularyService vocabularyService, IMessenger messenger)
+		public StudyVocabularyViewModel(IVocabularyService vocabularyService, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
 		{
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
+			this.pronunciationRecordPlayer = pronunciationRecordPlayer ?? throw new ArgumentNullException(nameof(pronunciationRecordPlayer));
 			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			CheckTypedTextCommand = new AsyncRelayCommand(CheckTypedText);
-			SwitchToNextTextCommand = new RelayCommand(SwitchToNextText);
+			SwitchToNextTextCommand = new AsyncRelayCommand(SwitchToNextText);
 			CheckOrSwitchToNextTextCommand = new AsyncRelayCommand(CheckOrSwitchToNextText);
+			PlayPronunciationRecordCommand = new AsyncRelayCommand(PlayPronunciationRecord);
 			FinishStudyCommand = new RelayCommand(FinishStudy);
 		}
 
@@ -121,7 +130,7 @@ namespace VocabularyCoach.ViewModels
 
 			CheckResults = new CheckResults();
 
-			SwitchToNextText();
+			await SwitchToNextText(cancellationToken);
 		}
 
 		private async Task CheckTypedText(CancellationToken cancellationToken)
@@ -132,10 +141,12 @@ namespace VocabularyCoach.ViewModels
 			TextIsTypedCorrectly = checkResult == CheckResultType.Ok;
 			TextIsTypedIncorrectly = !TextIsTypedCorrectly;
 
+			await PlayPronunciationRecord(cancellationToken);
+
 			CheckResults.AddResult(checkResult);
 		}
 
-		private void SwitchToNextText()
+		private async Task SwitchToNextText(CancellationToken cancellationToken)
 		{
 			++CurrentTextIndex;
 			if (CurrentTextIndex >= StudiedText.Count)
@@ -155,6 +166,8 @@ namespace VocabularyCoach.ViewModels
 			CheckResultIsShown = false;
 			TextIsTypedCorrectly = false;
 			TextIsTypedIncorrectly = false;
+
+			CurrentPronunciationRecord = await vocabularyService.GetPronunciationRecord(CurrentStudiedTextWithTranslation.StudiedText.LanguageText.Id, cancellationToken);
 		}
 
 		private async Task CheckOrSwitchToNextText(CancellationToken cancellationToken)
@@ -165,8 +178,13 @@ namespace VocabularyCoach.ViewModels
 			}
 			else
 			{
-				SwitchToNextText();
+				await SwitchToNextText(cancellationToken);
 			}
+		}
+
+		private async Task PlayPronunciationRecord(CancellationToken cancellationToken)
+		{
+			await pronunciationRecordPlayer.PlayPronunciationRecord(CurrentPronunciationRecord, cancellationToken);
 		}
 
 		private void FinishStudy()

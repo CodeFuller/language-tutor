@@ -32,6 +32,9 @@
                 <ColumnDefinition Width="8*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Height="48" Padding="0" VerticalAlignment="Center" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Listen" Command="{Binding PlayPronunciationRecordCommand}">
+                <materialDesign:PackIcon Width="48" Height="48" Kind="VolumeHigh" />
+            </Button>
             <TextBox Grid.Column="1" FontSize="32" HorizontalContentAlignment="Center" VerticalAlignment="Center"
                      Text="{Binding TypedText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding CheckResultIsShown}" IsReadOnlyCaretVisible="True"
                      helpers:FocusHelper.IsFocused="{Binding IsTypedTextFocused}">

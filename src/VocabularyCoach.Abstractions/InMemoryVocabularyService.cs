@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -98,6 +99,17 @@ namespace VocabularyCoach.Abstractions
 			studiedText.AddCheckResult(checkResult);
 
 			return Task.FromResult(checkResult.CheckResultType);
+		}
+
+		public async Task<PronunciationRecord> GetPronunciationRecord(string textId, CancellationToken cancellationToken)
+		{
+			var filePath = $@"c:\temp\pronunciation\{textId}.oga";
+
+			return new PronunciationRecord
+			{
+				Data = await File.ReadAllBytesAsync(filePath, cancellationToken),
+				Format = RecordFormat.Oga,
+			};
 		}
 
 		private static CheckResultType GetCheckResultType(LanguageText languageText, string typedText)

@@ -12,5 +12,7 @@ namespace VocabularyCoach.Abstractions.Interfaces
 		Task<IReadOnlyCollection<StudiedTextWithTranslation>> GetStudiedTexts(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
 
 		Task<CheckResultType> CheckTypedText(StudiedText studiedText, string typedText, CancellationToken cancellationToken);
+
+		Task<PronunciationRecord> GetPronunciationRecord(string textId, CancellationToken cancellationToken);
 	}
 }

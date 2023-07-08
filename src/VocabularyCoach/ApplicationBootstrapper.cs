@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using VocabularyCoach.Abstractions;
+using VocabularyCoach.Interfaces;
+using VocabularyCoach.Internal;
 using VocabularyCoach.ViewModels;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -16,6 +18,7 @@ namespace VocabularyCoach
 		{
 			RegisterViewModels(services);
 
+			services.AddSingleton<IPronunciationRecordPlayer, PronunciationRecordPlayer>();
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
 			services.AddVocabularyCoachServices();
