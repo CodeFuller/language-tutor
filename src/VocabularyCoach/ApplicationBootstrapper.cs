@@ -18,10 +18,13 @@ namespace VocabularyCoach
 		{
 			RegisterViewModels(services);
 
+			services.AddVocabularyCoachServices();
+
 			services.AddSingleton<IPronunciationRecordPlayer, PronunciationRecordPlayer>();
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
-			services.AddVocabularyCoachServices();
+			services.AddSingleton<IWebBrowser, DefaultSystemWebBrowser>();
+			services.AddSingleton<IContentDownloader, HttpContentDownloader>();
 		}
 
 		private static void RegisterViewModels(IServiceCollection services)

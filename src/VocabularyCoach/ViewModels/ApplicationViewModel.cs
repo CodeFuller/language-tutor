@@ -45,8 +45,8 @@ namespace VocabularyCoach.ViewModels
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 			messenger.Register<SwitchToStartPageEventArgs>(this, (_, _) => SwitchToStartPage(CancellationToken.None));
 			messenger.Register<SwitchToStudyVocabularyPageEventArgs>(this, (_, e) => SwitchToStudyVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
-			messenger.Register<SwitchToEditVocabularyPageEventArgs>(this, (_, _) => CurrentPage = EditVocabularyViewModel);
 			messenger.Register<SwitchToCheckResultsPageEventArgs>(this, (_, e) => SwitchToCheckResultsPage(e.CheckResults));
+			messenger.Register<SwitchToEditVocabularyPageEventArgs>(this, (_, e) => SwitchToEditVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 		}
 
 		private async Task Load(CancellationToken cancellationToken)
@@ -78,6 +78,13 @@ namespace VocabularyCoach.ViewModels
 			CheckResultsViewModel.Load(checkResults);
 
 			CurrentPage = CheckResultsViewModel;
+		}
+
+		private async void SwitchToEditVocabularyPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		{
+			await EditVocabularyViewModel.Load(studiedLanguage, knownLanguage, cancellationToken);
+
+			CurrentPage = EditVocabularyViewModel;
 		}
 	}
 }

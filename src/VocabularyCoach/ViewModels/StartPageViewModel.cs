@@ -46,8 +46,8 @@ namespace VocabularyCoach.ViewModels
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			StudyVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToStudyVocabularyPageEventArgs(SelectedStudiedLanguage, selectedKnownLanguage)));
-			EditVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToEditVocabularyPageEventArgs()));
+			StudyVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToStudyVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
+			EditVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToEditVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 		}
 
 		public async Task Load(CancellationToken cancellationToken)
