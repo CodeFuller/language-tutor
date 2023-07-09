@@ -18,11 +18,9 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		bool TextInStudiedLanguageIsFilled { get; }
 
-#pragma warning disable CA1056 // URI-like properties should not be strings
-		string PronunciationRecordUrl { get; set; }
-#pragma warning restore CA1056 // URI-like properties should not be strings
+		string PronunciationRecordSource { get; set; }
 
-		bool PronunciationRecordUrlIsFilled { get; }
+		bool PronunciationRecordIsLoaded { get; }
 
 		string TextInKnownLanguage { get; set; }
 

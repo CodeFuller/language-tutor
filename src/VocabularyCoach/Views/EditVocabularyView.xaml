@@ -53,9 +53,9 @@
             </Button>
 
             <Label Grid.Row="3" Grid.Column="0" Padding="0,5,5,0" Margin="0,10,0,0">Pronunciation record URL (optional):</Label>
-            <TextBox Grid.Row="4" Grid.Column="0"  Text="{Binding PronunciationRecordUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="4" Grid.Column="0"  Text="{Binding PronunciationRecordSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button Grid.Row="4" Grid.Column="1" Margin="5,0,5,0" Height="Auto" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Listen"
-                    IsEnabled="{Binding PronunciationRecordUrlIsFilled}" Command="{Binding PlayPronunciationRecordCommand}">
+                    IsEnabled="{Binding PronunciationRecordIsLoaded}" Command="{Binding PlayPronunciationRecordCommand}">
                 <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="VolumeHigh" />
             </Button>
 

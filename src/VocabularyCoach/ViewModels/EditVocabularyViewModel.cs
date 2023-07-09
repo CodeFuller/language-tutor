@@ -61,23 +61,38 @@ namespace VocabularyCoach.ViewModels
 
 		public bool TextInStudiedLanguageIsFilled => !String.IsNullOrEmpty(TextInStudiedLanguage);
 
-		private string pronunciationRecordUrl;
+		private string pronunciationRecordSource;
 
-		public string PronunciationRecordUrl
+		public string PronunciationRecordSource
 		{
-			get => pronunciationRecordUrl;
+			get => pronunciationRecordSource;
 			set
 			{
-				SetProperty(ref pronunciationRecordUrl, value);
-				OnPropertyChanged(nameof(PronunciationRecordUrlIsFilled));
+				SetProperty(ref pronunciationRecordSource, value);
 
 				PronunciationRecord = null;
+
+				if (Uri.TryCreate(pronunciationRecordSource, UriKind.Absolute, out var pronunciationRecordUrl))
+				{
+					Task.Run(() => LoadAndPlayPronunciationRecord(pronunciationRecordUrl, CancellationToken.None));
+				}
 			}
 		}
 
-		private PronunciationRecord PronunciationRecord { get; set; }
+		private PronunciationRecord pronunciationRecord;
 
-		public bool PronunciationRecordUrlIsFilled => !String.IsNullOrEmpty(PronunciationRecordUrl);
+		private PronunciationRecord PronunciationRecord
+		{
+			get => pronunciationRecord;
+			set
+			{
+				pronunciationRecord = value;
+
+				OnPropertyChanged(nameof(PronunciationRecordIsLoaded));
+			}
+		}
+
+		public bool PronunciationRecordIsLoaded => PronunciationRecord != null;
 
 		private string textInKnownLanguage;
 
@@ -149,29 +164,26 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task PlayPronunciationRecord(CancellationToken cancellationToken)
 		{
-			await FillPronunciationRecord(cancellationToken);
+			await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
+		}
+
+		private async Task LoadAndPlayPronunciationRecord(Uri pronunciationRecordUrl, CancellationToken cancellationToken)
+		{
+			var recordData = await contentDownloader.Download(pronunciationRecordUrl, cancellationToken);
+
+			PronunciationRecord = new PronunciationRecord
+			{
+				Data = recordData,
+				Format = GetPronunciationRecordFormat(pronunciationRecordUrl),
+				Source = pronunciationRecordUrl.OriginalString,
+			};
 
 			await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
 		}
 
-		private async Task FillPronunciationRecord(CancellationToken cancellationToken)
+		private static RecordFormat GetPronunciationRecordFormat(Uri pronunciationRecordUrl)
 		{
-			if (PronunciationRecord == null && PronunciationRecordUrlIsFilled)
-			{
-				var recordData = await contentDownloader.Download(new Uri(PronunciationRecordUrl), cancellationToken);
-
-				PronunciationRecord = new PronunciationRecord
-				{
-					Data = recordData,
-					Format = GetPronunciationRecordFormat(PronunciationRecordUrl),
-					Source = PronunciationRecordUrl,
-				};
-			}
-		}
-
-		private static RecordFormat GetPronunciationRecordFormat(string pronunciationRecordUrl)
-		{
-			var extension = Path.GetExtension(pronunciationRecordUrl);
+			var extension = Path.GetExtension(pronunciationRecordUrl.OriginalString);
 
 			var recordFormats = new Dictionary<string, RecordFormat>(StringComparer.OrdinalIgnoreCase)
 			{
@@ -190,8 +202,6 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task SaveChanges(CancellationToken cancellationToken)
 		{
-			await FillPronunciationRecord(cancellationToken);
-
 			var textDataInStudiedLanguage = new LanguageTextCreationData
 			{
 				Language = StudiedLanguage,
@@ -226,7 +236,7 @@ namespace VocabularyCoach.ViewModels
 			TextInStudiedLanguage = String.Empty;
 			TextInKnownLanguage = String.Empty;
 			NoteInKnownLanguage = String.Empty;
-			PronunciationRecordUrl = String.Empty;
+			PronunciationRecordSource = String.Empty;
 		}
 	}
 }
