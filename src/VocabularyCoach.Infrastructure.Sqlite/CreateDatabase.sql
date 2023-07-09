@@ -23,6 +23,8 @@ CREATE TABLE [Texts] (
   FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE INDEX [IX_Texts_LanguageId] ON [Texts] ([LanguageId]);
+
 CREATE TABLE [Translations] (
   [TextId1] int NOT NULL,
   [TextId2] int NOT NULL,
@@ -30,6 +32,9 @@ CREATE TABLE [Translations] (
   FOREIGN KEY ([TextId1]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([TextId2]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- We do not create index for TextId1, because PK index will be used for the search via (TextId1) - https://stackoverflow.com/questions/19384837
+CREATE INDEX [IX_Translations_TextId2] ON [Translations] ([TextId2]);
 
 CREATE TABLE [PronunciationRecords] (
   [Id] INTEGER NOT NULL,
@@ -42,6 +47,8 @@ CREATE TABLE [PronunciationRecords] (
   CONSTRAINT [sqlite_master_UC_PronunciationRecords] UNIQUE ([TextId])
 );
 
+CREATE INDEX [IX_PronunciationRecords_TextId] ON [PronunciationRecords] ([TextId]);
+
 CREATE TABLE [CheckResults] (
   [Id] INTEGER NOT NULL,
   [UserId] int NOT NULL,
@@ -52,6 +59,9 @@ CREATE TABLE [CheckResults] (
   FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([TextId]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE INDEX [IX_CheckResults_UserId] ON [CheckResults] ([UserId]);
+CREATE INDEX [IX_CheckResults_TextId] ON [CheckResults] ([TextId]);
 
 INSERT INTO [Users]([Id], [Name]) VALUES(1, 'Default User');
 
