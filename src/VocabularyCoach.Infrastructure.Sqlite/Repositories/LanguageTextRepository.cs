@@ -21,7 +21,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
 
-		public async Task<IReadOnlyCollection<LanguageText>> GetLanguageText(ItemId languageId, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(ItemId languageId, CancellationToken cancellationToken)
 		{
 			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 

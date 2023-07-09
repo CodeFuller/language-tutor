@@ -7,7 +7,7 @@ namespace VocabularyCoach.Services.Interfaces.Repositories
 {
 	public interface ILanguageTextRepository
 	{
-		Task<IReadOnlyCollection<LanguageText>> GetLanguageText(ItemId languageId, CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(ItemId languageId, CancellationToken cancellationToken);
 
 		Task<IReadOnlyCollection<StudiedTextWithTranslation>> GetStudiedTexts(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken);
 

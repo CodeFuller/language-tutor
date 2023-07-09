@@ -28,7 +28,7 @@ namespace VocabularyCoach.Services
 
 		public Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(Language language, CancellationToken cancellationToken)
 		{
-			return languageTextRepository.GetLanguageText(language.Id, cancellationToken);
+			return languageTextRepository.GetLanguageTexts(language.Id, cancellationToken);
 		}
 
 		public async Task<Uri> GetUrlForLanguageTextCheck(LanguageText languageText, CancellationToken cancellationToken)
