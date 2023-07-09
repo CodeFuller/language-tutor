@@ -37,6 +37,27 @@ namespace VocabularyCoach.Abstractions
 					{
 						LanguageText = new LanguageText
 						{
+							Id = "fa894ede-2649-4176-95b5-7a60dd9c6dff",
+							Language = SupportedLanguages.Polish,
+							Text = "zamek",
+						},
+					},
+
+					TextInKnownLanguage = new LanguageText
+					{
+						Id = "5ca1c72f-9609-425e-832a-22684ae08066",
+						Language = SupportedLanguages.Russian,
+						Text = "замок",
+						Note = "дверной",
+					},
+				},
+
+				new StudiedTextWithTranslation
+				{
+					StudiedText = new StudiedText
+					{
+						LanguageText = new LanguageText
+						{
 							Id = "44ccc4c5-f504-42b6-86fb-c35671e0722d",
 							Language = SupportedLanguages.Polish,
 							Text = "dziękuję",

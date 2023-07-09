@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label FontSize="32" Content="{Binding CurrentStudiedTextWithTranslation.TextInKnownLanguage.Text}" />
+            <Label FontSize="32" Content="{Binding DisplayedTextInKnownLanguage}" />
         </Grid>
 
         <Grid Grid.Row="1">

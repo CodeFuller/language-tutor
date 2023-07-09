@@ -43,7 +43,21 @@ namespace VocabularyCoach.ViewModels
 		public StudiedTextWithTranslation CurrentStudiedTextWithTranslation
 		{
 			get => currentStudiedTextWithTranslation;
-			private set => SetProperty(ref currentStudiedTextWithTranslation, value);
+			private set
+			{
+				SetProperty(ref currentStudiedTextWithTranslation, value);
+				OnPropertyChanged(nameof(DisplayedTextInKnownLanguage));
+			}
+		}
+
+		public string DisplayedTextInKnownLanguage
+		{
+			get
+			{
+				var textInKnownLanguage = CurrentStudiedTextWithTranslation.TextInKnownLanguage;
+
+				return String.IsNullOrEmpty(textInKnownLanguage.Note) ? textInKnownLanguage.Text : $"{textInKnownLanguage.Text} ({textInKnownLanguage.Note})";
+			}
 		}
 
 		private PronunciationRecord CurrentPronunciationRecord { get; set; }

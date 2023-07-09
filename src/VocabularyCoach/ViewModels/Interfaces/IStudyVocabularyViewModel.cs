@@ -9,6 +9,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 	{
 		StudiedTextWithTranslation CurrentStudiedTextWithTranslation { get; }
 
+		string DisplayedTextInKnownLanguage { get; }
+
 		bool IsTypedTextFocused { get; }
 
 		string TypedText { get; set; }
