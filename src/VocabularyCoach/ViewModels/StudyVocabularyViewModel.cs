@@ -7,10 +7,10 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using VocabularyCoach.Abstractions.Interfaces;
-using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
 using VocabularyCoach.Interfaces;
+using VocabularyCoach.Models;
+using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -24,7 +24,9 @@ namespace VocabularyCoach.ViewModels
 
 		private readonly IMessenger messenger;
 
-		private IReadOnlyList<StudiedTextWithTranslation> StudiedText { get; set; }
+		private User User { get; set; }
+
+		private IReadOnlyList<StudiedTextWithTranslation> StudiedTexts { get; set; }
 
 		private int currentTextIndex;
 
@@ -60,7 +62,19 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
-		private PronunciationRecord CurrentPronunciationRecord { get; set; }
+		private PronunciationRecord currentPronunciationRecord;
+
+		private PronunciationRecord CurrentPronunciationRecord
+		{
+			get => currentPronunciationRecord;
+			set
+			{
+				currentPronunciationRecord = value;
+				OnPropertyChanged(nameof(PronunciationRecordExists));
+			}
+		}
+
+		public bool PronunciationRecordExists => CurrentPronunciationRecord != null;
 
 		private bool isTypedTextFocused;
 
@@ -110,7 +124,7 @@ namespace VocabularyCoach.ViewModels
 			private set => SetProperty(ref textIsTypedIncorrectly, value);
 		}
 
-		public bool CanSwitchToNextText => CheckResultIsShown && CurrentTextIndex + 1 < StudiedText.Count;
+		public bool CanSwitchToNextText => CheckResultIsShown && CurrentTextIndex + 1 < StudiedTexts.Count;
 
 		private CheckResults CheckResults { get; set; }
 
@@ -137,9 +151,11 @@ namespace VocabularyCoach.ViewModels
 			FinishStudyCommand = new RelayCommand(FinishStudy);
 		}
 
-		public async Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		public async Task Load(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			StudiedText = (await vocabularyService.GetStudiedTexts(studiedLanguage, knownLanguage, cancellationToken)).ToList();
+			User = user;
+
+			StudiedTexts = (await vocabularyService.GetStudiedTexts(User, studiedLanguage, knownLanguage, cancellationToken)).ToList();
 			CurrentTextIndex = -1;
 
 			CheckResults = new CheckResults();
@@ -149,7 +165,7 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task CheckTypedText(CancellationToken cancellationToken)
 		{
-			var checkResult = await vocabularyService.CheckTypedText(CurrentStudiedTextWithTranslation.StudiedText, TypedText, cancellationToken);
+			var checkResult = await vocabularyService.CheckTypedText(User, CurrentStudiedTextWithTranslation.StudiedText, TypedText, cancellationToken);
 
 			CheckResultIsShown = true;
 			TextIsTypedCorrectly = checkResult == CheckResultType.Ok;
@@ -163,13 +179,13 @@ namespace VocabularyCoach.ViewModels
 		private async Task SwitchToNextText(CancellationToken cancellationToken)
 		{
 			++CurrentTextIndex;
-			if (CurrentTextIndex >= StudiedText.Count)
+			if (CurrentTextIndex >= StudiedTexts.Count)
 			{
 				FinishStudy();
 				return;
 			}
 
-			CurrentStudiedTextWithTranslation = StudiedText[CurrentTextIndex];
+			CurrentStudiedTextWithTranslation = StudiedTexts[CurrentTextIndex];
 
 			// We set property to false and true, so that PropertyChanged event is triggered.
 			IsTypedTextFocused = false;
@@ -198,7 +214,10 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task PlayPronunciationRecord(CancellationToken cancellationToken)
 		{
-			await pronunciationRecordPlayer.PlayPronunciationRecord(CurrentPronunciationRecord, cancellationToken);
+			if (CurrentPronunciationRecord != null)
+			{
+				await pronunciationRecordPlayer.PlayPronunciationRecord(CurrentPronunciationRecord, cancellationToken);
+			}
 		}
 
 		private void FinishStudy()

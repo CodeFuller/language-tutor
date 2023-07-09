@@ -4,9 +4,10 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using VocabularyCoach.Abstractions;
+using VocabularyCoach.Infrastructure.Sqlite;
 using VocabularyCoach.Interfaces;
 using VocabularyCoach.Internal;
+using VocabularyCoach.Services;
 using VocabularyCoach.ViewModels;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -19,6 +20,7 @@ namespace VocabularyCoach
 			RegisterViewModels(services);
 
 			services.AddVocabularyCoachServices();
+			services.AddVocabularyCoachSqliteDal(settings => configuration.Bind("database", settings));
 
 			services.AddSingleton<IPronunciationRecordPlayer, PronunciationRecordPlayer>();
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);

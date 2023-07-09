@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using VocabularyCoach.Abstractions.Models;
+using VocabularyCoach.Models;
 
 namespace VocabularyCoach.Interfaces
 {

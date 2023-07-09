@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using VocabularyCoach.Abstractions.Models;
+using VocabularyCoach.Models;
 
 namespace VocabularyCoach.ViewModels.Interfaces
 {
@@ -10,6 +10,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 		StudiedTextWithTranslation CurrentStudiedTextWithTranslation { get; }
 
 		string DisplayedTextInKnownLanguage { get; }
+
+		bool PronunciationRecordExists { get; }
 
 		bool IsTypedTextFocused { get; }
 
@@ -33,6 +35,6 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		ICommand FinishStudyCommand { get; }
 
-		Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
+		Task Load(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
 	}
 }

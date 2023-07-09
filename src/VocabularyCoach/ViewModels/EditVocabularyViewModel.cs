@@ -9,12 +9,12 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using VocabularyCoach.Abstractions.Data;
-using VocabularyCoach.Abstractions.Interfaces;
-using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
 using VocabularyCoach.Extensions;
 using VocabularyCoach.Interfaces;
+using VocabularyCoach.Models;
+using VocabularyCoach.Services.Data;
+using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels
@@ -164,6 +164,7 @@ namespace VocabularyCoach.ViewModels
 				{
 					Data = recordData,
 					Format = GetPronunciationRecordFormat(PronunciationRecordUrl),
+					Source = PronunciationRecordUrl,
 				};
 			}
 		}
@@ -205,7 +206,7 @@ namespace VocabularyCoach.ViewModels
 				Note = NoteInKnownLanguage,
 			};
 
-			var addedText = await editVocabularyService.AddOrUpdateLanguageTextWithTranslation(textDataInStudiedLanguage, textDataInKnownLanguage, cancellationToken);
+			var addedText = await editVocabularyService.AddLanguageTextWithTranslation(textDataInStudiedLanguage, textDataInKnownLanguage, cancellationToken);
 
 			// Adding new text keeping sorting.
 			for (var i = 0; i < TextsInStudiedLanguage.Count + 1; ++i)

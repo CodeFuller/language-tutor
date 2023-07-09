@@ -5,8 +5,8 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
+using VocabularyCoach.Models;
 using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -14,6 +14,13 @@ namespace VocabularyCoach.ViewModels
 {
 	public class ApplicationViewModel : ObservableObject
 	{
+		// Currently we do not support multi-user mode on application level (although it is supported on service level).
+		private User CurrentUser { get; } = new()
+		{
+			Id = new ItemId("1"),
+			Name = "Default User",
+		};
+
 		public IStartPageViewModel StartPageViewModel { get; }
 
 		public IStudyVocabularyViewModel StudyVocabularyViewModel { get; }
@@ -68,7 +75,7 @@ namespace VocabularyCoach.ViewModels
 
 		private async void SwitchToStudyVocabularyPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			await StudyVocabularyViewModel.Load(studiedLanguage, knownLanguage, cancellationToken);
+			await StudyVocabularyViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
 
 			CurrentPage = StudyVocabularyViewModel;
 		}

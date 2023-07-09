@@ -1,5 +1,5 @@
 using System;
-using VocabularyCoach.Abstractions.Models;
+using VocabularyCoach.Models;
 
 namespace VocabularyCoach.Events
 {

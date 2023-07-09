@@ -1,4 +1,9 @@
 {
+  "database": {
+    "connectionString": "Data Source=c:\\VocabularyCoachDB\\VocabularyCoach.db;Foreign Keys=True;",
+    "pronunciationRecordsPath": "c:\\VocabularyCoachDB\\PronunciationRecords"
+  },
+
   "logging": {
     "defaultLogLevel": "Debug",
     "targets": [

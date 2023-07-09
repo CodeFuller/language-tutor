@@ -14,7 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		VocabularyCoach.tests.ruleset = VocabularyCoach.tests.ruleset
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocabularyCoach.Abstractions", "src\VocabularyCoach.Abstractions\VocabularyCoach.Abstractions.csproj", "{589ADA60-F20D-4911-9729-B708D8F9DC42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach.Infrastructure.Sqlite", "src\VocabularyCoach.Infrastructure.Sqlite\VocabularyCoach.Infrastructure.Sqlite.csproj", "{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach.Services", "src\VocabularyCoach.Services\VocabularyCoach.Services.csproj", "{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach.Models", "src\VocabularyCoach.Models\VocabularyCoach.Models.csproj", "{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,17 +30,27 @@ Global
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{589ADA60-F20D-4911-9729-B708D8F9DC42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
-		{589ADA60-F20D-4911-9729-B708D8F9DC42} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1E5A42E-55DC-45BE-BA73-507E66AA59AA}

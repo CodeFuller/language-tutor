@@ -7,10 +7,10 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using VocabularyCoach.Abstractions.Interfaces;
-using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Events;
 using VocabularyCoach.Extensions;
+using VocabularyCoach.Models;
+using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels

@@ -32,7 +32,8 @@
                 <ColumnDefinition Width="8*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Height="48" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Listen" Command="{Binding PlayPronunciationRecordCommand}">
+            <Button Grid.Column="0" Height="48" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" 
+                    IsEnabled="{Binding PronunciationRecordExists}" ToolTip="Listen" Command="{Binding PlayPronunciationRecordCommand}">
                 <materialDesign:PackIcon Width="48" Height="48" Kind="VolumeHigh" />
             </Button>
             <TextBox Grid.Column="1" FontSize="32" HorizontalContentAlignment="Center" VerticalAlignment="Center"

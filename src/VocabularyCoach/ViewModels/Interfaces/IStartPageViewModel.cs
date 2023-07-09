@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using VocabularyCoach.Abstractions.Models;
+using VocabularyCoach.Models;
 
 namespace VocabularyCoach.ViewModels.Interfaces
 {

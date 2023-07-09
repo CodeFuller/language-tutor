@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ImportGroup Label="Properties">
     <Import Project="..\..\VocabularyCoach.src.props" />
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VocabularyCoach.Abstractions\VocabularyCoach.Abstractions.csproj" />
+    <ProjectReference Include="..\VocabularyCoach.Infrastructure.Sqlite\VocabularyCoach.Infrastructure.Sqlite.csproj" />
   </ItemGroup>
 
   <ItemGroup>

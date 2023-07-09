@@ -1,0 +1,18 @@
+using System;
+using VocabularyCoach.Models;
+
+namespace VocabularyCoach.Infrastructure.Sqlite.Entities
+{
+	internal sealed class CheckResultEntity
+	{
+		public int Id { get; set; }
+
+		public int UserId { get; set; }
+
+		public int TextId { get; set; }
+
+		public DateTimeOffset DateTime { get; set; }
+
+		public CheckResultType ResultType { get; set; }
+	}
+}

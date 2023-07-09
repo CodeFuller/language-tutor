@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using NAudio.Vorbis;
 using NAudio.Wave;
-using VocabularyCoach.Abstractions.Models;
 using VocabularyCoach.Interfaces;
+using VocabularyCoach.Models;
 
 namespace VocabularyCoach.Internal
 {
