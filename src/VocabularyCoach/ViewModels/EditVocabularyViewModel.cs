@@ -61,22 +61,6 @@ namespace VocabularyCoach.ViewModels
 
 		public bool TextInStudiedLanguageIsFilled => !String.IsNullOrEmpty(TextInStudiedLanguage);
 
-		private string textInKnownLanguage;
-
-		public string TextInKnownLanguage
-		{
-			get => textInKnownLanguage;
-			set => SetProperty(ref textInKnownLanguage, value);
-		}
-
-		private string noteInKnownLanguage;
-
-		public string NoteInKnownLanguage
-		{
-			get => noteInKnownLanguage;
-			set => SetProperty(ref noteInKnownLanguage, value);
-		}
-
 		private string pronunciationRecordUrl;
 
 		public string PronunciationRecordUrl
@@ -94,6 +78,22 @@ namespace VocabularyCoach.ViewModels
 		private PronunciationRecord PronunciationRecord { get; set; }
 
 		public bool PronunciationRecordUrlIsFilled => !String.IsNullOrEmpty(PronunciationRecordUrl);
+
+		private string textInKnownLanguage;
+
+		public string TextInKnownLanguage
+		{
+			get => textInKnownLanguage;
+			set => SetProperty(ref textInKnownLanguage, value);
+		}
+
+		private string noteInKnownLanguage;
+
+		public string NoteInKnownLanguage
+		{
+			get => noteInKnownLanguage;
+			set => SetProperty(ref noteInKnownLanguage, value);
+		}
 
 		public ICommand CheckTextCommand { get; }
 
