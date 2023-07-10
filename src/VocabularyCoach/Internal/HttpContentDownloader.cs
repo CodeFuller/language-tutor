@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using VocabularyCoach.Exceptions;
 using VocabularyCoach.Interfaces;
 
 namespace VocabularyCoach.Internal
@@ -20,7 +21,7 @@ namespace VocabularyCoach.Internal
 			using var response = await httpClient.SendAsync(request, cancellationToken);
 			if (!response.IsSuccessStatusCode)
 			{
-				throw new InvalidOperationException($"Failed to download document '{contentUrl}'. Error code: {response.StatusCode}");
+				throw new ContentDownloadFailedException($"Failed to download document '{contentUrl}'. Error code: {response.StatusCode}");
 			}
 
 			return await response.Content.ReadAsByteArrayAsync(cancellationToken);

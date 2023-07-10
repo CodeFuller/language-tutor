@@ -1,7 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Events;
+using VocabularyCoach.Exceptions;
 using VocabularyCoach.Extensions;
 using VocabularyCoach.Interfaces;
 using VocabularyCoach.Models;
@@ -19,13 +21,13 @@ using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels
 {
-	public class EditVocabularyViewModel : ObservableObject, IEditVocabularyViewModel
+	public class EditVocabularyViewModel : ObservableObject, IEditVocabularyViewModel, INotifyDataErrorInfo
 	{
 		private readonly IEditVocabularyService editVocabularyService;
 
 		private readonly IWebBrowser webBrowser;
 
-		private readonly IContentDownloader contentDownloader;
+		private readonly IPronunciationRecordLoader pronunciationRecordLoader;
 
 		private readonly IPronunciationRecordPlayer pronunciationRecordPlayer;
 
@@ -56,6 +58,7 @@ namespace VocabularyCoach.ViewModels
 			{
 				SetProperty(ref textInStudiedLanguage, value);
 				OnPropertyChanged(nameof(TextInStudiedLanguageIsFilled));
+				OnErrorsChanged(nameof(TextInStudiedLanguage));
 			}
 		}
 
@@ -72,12 +75,11 @@ namespace VocabularyCoach.ViewModels
 
 				PronunciationRecord = null;
 
-				if (Uri.TryCreate(pronunciationRecordSource, UriKind.Absolute, out var pronunciationRecordUrl))
-				{
-					Task.Run(() => LoadAndPlayPronunciationRecord(pronunciationRecordUrl, CancellationToken.None));
-				}
+				Task.Run(() => LoadAndPlayPronunciationRecord(CancellationToken.None));
 			}
 		}
+
+		private string PronunciationRecordSourceError { get; set; }
 
 		private PronunciationRecord pronunciationRecord;
 
@@ -89,6 +91,7 @@ namespace VocabularyCoach.ViewModels
 				pronunciationRecord = value;
 
 				OnPropertyChanged(nameof(PronunciationRecordIsLoaded));
+				OnErrorsChanged(nameof(PronunciationRecordSource));
 			}
 		}
 
@@ -99,7 +102,11 @@ namespace VocabularyCoach.ViewModels
 		public string TextInKnownLanguage
 		{
 			get => textInKnownLanguage;
-			set => SetProperty(ref textInKnownLanguage, value);
+			set
+			{
+				SetProperty(ref textInKnownLanguage, value);
+				OnErrorsChanged(nameof(TextInKnownLanguage));
+			}
 		}
 
 		private string noteInKnownLanguage;
@@ -109,6 +116,32 @@ namespace VocabularyCoach.ViewModels
 			get => noteInKnownLanguage;
 			set => SetProperty(ref noteInKnownLanguage, value);
 		}
+
+		private static IEnumerable<string> ValidationProperties
+		{
+			get
+			{
+				yield return nameof(TextInStudiedLanguage);
+				yield return nameof(TextInKnownLanguage);
+				yield return nameof(PronunciationRecordSource);
+			}
+		}
+
+		private bool validationIsEnabled;
+
+		private bool ValidationIsEnabled
+		{
+			get => validationIsEnabled;
+			set
+			{
+				validationIsEnabled = value;
+				OnErrorsChanged();
+			}
+		}
+
+		public bool HasErrors => ValidationProperties.Select(GetValidationError).Any(x => !String.IsNullOrEmpty(x));
+
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
 		public ICommand CheckTextCommand { get; }
 
@@ -121,11 +154,11 @@ namespace VocabularyCoach.ViewModels
 		public ICommand GoToStartPageCommand { get; }
 
 		public EditVocabularyViewModel(IEditVocabularyService editVocabularyService, IWebBrowser webBrowser,
-			IContentDownloader contentDownloader, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
+			IPronunciationRecordLoader pronunciationRecordLoader, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
 		{
 			this.editVocabularyService = editVocabularyService ?? throw new ArgumentNullException(nameof(editVocabularyService));
 			this.webBrowser = webBrowser ?? throw new ArgumentNullException(nameof(webBrowser));
-			this.contentDownloader = contentDownloader ?? throw new ArgumentNullException(nameof(contentDownloader));
+			this.pronunciationRecordLoader = pronunciationRecordLoader ?? throw new ArgumentNullException(nameof(pronunciationRecordLoader));
 			this.pronunciationRecordPlayer = pronunciationRecordPlayer ?? throw new ArgumentNullException(nameof(pronunciationRecordPlayer));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
@@ -167,41 +200,38 @@ namespace VocabularyCoach.ViewModels
 			await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
 		}
 
-		private async Task LoadAndPlayPronunciationRecord(Uri pronunciationRecordUrl, CancellationToken cancellationToken)
+		private async Task LoadAndPlayPronunciationRecord(CancellationToken cancellationToken)
 		{
-			var recordData = await contentDownloader.Download(pronunciationRecordUrl, cancellationToken);
+			PronunciationRecordSourceError = null;
 
-			PronunciationRecord = new PronunciationRecord
+			if (String.IsNullOrWhiteSpace(PronunciationRecordSource))
 			{
-				Data = recordData,
-				Format = GetPronunciationRecordFormat(pronunciationRecordUrl),
-				Source = pronunciationRecordUrl.OriginalString,
-			};
+				PronunciationRecordSourceError = "Please fill URL for pronunciation record";
+				return;
+			}
+
+			try
+			{
+				PronunciationRecord = await pronunciationRecordLoader.LoadPronunciationRecord(PronunciationRecordSource, cancellationToken);
+			}
+			catch (PronunciationRecordLoadException e)
+			{
+				PronunciationRecordSourceError = e.Message;
+				return;
+			}
 
 			await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
 		}
 
-		private static RecordFormat GetPronunciationRecordFormat(Uri pronunciationRecordUrl)
-		{
-			var extension = Path.GetExtension(pronunciationRecordUrl.OriginalString);
-
-			var recordFormats = new Dictionary<string, RecordFormat>(StringComparer.OrdinalIgnoreCase)
-			{
-				{ ".oga", RecordFormat.Oga },
-				{ ".ogg", RecordFormat.Oga },
-				{ ".mp3", RecordFormat.Mp3 },
-			};
-
-			if (recordFormats.TryGetValue(extension, out var recordFormat))
-			{
-				return recordFormat;
-			}
-
-			throw new InvalidOperationException($"Cannot detect record format for URL {pronunciationRecordUrl}");
-		}
-
 		private async Task SaveChanges(CancellationToken cancellationToken)
 		{
+			ValidationIsEnabled = true;
+
+			if (HasErrors)
+			{
+				return;
+			}
+
 			var textDataInStudiedLanguage = new LanguageTextCreationData
 			{
 				Language = StudiedLanguage,
@@ -237,6 +267,47 @@ namespace VocabularyCoach.ViewModels
 			TextInKnownLanguage = String.Empty;
 			NoteInKnownLanguage = String.Empty;
 			PronunciationRecordSource = String.Empty;
+
+			ValidationIsEnabled = false;
+		}
+
+		private void OnErrorsChanged()
+		{
+			foreach (var propertyName in ValidationProperties)
+			{
+				OnErrorsChanged(propertyName);
+			}
+		}
+
+		private void OnErrorsChanged(string propertyName)
+		{
+			ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+		}
+
+		public IEnumerable GetErrors(string propertyName)
+		{
+			var error = GetValidationError(propertyName);
+
+			if (!String.IsNullOrEmpty(error))
+			{
+				yield return error;
+			}
+		}
+
+		private string GetValidationError(string propertyName)
+		{
+			if (!ValidationIsEnabled)
+			{
+				return String.Empty;
+			}
+
+			return propertyName switch
+			{
+				nameof(TextInStudiedLanguage) when String.IsNullOrWhiteSpace(TextInStudiedLanguage) => $"Please fill text in {StudiedLanguage.Name} language",
+				nameof(TextInKnownLanguage) when String.IsNullOrWhiteSpace(TextInKnownLanguage) => $"Please fill text in {KnownLanguage.Name} language",
+				nameof(PronunciationRecordSource) when PronunciationRecord == null => String.IsNullOrEmpty(PronunciationRecordSourceError) ? "Error" : PronunciationRecordSourceError,
+				_ => String.Empty,
+			};
 		}
 	}
 }

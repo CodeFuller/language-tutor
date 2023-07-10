@@ -25,6 +25,7 @@ namespace VocabularyCoach
 			services.AddSingleton<IPronunciationRecordPlayer, PronunciationRecordPlayer>();
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
+			services.AddSingleton<IPronunciationRecordLoader, PronunciationRecordLoader>();
 			services.AddSingleton<IWebBrowser, DefaultSystemWebBrowser>();
 			services.AddSingleton<IContentDownloader, HttpContentDownloader>();
 		}
