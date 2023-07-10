@@ -57,7 +57,7 @@ namespace VocabularyCoach.Services
 			{
 				Language = languageTextData.Language,
 				Text = languageTextData.Text,
-				Note = languageTextData.Note,
+				Note = String.IsNullOrWhiteSpace(languageTextData.Note) ? null : languageTextData.Note,
 			};
 
 			await languageTextRepository.AddLanguageText(languageText, cancellationToken);
