@@ -13,9 +13,10 @@ namespace VocabularyCoach.Internal
 	{
 		private readonly IReadOnlyDictionary<string, RecordFormat> recordFormats = new Dictionary<string, RecordFormat>(StringComparer.OrdinalIgnoreCase)
 		{
+			{ ".mp3", RecordFormat.Mp3 },
 			{ ".oga", RecordFormat.Oga },
 			{ ".ogg", RecordFormat.Oga },
-			{ ".mp3", RecordFormat.Mp3 },
+			{ ".wav", RecordFormat.Wav },
 		};
 
 		private readonly IContentDownloader contentDownloader;

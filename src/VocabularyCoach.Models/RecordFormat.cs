@@ -5,5 +5,6 @@ namespace VocabularyCoach.Models
 		None,
 		Mp3,
 		Oga,
+		Wav,
 	}
 }

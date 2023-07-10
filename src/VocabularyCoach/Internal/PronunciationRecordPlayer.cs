@@ -62,6 +62,7 @@ namespace VocabularyCoach.Internal
 			{
 				RecordFormat.Mp3 => new Mp3FileReader(dataStream),
 				RecordFormat.Oga => new VorbisWaveReader(dataStream),
+				RecordFormat.Wav => new WaveFileReader(dataStream),
 				_ => throw new NotSupportedException($"Record format is not supported: {format}"),
 			};
 		}
