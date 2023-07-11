@@ -52,7 +52,7 @@
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label FontSize="32" VerticalContentAlignment="Center" Content="{Binding CurrentStudiedTextWithTranslation.StudiedText.LanguageText.Text}"
+            <Label FontSize="32" VerticalContentAlignment="Center" Content="{Binding CurrentTextForCheck.StudiedText.LanguageText.Text}"
                    Visibility="{Binding TextIsTypedIncorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
 

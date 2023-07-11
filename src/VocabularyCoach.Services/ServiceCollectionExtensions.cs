@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using VocabularyCoach.Services.Interfaces;
+using VocabularyCoach.Services.Internal;
 using VocabularyCoach.Services.LanguageTraits;
 
 namespace VocabularyCoach.Services
@@ -12,6 +13,8 @@ namespace VocabularyCoach.Services
 			services.AddSingleton<IEditVocabularyService, EditVocabularyService>();
 
 			services.AddSingleton<ILanguageTraits, PolishLanguageTraits>();
+
+			services.AddSingleton<ISystemClock, SystemClock>();
 
 			return services;
 		}

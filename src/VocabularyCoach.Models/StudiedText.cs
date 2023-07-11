@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VocabularyCoach.Models
 {
@@ -8,7 +9,8 @@ namespace VocabularyCoach.Models
 
 		public LanguageText LanguageText { get; init; }
 
-		public IReadOnlyCollection<CheckResult> CheckResults => checkResults;
+		// The check results order is from the latest (most significant) to the earliest (less significant).
+		public IReadOnlyList<CheckResult> CheckResults => checkResults.OrderByDescending(x => x.DateTime).ToList();
 
 		public void AddCheckResult(CheckResult checkResult)
 		{

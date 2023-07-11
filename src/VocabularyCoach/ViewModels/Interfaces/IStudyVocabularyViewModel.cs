@@ -7,7 +7,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IStudyVocabularyViewModel : IPageViewModel
 	{
-		StudiedTextWithTranslation CurrentStudiedTextWithTranslation { get; }
+		StudiedTextWithTranslation CurrentTextForCheck { get; }
 
 		string DisplayedTextInKnownLanguage { get; }
 

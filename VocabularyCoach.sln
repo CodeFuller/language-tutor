@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		VocabularyCoach.props = VocabularyCoach.props
 		VocabularyCoach.src.props = VocabularyCoach.src.props
 		VocabularyCoach.src.ruleset = VocabularyCoach.src.ruleset
+		VocabularyCoach.tests.props = VocabularyCoach.tests.props
 		VocabularyCoach.tests.ruleset = VocabularyCoach.tests.ruleset
 	EndProjectSection
 EndProject
@@ -19,6 +20,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach.Services", "src\VocabularyCoach.Services\VocabularyCoach.Services.csproj", "{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach.Models", "src\VocabularyCoach.Models\VocabularyCoach.Models.csproj", "{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4DE29239-7950-4E3E-BDEE-6A7D9474442D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach.Services.UnitTests", "tests\VocabularyCoach.Services.UnitTests\VocabularyCoach.Services.UnitTests.csproj", "{D43515CA-7218-4A77-B831-D12B78042DCE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyCoach.Models.UnitTests", "tests\VocabularyCoach.Models.UnitTests\VocabularyCoach.Models.UnitTests.csproj", "{2546B9DC-EB69-4D62-BFEC-F2C05831020A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +49,14 @@ Global
 		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +66,8 @@ Global
 		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
 		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
 		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{D43515CA-7218-4A77-B831-D12B78042DCE} = {4DE29239-7950-4E3E-BDEE-6A7D9474442D}
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A} = {4DE29239-7950-4E3E-BDEE-6A7D9474442D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1E5A42E-55DC-45BE-BA73-507E66AA59AA}
