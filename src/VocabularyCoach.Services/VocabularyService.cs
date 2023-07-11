@@ -57,7 +57,7 @@ namespace VocabularyCoach.Services
 			return languages.OrderBy(x => x.Name).ToList();
 		}
 
-		public async Task<IReadOnlyCollection<StudiedTextWithTranslation>> GetTextsForCheck(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<StudiedText>> GetTextsForCheck(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
 			var studiedTexts = await languageTextRepository.GetStudiedTexts(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
 
@@ -65,7 +65,7 @@ namespace VocabularyCoach.Services
 				.Select(x => new
 				{
 					StudiedText = x,
-					NextCheckDateTime = GetNextCheckDateTimeForStudiedText(x.StudiedText.CheckResults).Date,
+					NextCheckDateTime = GetNextCheckDateTimeForStudiedText(x.CheckResults).Date,
 				})
 				.Where(x => x.NextCheckDateTime <= systemClock.Now.Date)
 				.GroupBy(x => x.NextCheckDateTime, x => x.StudiedText)
@@ -113,10 +113,10 @@ namespace VocabularyCoach.Services
 			var checkResult = new CheckResult
 			{
 				DateTime = systemClock.Now,
-				CheckResultType = GetCheckResultType(studiedText.LanguageText, typedText),
+				CheckResultType = GetCheckResultType(studiedText.TextInStudiedLanguage, typedText),
 			};
 
-			await checkResultRepository.AddCheckResult(user.Id, studiedText.LanguageText.Id, checkResult, cancellationToken);
+			await checkResultRepository.AddCheckResult(user.Id, studiedText.TextInStudiedLanguage.Id, checkResult, cancellationToken);
 
 			studiedText.AddCheckResult(checkResult);
 

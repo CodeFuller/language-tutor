@@ -12,28 +12,29 @@ namespace VocabularyCoach.Models.UnitTests
 		{
 			// Arrange
 
-			var check1 = new CheckResult { DateTime = new DateTime(2023, 07, 08) };
-			var check2 = new CheckResult { DateTime = new DateTime(2023, 07, 10) };
-			var check3 = new CheckResult { DateTime = new DateTime(2023, 07, 09) };
+			var checkResults = new[]
+			{
+				new CheckResult { DateTime = new DateTime(2023, 07, 08) },
+				new CheckResult { DateTime = new DateTime(2023, 07, 10) },
+				new CheckResult { DateTime = new DateTime(2023, 07, 09) },
+			};
 
-			var target = new StudiedText();
+			var target = new StudiedText(checkResults);
 
 			// Act
 
-			target.AddCheckResult(check1);
-			target.AddCheckResult(check2);
-			target.AddCheckResult(check3);
+			var result = target.CheckResults;
 
 			// Assert
 
 			var expectedCheckResults = new[]
 			{
-				check2,
-				check3,
-				check1,
+				checkResults[1],
+				checkResults[2],
+				checkResults[0],
 			};
 
-			target.CheckResults.Should().BeEquivalentTo(expectedCheckResults, x => x.WithStrictOrdering());
+			result.Should().BeEquivalentTo(expectedCheckResults, x => x.WithStrictOrdering());
 		}
 	}
 }

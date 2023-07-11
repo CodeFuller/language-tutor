@@ -33,7 +33,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			return texts.Select(x => x.ToModel()).ToList();
 		}
 
-		public async Task<IReadOnlyCollection<StudiedTextWithTranslation>> GetStudiedTexts(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<StudiedText>> GetStudiedTexts(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken)
 		{
 			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
@@ -60,7 +60,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 
 			return studiedTextsWithCheckResults
 				.GroupBy(x => x.TextInStudiedLanguage.Id)
-				.Select(x => CreateStudiedTextWithTranslation(x.First().TextInStudiedLanguage, x.First().TextInKnownLanguage, x.Select(y => y.CheckResult).ToList()))
+				.Select(x => CreateStudiedText(x.First().TextInStudiedLanguage, x.First().TextInKnownLanguage, x.Select(y => y.CheckResult).ToList()))
 				.ToList();
 		}
 
@@ -90,7 +90,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			await context.SaveChangesAsync(cancellationToken);
 		}
 
-		private static StudiedTextWithTranslation CreateStudiedTextWithTranslation(TextEntity textInStudiedLanguage, TextEntity textInKnownLanguage, IReadOnlyCollection<CheckResultEntity> checkResults)
+		private static StudiedText CreateStudiedText(TextEntity textInStudiedLanguage, TextEntity textInKnownLanguage, IReadOnlyCollection<CheckResultEntity> checkResults)
 		{
 			// https://learn.microsoft.com/en-us/ef/core/querying/complex-query-operators#left-join
 			if (checkResults.Count == 1 && checkResults.Single() == null)
@@ -98,19 +98,9 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 				checkResults = new List<CheckResultEntity>();
 			}
 
-			var studiedText = new StudiedText
+			return new StudiedText(checkResults.Select(x => x.ToModel()))
 			{
-				LanguageText = textInStudiedLanguage.ToModel(),
-			};
-
-			foreach (var checkResult in checkResults)
-			{
-				studiedText.AddCheckResult(checkResult.ToModel());
-			}
-
-			return new StudiedTextWithTranslation
-			{
-				StudiedText = studiedText,
+				TextInStudiedLanguage = textInStudiedLanguage.ToModel(),
 				TextInKnownLanguage = textInKnownLanguage.ToModel(),
 			};
 		}

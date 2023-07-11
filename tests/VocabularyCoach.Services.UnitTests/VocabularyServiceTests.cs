@@ -37,7 +37,7 @@ namespace VocabularyCoach.Services.UnitTests
 		{
 			// Arrange
 
-			var mocker = StubStudiedTexts(Array.Empty<StudiedTextWithTranslation>());
+			var mocker = StubStudiedTexts(Array.Empty<StudiedText>());
 			var target = mocker.CreateInstance<VocabularyService>();
 
 			// Act
@@ -419,7 +419,7 @@ namespace VocabularyCoach.Services.UnitTests
 			};
 		}
 
-		private static AutoMocker StubStudiedTexts(IReadOnlyCollection<StudiedTextWithTranslation> studiedTexts)
+		private static AutoMocker StubStudiedTexts(IReadOnlyCollection<StudiedText> studiedTexts)
 		{
 			var mocker = new AutoMocker();
 

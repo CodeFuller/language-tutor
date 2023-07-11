@@ -26,7 +26,7 @@ namespace VocabularyCoach.ViewModels
 
 		private User User { get; set; }
 
-		private IReadOnlyList<StudiedTextWithTranslation> TextsForCheck { get; set; }
+		private IReadOnlyList<StudiedText> TextsForCheck { get; set; }
 
 		private int currentTextIndex;
 
@@ -40,9 +40,9 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
-		private StudiedTextWithTranslation currentTextForCheck;
+		private StudiedText currentTextForCheck;
 
-		public StudiedTextWithTranslation CurrentTextForCheck
+		public StudiedText CurrentTextForCheck
 		{
 			get => currentTextForCheck;
 			private set
@@ -165,7 +165,7 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task CheckTypedText(CancellationToken cancellationToken)
 		{
-			var checkResult = await vocabularyService.CheckTypedText(User, CurrentTextForCheck.StudiedText, TypedText, cancellationToken);
+			var checkResult = await vocabularyService.CheckTypedText(User, CurrentTextForCheck, TypedText, cancellationToken);
 
 			CheckResultIsShown = true;
 			TextIsTypedCorrectly = checkResult == CheckResultType.Ok;
@@ -197,7 +197,7 @@ namespace VocabularyCoach.ViewModels
 			TextIsTypedCorrectly = false;
 			TextIsTypedIncorrectly = false;
 
-			CurrentPronunciationRecord = await vocabularyService.GetPronunciationRecord(CurrentTextForCheck.StudiedText.LanguageText.Id, cancellationToken);
+			CurrentPronunciationRecord = await vocabularyService.GetPronunciationRecord(CurrentTextForCheck.TextInStudiedLanguage.Id, cancellationToken);
 		}
 
 		private async Task CheckOrSwitchToNextText(CancellationToken cancellationToken)

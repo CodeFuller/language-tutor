@@ -9,7 +9,7 @@ namespace VocabularyCoach.Services.Interfaces.Repositories
 	{
 		Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(ItemId languageId, CancellationToken cancellationToken);
 
-		Task<IReadOnlyCollection<StudiedTextWithTranslation>> GetStudiedTexts(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<StudiedText>> GetStudiedTexts(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken);
 
 		Task AddLanguageText(LanguageText languageText, CancellationToken cancellationToken);
 
