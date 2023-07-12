@@ -1,0 +1,107 @@
+trigger: none
+
+pool:
+  name: Azure Pipelines
+  vmImage: windows-2022
+
+variables:
+  - name: ReleaseBranchName
+    value: master
+    readonly: true
+  - name: TargetFramework
+    value: net7.0-windows
+    readonly: true
+  - name: PublishRuntimeIdentifier
+    value: win-x64
+    readonly: true
+
+stages:
+- stage: BuildStage
+  displayName: Build
+  jobs:
+  - job: BuildJob
+    displayName: Build
+    workspace:
+      clean: all
+    variables:
+      disable.coverage.autogenerate: true
+    steps:
+    - powershell: |
+        $appVersion = ([xml](Get-Content 'src/VocabularyCoach/VocabularyCoach.csproj')).Project.PropertyGroup.Version
+        if ($appVersion -eq $null) {
+            throw 'The application version is missing in cpsroj file'
+        }
+
+        if ('$(Build.SourceBranchName)' -ine '$(ReleaseBranchName)') {
+            $buildVersionSuffix = '-preview'
+        }
+
+        $buildVersion = "$appVersion.$(Build.BuildId)$buildVersionSuffix"
+
+        Write-Host "##vso[build.updatebuildnumber]$buildVersion"
+        Write-Host "##vso[task.setvariable variable=BuildVersion]$buildVersion"
+      displayName: Define Build Version
+
+    - task: DotNetCoreCLI@2
+      displayName: Restore NuGet Packages
+      inputs:
+        command: restore
+        projects: VocabularyCoach.sln
+        feedsToUse: select
+        verbosityRestore: Minimal
+
+    - task: DotNetCoreCLI@2
+      displayName: Build Solution
+      inputs:
+        command: build
+        projects: VocabularyCoach.sln
+        arguments: --no-restore --configuration Release
+
+    - task: DotNetCoreCLI@2
+      displayName: Run Tests
+      inputs:
+        command: test
+        projects: VocabularyCoach.sln
+        arguments: --no-build --configuration Release --collect:"XPlat Code Coverage"
+
+    - task: reportgenerator@5
+      displayName: Merge Code Coverage Reports
+      inputs:
+        reports: $(Agent.TempDirectory)/**/coverage.cobertura.xml
+        sourcedirs: $(Build.SourcesDirectory)
+        targetdir: $(Build.ArtifactStagingDirectory)/TestResults/merged
+        reporttypes: HtmlInline_AzurePipelines;Cobertura
+        verbosity: Verbose
+
+    - task: PublishCodeCoverageResults@1
+      displayName: Publish Code Coverage
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(Build.ArtifactStagingDirectory)/TestResults/merged/Cobertura.xml
+        reportDirectory: $(Build.ArtifactStagingDirectory)/TestResults/merged
+        failIfCoverageEmpty: true
+
+    - task: DotNetCoreCLI@2
+      displayName: Publish VocabularyCoach
+      inputs:
+        command: publish
+        projects: src/VocabularyCoach/VocabularyCoach.csproj
+        arguments: --no-build --configuration Release --self-contained
+        publishWebProjects: false
+        zipAfterPublish: false
+        modifyOutputPath: false
+
+    - task: ArchiveFiles@2
+      displayName: Archive VocabularyCoach
+      inputs:
+        rootFolderOrFile: src/VocabularyCoach/bin/Release/$(TargetFramework)/$(PublishRuntimeIdentifier)/publish
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/VocabularyCoach.zip
+        replaceExistingArchive: true
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish VocabularyCoach Artifacts
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/VocabularyCoach.zip
+        artifact: VocabularyCoach
