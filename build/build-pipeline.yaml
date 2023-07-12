@@ -6,7 +6,7 @@ pool:
 
 variables:
   - name: ReleaseBranchName
-    value: master
+    value: main
     readonly: true
   - name: TargetFramework
     value: net7.0-windows
