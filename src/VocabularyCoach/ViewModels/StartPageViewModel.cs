@@ -37,7 +37,7 @@ namespace VocabularyCoach.ViewModels
 			set => SetProperty(ref selectedKnownLanguage, value);
 		}
 
-		public ICommand StudyVocabularyCommand { get; }
+		public ICommand PracticeVocabularyCommand { get; }
 
 		public ICommand EditVocabularyCommand { get; }
 
@@ -46,7 +46,7 @@ namespace VocabularyCoach.ViewModels
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			StudyVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToStudyVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
+			PracticeVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToPracticeVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			EditVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToEditVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 		}
 

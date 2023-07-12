@@ -5,7 +5,7 @@ using VocabularyCoach.Models;
 
 namespace VocabularyCoach.ViewModels.Interfaces
 {
-	public interface IStudyVocabularyViewModel : IPageViewModel
+	public interface IPracticeVocabularyViewModel : IPageViewModel
 	{
 		StudiedText CurrentTextForCheck { get; }
 
@@ -33,7 +33,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		ICommand PlayPronunciationRecordCommand { get; }
 
-		ICommand FinishStudyCommand { get; }
+		ICommand FinishPracticeCommand { get; }
 
 		Task Load(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
 	}

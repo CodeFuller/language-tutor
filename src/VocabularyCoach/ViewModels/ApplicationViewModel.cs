@@ -23,7 +23,7 @@ namespace VocabularyCoach.ViewModels
 
 		public IStartPageViewModel StartPageViewModel { get; }
 
-		public IStudyVocabularyViewModel StudyVocabularyViewModel { get; }
+		public IPracticeVocabularyViewModel PracticeVocabularyViewModel { get; }
 
 		public ICheckResultsViewModel CheckResultsViewModel { get; }
 
@@ -39,11 +39,11 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand LoadCommand { get; }
 
-		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IStudyVocabularyViewModel studyVocabularyViewModel,
+		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPracticeVocabularyViewModel practiceVocabularyViewModel,
 			ICheckResultsViewModel checkResultsViewModel, IEditVocabularyViewModel editVocabularyViewModel, IMessenger messenger)
 		{
 			StartPageViewModel = startPageViewModel ?? throw new ArgumentNullException(nameof(startPageViewModel));
-			StudyVocabularyViewModel = studyVocabularyViewModel ?? throw new ArgumentNullException(nameof(studyVocabularyViewModel));
+			PracticeVocabularyViewModel = practiceVocabularyViewModel ?? throw new ArgumentNullException(nameof(practiceVocabularyViewModel));
 			CheckResultsViewModel = checkResultsViewModel ?? throw new ArgumentNullException(nameof(checkResultsViewModel));
 			EditVocabularyViewModel = editVocabularyViewModel ?? throw new ArgumentNullException(nameof(editVocabularyViewModel));
 
@@ -51,7 +51,7 @@ namespace VocabularyCoach.ViewModels
 
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 			messenger.Register<SwitchToStartPageEventArgs>(this, (_, _) => SwitchToStartPage(CancellationToken.None));
-			messenger.Register<SwitchToStudyVocabularyPageEventArgs>(this, (_, e) => SwitchToStudyVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
+			messenger.Register<SwitchToPracticeVocabularyPageEventArgs>(this, (_, e) => SwitchToPracticeVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 			messenger.Register<SwitchToCheckResultsPageEventArgs>(this, (_, e) => SwitchToCheckResultsPage(e.CheckResults));
 			messenger.Register<SwitchToEditVocabularyPageEventArgs>(this, (_, e) => SwitchToEditVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 		}
@@ -73,11 +73,11 @@ namespace VocabularyCoach.ViewModels
 			CurrentPage = StartPageViewModel;
 		}
 
-		private async void SwitchToStudyVocabularyPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		private async void SwitchToPracticeVocabularyPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			await StudyVocabularyViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
+			await PracticeVocabularyViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
 
-			CurrentPage = StudyVocabularyViewModel;
+			CurrentPage = PracticeVocabularyViewModel;
 		}
 
 		private void SwitchToCheckResultsPage(CheckResults checkResults)

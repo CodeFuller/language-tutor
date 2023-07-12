@@ -16,7 +16,7 @@ using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels
 {
-	public class StudyVocabularyViewModel : ObservableObject, IStudyVocabularyViewModel
+	public class PracticeVocabularyViewModel : ObservableObject, IPracticeVocabularyViewModel
 	{
 		private readonly IVocabularyService vocabularyService;
 
@@ -136,9 +136,9 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand PlayPronunciationRecordCommand { get; }
 
-		public ICommand FinishStudyCommand { get; }
+		public ICommand FinishPracticeCommand { get; }
 
-		public StudyVocabularyViewModel(IVocabularyService vocabularyService, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
+		public PracticeVocabularyViewModel(IVocabularyService vocabularyService, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
 		{
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 			this.pronunciationRecordPlayer = pronunciationRecordPlayer ?? throw new ArgumentNullException(nameof(pronunciationRecordPlayer));
@@ -148,7 +148,7 @@ namespace VocabularyCoach.ViewModels
 			SwitchToNextTextCommand = new AsyncRelayCommand(SwitchToNextText);
 			CheckOrSwitchToNextTextCommand = new AsyncRelayCommand(CheckOrSwitchToNextText);
 			PlayPronunciationRecordCommand = new AsyncRelayCommand(PlayPronunciationRecord);
-			FinishStudyCommand = new RelayCommand(FinishStudy);
+			FinishPracticeCommand = new RelayCommand(FinishPractice);
 		}
 
 		public async Task Load(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
@@ -181,7 +181,7 @@ namespace VocabularyCoach.ViewModels
 			++CurrentTextIndex;
 			if (CurrentTextIndex >= TextsForCheck.Count)
 			{
-				FinishStudy();
+				FinishPractice();
 				return;
 			}
 
@@ -220,7 +220,7 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
-		private void FinishStudy()
+		private void FinishPractice()
 		{
 			messenger.Send(new SwitchToCheckResultsPageEventArgs(CheckResults));
 		}

@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace VocabularyCoach.Views
 {
-	public partial class StudyVocabularyView : UserControl
+	public partial class PracticeVocabularyView : UserControl
 	{
-		public StudyVocabularyView()
+		public PracticeVocabularyView()
 		{
 			InitializeComponent();
 		}

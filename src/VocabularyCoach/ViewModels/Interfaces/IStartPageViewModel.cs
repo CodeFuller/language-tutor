@@ -14,7 +14,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		Language SelectedKnownLanguage { get; set; }
 
-		ICommand StudyVocabularyCommand { get; }
+		ICommand PracticeVocabularyCommand { get; }
 
 		ICommand EditVocabularyCommand { get; }
 

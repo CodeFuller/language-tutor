@@ -20,8 +20,8 @@
         <DataTemplate DataType="{x:Type viewModels:StartPageViewModel}">
             <views:StartPageView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:StudyVocabularyViewModel}">
-            <views:StudyVocabularyView />
+        <DataTemplate DataType="{x:Type viewModels:PracticeVocabularyViewModel}">
+            <views:PracticeVocabularyView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:CheckResultsViewModel}">
             <views:CheckResultsView />

@@ -35,7 +35,7 @@ namespace VocabularyCoach
 			services.AddSingleton<ApplicationViewModel>();
 
 			services.AddSingleton<IStartPageViewModel, StartPageViewModel>();
-			services.AddSingleton<IStudyVocabularyViewModel, StudyVocabularyViewModel>();
+			services.AddSingleton<IPracticeVocabularyViewModel, PracticeVocabularyViewModel>();
 			services.AddSingleton<ICheckResultsViewModel, CheckResultsViewModel>();
 			services.AddSingleton<IEditVocabularyViewModel, EditVocabularyViewModel>();
 		}

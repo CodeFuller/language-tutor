@@ -78,7 +78,7 @@ namespace VocabularyCoach.Services
 		{
 			if (!checkResults.Any())
 			{
-				// If text was not yet checked, this is the highest priority for study.
+				// If text was not yet checked, this is the highest priority for practice.
 				return DateTimeOffset.MinValue;
 			}
 
