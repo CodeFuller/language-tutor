@@ -16,11 +16,14 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 	{
 		private readonly IDbContextFactory<VocabularyCoachDbContext> contextFactory;
 
+		private readonly IChecksumCalculator checksumCalculator;
+
 		private readonly VocabularyDatabaseSettings settings;
 
-		public PronunciationRecordRepository(IDbContextFactory<VocabularyCoachDbContext> contextFactory, IOptions<VocabularyDatabaseSettings> options)
+		public PronunciationRecordRepository(IDbContextFactory<VocabularyCoachDbContext> contextFactory, IChecksumCalculator checksumCalculator, IOptions<VocabularyDatabaseSettings> options)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
+			this.checksumCalculator = checksumCalculator ?? throw new ArgumentNullException(nameof(checksumCalculator));
 			settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
@@ -38,6 +41,18 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			var recordDataPath = GetPathForPronunciationRecordDataFile(pronunciationRecordEntity);
 			var recordData = await File.ReadAllBytesAsync(recordDataPath, cancellationToken);
 
+			if (recordData.Length != pronunciationRecordEntity.DataLength)
+			{
+				throw new InvalidOperationException($"Pronunciation record data is corrupted. Length {recordData.Length} != {pronunciationRecordEntity.DataLength}");
+			}
+
+			var actualChecksum = checksumCalculator.CalculateChecksum(recordData);
+			var expectedChecksum = (uint)pronunciationRecordEntity.DataChecksum;
+			if (actualChecksum != expectedChecksum)
+			{
+				throw new InvalidOperationException($"Pronunciation record data is corrupted. Checksum {actualChecksum:X8} != {expectedChecksum:X8}");
+			}
+
 			return new PronunciationRecord
 			{
 				Data = recordData,
@@ -53,7 +68,9 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 				TextId = languageTextId.ToInt32(),
 				Format = pronunciationRecord.Format,
 				Source = pronunciationRecord.Source,
-				Path = Path.ChangeExtension(Guid.NewGuid().ToString("D"), ".bin"),
+				Path = Path.ChangeExtension(Guid.NewGuid().ToString("D"), GetExtensionForPronunciationRecordDataFile(pronunciationRecord)),
+				DataLength = pronunciationRecord.Data.Length,
+				DataChecksum = (int)checksumCalculator.CalculateChecksum(pronunciationRecord.Data),
 			};
 
 			var recordDataPath = GetPathForPronunciationRecordDataFile(pronunciationRecordEntity);
@@ -63,6 +80,17 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 
 			await context.PronunciationRecords.AddAsync(pronunciationRecordEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);
+		}
+
+		private static string GetExtensionForPronunciationRecordDataFile(PronunciationRecord pronunciationRecord)
+		{
+			return pronunciationRecord.Format switch
+			{
+				RecordFormat.Mp3 => ".mp3",
+				RecordFormat.Oga => ".oga",
+				RecordFormat.Wav => ".wav",
+				_ => throw new NotSupportedException($"Pronunciation record format is not supported: {pronunciationRecord.Format}"),
+			};
 		}
 
 		private string GetPathForPronunciationRecordDataFile(PronunciationRecordEntity pronunciationRecordEntity)

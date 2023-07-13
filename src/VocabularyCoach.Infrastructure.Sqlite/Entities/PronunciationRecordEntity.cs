@@ -13,5 +13,9 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 		public string Source { get; set; }
 
 		public string Path { get; set; }
+
+		public int DataLength { get; set; }
+
+		public int DataChecksum { get; set; }
 	}
 }

@@ -42,6 +42,8 @@ CREATE TABLE [PronunciationRecords] (
   [Format] int NOT NULL,
   [Source] ntext NULL,
   [Path] ntext NOT NULL,
+  [DataLength] int NOT NULL,
+  [DataChecksum] int NOT NULL,
   CONSTRAINT [sqlite_master_PK_PronunciationRecords] PRIMARY KEY ([Id]),
   FOREIGN KEY ([TextId]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT [sqlite_master_UC_PronunciationRecords] UNIQUE ([TextId])

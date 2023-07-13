@@ -20,6 +20,8 @@ namespace VocabularyCoach.Infrastructure.Sqlite
 			services.AddSingleton<IPronunciationRecordRepository, PronunciationRecordRepository>();
 			services.AddSingleton<ICheckResultRepository, CheckResultRepository>();
 
+			services.AddSingleton<IChecksumCalculator, Crc32Calculator>();
+
 			return services;
 		}
 
