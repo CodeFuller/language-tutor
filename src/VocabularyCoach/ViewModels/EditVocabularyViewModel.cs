@@ -78,7 +78,11 @@ namespace VocabularyCoach.ViewModels
 		public bool TextInStudiedLanguageWasChecked
 		{
 			get => textInStudiedLanguageWasChecked;
-			private set => SetProperty(ref textInStudiedLanguageWasChecked, value);
+			private set
+			{
+				SetProperty(ref textInStudiedLanguageWasChecked, value);
+				OnErrorsChanged(nameof(TextInStudiedLanguage));
+			}
 		}
 
 		public bool TextInStudiedLanguageIsFilled => !String.IsNullOrEmpty(TextInStudiedLanguage);
@@ -297,6 +301,7 @@ namespace VocabularyCoach.ViewModels
 			return propertyName switch
 			{
 				nameof(TextInStudiedLanguage) when String.IsNullOrWhiteSpace(TextInStudiedLanguage) => $"Please fill text in {StudiedLanguage.Name} language",
+				nameof(TextInStudiedLanguage) when !TextInStudiedLanguageWasChecked => $"Please check text in {StudiedLanguage.Name} language",
 				nameof(TextInKnownLanguage) when String.IsNullOrWhiteSpace(TextInKnownLanguage) => $"Please fill text in {KnownLanguage.Name} language",
 				_ => String.Empty,
 			};
