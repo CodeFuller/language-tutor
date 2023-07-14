@@ -245,7 +245,7 @@ namespace VocabularyCoach.ViewModels
 			// Adding new text keeping sorting.
 			for (var i = 0; i < TextsInStudiedLanguage.Count + 1; ++i)
 			{
-				if (i == TextsInStudiedLanguage.Count || String.Compare(addedText.Text, TextsInStudiedLanguage[i].Text, StringComparison.Ordinal) < 0)
+				if (i == TextsInStudiedLanguage.Count || String.Compare(addedText.Text, TextsInStudiedLanguage[i].Text, LanguageTextComparison.IgnoreCase) < 0)
 				{
 					TextsInStudiedLanguage.Insert(i, addedText);
 					break;
