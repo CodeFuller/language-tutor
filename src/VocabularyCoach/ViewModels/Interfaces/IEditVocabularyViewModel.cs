@@ -18,10 +18,6 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		bool TextInStudiedLanguageIsFilled { get; }
 
-		string PronunciationRecordSource { get; set; }
-
-		bool PronunciationRecordIsLoaded { get; }
-
 		string TextInKnownLanguage { get; set; }
 
 		string NoteInKnownLanguage { get; set; }

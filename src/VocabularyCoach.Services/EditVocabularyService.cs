@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VocabularyCoach.Models;
@@ -17,13 +16,13 @@ namespace VocabularyCoach.Services
 
 		private readonly IPronunciationRecordRepository pronunciationRecordRepository;
 
-		private readonly IReadOnlyDictionary<ItemId, ILanguageTraits> languagesTraits;
+		private readonly ISupportedLanguageTraits supportedLanguageTraits;
 
-		public EditVocabularyService(ILanguageTextRepository languageTextRepository, IPronunciationRecordRepository pronunciationRecordRepository, IEnumerable<ILanguageTraits> languagesTraits)
+		public EditVocabularyService(ILanguageTextRepository languageTextRepository, IPronunciationRecordRepository pronunciationRecordRepository, ISupportedLanguageTraits supportedLanguageTraits)
 		{
 			this.languageTextRepository = languageTextRepository ?? throw new ArgumentNullException(nameof(languageTextRepository));
 			this.pronunciationRecordRepository = pronunciationRecordRepository ?? throw new ArgumentNullException(nameof(pronunciationRecordRepository));
-			this.languagesTraits = languagesTraits?.ToDictionary(x => x.Language.Id, x => x) ?? throw new ArgumentNullException(nameof(languagesTraits));
+			this.supportedLanguageTraits = supportedLanguageTraits ?? throw new ArgumentNullException(nameof(supportedLanguageTraits));
 		}
 
 		public Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(Language language, CancellationToken cancellationToken)
@@ -31,18 +30,21 @@ namespace VocabularyCoach.Services
 			return languageTextRepository.GetLanguageTexts(language.Id, cancellationToken);
 		}
 
-		public async Task<Uri> GetUrlForLanguageTextCheck(LanguageText languageText, CancellationToken cancellationToken)
+		public Task<Uri> GetUrlForLanguageTextCheck(LanguageText languageText, CancellationToken cancellationToken)
 		{
-			if (!languagesTraits.TryGetValue(languageText.Language.Id, out var languageTraits))
-			{
-				throw new NotSupportedException($"Language is not supported: {languageText.Language}");
-			}
+			var url = supportedLanguageTraits.GetLanguageTraits(languageText.Language)
+				.GetUrlForTextCheck(languageText.Text);
 
-			return await languageTraits.GetUrlForTextCheck(languageText.Text, cancellationToken);
+			return Task.FromResult(url);
 		}
 
 		public async Task<LanguageText> AddLanguageTextWithTranslation(LanguageTextCreationData languageTextData1, LanguageTextCreationData languageTextData2, CancellationToken cancellationToken)
 		{
+			if (languageTextData1.PronunciationRecord == null)
+			{
+				throw new InvalidOperationException("Pronunciation record is not set");
+			}
+
 			var languageText1 = await AddLanguageText(languageTextData1, cancellationToken);
 			var languageText2 = await AddLanguageText(languageTextData2, cancellationToken);
 

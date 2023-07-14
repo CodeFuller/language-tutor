@@ -1,7 +1,6 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using VocabularyCoach.Models;
+using VocabularyCoach.Services.GoogleTextToSpeech.DataContracts;
 
 namespace VocabularyCoach.Services.LanguageTraits
 {
@@ -9,6 +8,8 @@ namespace VocabularyCoach.Services.LanguageTraits
 	{
 		Language Language { get; }
 
-		Task<Uri> GetUrlForTextCheck(string text, CancellationToken cancellationToken);
+		Uri GetUrlForTextCheck(string text);
+
+		VoiceSelectionParams GetSynthesisVoiceConfiguration();
 	}
 }

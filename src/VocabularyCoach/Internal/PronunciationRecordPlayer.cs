@@ -11,26 +11,6 @@ namespace VocabularyCoach.Internal
 {
 	internal sealed class PronunciationRecordPlayer : IPronunciationRecordPlayer
 	{
-		public bool PronunciationRecordDataIsCorrect(PronunciationRecord pronunciationRecord, out string errorMessage)
-		{
-			using var memoryStream = new MemoryStream(pronunciationRecord.Data);
-
-			try
-			{
-				using var fileReader = CreateRecordReader(memoryStream, pronunciationRecord.Format);
-
-				errorMessage = null;
-				return true;
-			}
-#pragma warning disable CA1031 // Do not catch general exception types
-			catch (Exception e)
-#pragma warning disable CA1031 // Do not catch general exception types
-			{
-				errorMessage = e.Message;
-				return false;
-			}
-		}
-
 		public Task PlayPronunciationRecord(PronunciationRecord pronunciationRecord, CancellationToken cancellationToken)
 		{
 			// We play record in background task to prevent block of UI thread and allow user to invoke next UI command.

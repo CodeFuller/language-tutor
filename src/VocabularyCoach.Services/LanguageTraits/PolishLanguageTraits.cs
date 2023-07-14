@@ -1,7 +1,6 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using VocabularyCoach.Models;
+using VocabularyCoach.Services.GoogleTextToSpeech.DataContracts;
 
 namespace VocabularyCoach.Services.LanguageTraits
 {
@@ -9,10 +8,19 @@ namespace VocabularyCoach.Services.LanguageTraits
 	{
 		public Language Language => SupportedLanguages.Polish;
 
-		public Task<Uri> GetUrlForTextCheck(string text, CancellationToken cancellationToken)
+		public Uri GetUrlForTextCheck(string text)
 		{
-			var uri = new Uri($"https://pl.wiktionary.org/wiki/{text}");
-			return Task.FromResult(uri);
+			return new Uri($"https://pl.wiktionary.org/wiki/{text}");
+		}
+
+		public VoiceSelectionParams GetSynthesisVoiceConfiguration()
+		{
+			return new VoiceSelectionParams
+			{
+				LanguageCode = "pl-PL",
+				Name = "pl-PL-Wavenet-A",
+				SsmlGender = "FEMALE",
+			};
 		}
 	}
 }

@@ -19,15 +19,13 @@ namespace VocabularyCoach
 		{
 			RegisterViewModels(services);
 
-			services.AddVocabularyCoachServices();
+			services.AddVocabularyCoachServices(settings => configuration.Bind("googleTextToSpeechApi", settings));
 			services.AddVocabularyCoachSqliteDal(settings => configuration.Bind("database", settings));
 
 			services.AddSingleton<IPronunciationRecordPlayer, PronunciationRecordPlayer>();
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
-			services.AddSingleton<IPronunciationRecordLoader, PronunciationRecordLoader>();
 			services.AddSingleton<IWebBrowser, DefaultSystemWebBrowser>();
-			services.AddSingleton<IContentDownloader, HttpContentDownloader>();
 		}
 
 		private static void RegisterViewModels(IServiceCollection services)
