@@ -17,6 +17,7 @@ using VocabularyCoach.Models;
 using VocabularyCoach.Services.Data;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Interfaces;
+using static VocabularyCoach.ViewModels.Extensions.FocusHelpers;
 
 namespace VocabularyCoach.ViewModels
 {
@@ -48,6 +49,14 @@ namespace VocabularyCoach.ViewModels
 
 		public ObservableCollection<LanguageText> TextsInStudiedLanguage { get; } = new();
 
+		private bool textInStudiedLanguageIsFocused;
+
+		public bool TextInStudiedLanguageIsFocused
+		{
+			get => textInStudiedLanguageIsFocused;
+			set => SetProperty(ref textInStudiedLanguageIsFocused, value);
+		}
+
 		private string textInStudiedLanguage;
 
 		public string TextInStudiedLanguage
@@ -75,6 +84,14 @@ namespace VocabularyCoach.ViewModels
 		public bool TextInStudiedLanguageIsFilled => !String.IsNullOrEmpty(TextInStudiedLanguage);
 
 		private PronunciationRecord PronunciationRecord { get; set; }
+
+		private bool textInKnownLanguageIsFocused;
+
+		public bool TextInKnownLanguageIsFocused
+		{
+			get => textInKnownLanguageIsFocused;
+			set => SetProperty(ref textInKnownLanguageIsFocused, value);
+		}
 
 		private string textInKnownLanguage;
 
@@ -180,6 +197,8 @@ namespace VocabularyCoach.ViewModels
 			}
 
 			TextInStudiedLanguageWasChecked = true;
+
+			SetFocus(() => TextInKnownLanguageIsFocused);
 		}
 
 		private async Task LoadAndPlayPronunciationRecord(CancellationToken cancellationToken)
@@ -241,6 +260,8 @@ namespace VocabularyCoach.ViewModels
 			PronunciationRecord = null;
 
 			ValidationIsEnabled = false;
+
+			SetFocus(() => TextInStudiedLanguageIsFocused);
 		}
 
 		private void OnErrorsChanged()

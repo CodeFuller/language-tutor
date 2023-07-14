@@ -38,7 +38,7 @@
             </Button>
             <TextBox Grid.Column="1" FontSize="32" HorizontalContentAlignment="Center" VerticalAlignment="Center"
                      Text="{Binding TypedText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding CheckResultIsShown}" IsReadOnlyCaretVisible="True"
-                     helpers:FocusHelper.IsFocused="{Binding IsTypedTextFocused}">
+                     helpers:FocusHelper.IsFocused="{Binding TypedTextIsFocused}">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding CheckOrSwitchToNextTextCommand}" Key="Enter" />
                 </TextBox.InputBindings>

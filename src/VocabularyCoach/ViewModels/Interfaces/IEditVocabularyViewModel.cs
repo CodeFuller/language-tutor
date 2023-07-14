@@ -14,11 +14,15 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		Language KnownLanguage { get; }
 
+		bool TextInStudiedLanguageIsFocused { get; }
+
 		string TextInStudiedLanguage { get; set; }
 
 		bool TextInStudiedLanguageWasChecked { get; }
 
 		bool TextInStudiedLanguageIsFilled { get; }
+
+		bool TextInKnownLanguageIsFocused { get; }
 
 		string TextInKnownLanguage { get; set; }
 

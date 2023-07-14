@@ -13,7 +13,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		bool PronunciationRecordExists { get; }
 
-		bool IsTypedTextFocused { get; }
+		bool TypedTextIsFocused { get; }
 
 		string TypedText { get; set; }
 

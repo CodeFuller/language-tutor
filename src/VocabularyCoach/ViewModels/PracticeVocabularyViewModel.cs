@@ -13,6 +13,7 @@ using VocabularyCoach.Models;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
+using static VocabularyCoach.ViewModels.Extensions.FocusHelpers;
 
 namespace VocabularyCoach.ViewModels
 {
@@ -76,12 +77,12 @@ namespace VocabularyCoach.ViewModels
 
 		public bool PronunciationRecordExists => CurrentPronunciationRecord != null;
 
-		private bool isTypedTextFocused;
+		private bool typedTextIsFocused;
 
-		public bool IsTypedTextFocused
+		public bool TypedTextIsFocused
 		{
-			get => isTypedTextFocused;
-			set => SetProperty(ref isTypedTextFocused, value);
+			get => typedTextIsFocused;
+			set => SetProperty(ref typedTextIsFocused, value);
 		}
 
 		private string typedText;
@@ -187,9 +188,7 @@ namespace VocabularyCoach.ViewModels
 
 			CurrentTextForCheck = TextsForCheck[CurrentTextIndex];
 
-			// We set property to false and true, so that PropertyChanged event is triggered.
-			IsTypedTextFocused = false;
-			IsTypedTextFocused = true;
+			SetFocus(() => TypedTextIsFocused);
 
 			TypedText = String.Empty;
 
