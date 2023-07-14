@@ -16,6 +16,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		string TextInStudiedLanguage { get; set; }
 
+		bool TextInStudiedLanguageWasChecked { get; }
+
 		bool TextInStudiedLanguageIsFilled { get; }
 
 		string TextInKnownLanguage { get; set; }

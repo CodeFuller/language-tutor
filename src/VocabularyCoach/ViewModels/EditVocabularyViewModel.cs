@@ -55,10 +55,21 @@ namespace VocabularyCoach.ViewModels
 			get => textInStudiedLanguage;
 			set
 			{
+				TextInStudiedLanguageWasChecked = false;
+				PronunciationRecord = null;
+
 				SetProperty(ref textInStudiedLanguage, value);
 				OnPropertyChanged(nameof(TextInStudiedLanguageIsFilled));
 				OnErrorsChanged(nameof(TextInStudiedLanguage));
 			}
+		}
+
+		private bool textInStudiedLanguageWasChecked;
+
+		public bool TextInStudiedLanguageWasChecked
+		{
+			get => textInStudiedLanguageWasChecked;
+			private set => SetProperty(ref textInStudiedLanguageWasChecked, value);
 		}
 
 		public bool TextInStudiedLanguageIsFilled => !String.IsNullOrEmpty(TextInStudiedLanguage);
@@ -130,7 +141,7 @@ namespace VocabularyCoach.ViewModels
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			CheckTextCommand = new AsyncRelayCommand(CheckText);
-			PlayPronunciationRecordCommand = new AsyncRelayCommand(PlayPronunciationRecord);
+			PlayPronunciationRecordCommand = new AsyncRelayCommand(LoadAndPlayPronunciationRecord);
 			SaveChangesCommand = new AsyncRelayCommand(SaveChanges);
 			ClearChangesCommand = new RelayCommand(ClearFilledData);
 			GoToStartPageCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
@@ -160,13 +171,27 @@ namespace VocabularyCoach.ViewModels
 			var url = await editVocabularyService.GetUrlForLanguageTextCheck(languageText, cancellationToken);
 
 			webBrowser.OpenPage(url);
+
+			if (PronunciationRecord == null)
+			{
+				PronunciationRecord = await SynthesizePronunciationRecord(cancellationToken);
+
+				await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
+			}
+
+			TextInStudiedLanguageWasChecked = true;
 		}
 
-		private async Task PlayPronunciationRecord(CancellationToken cancellationToken)
+		private async Task LoadAndPlayPronunciationRecord(CancellationToken cancellationToken)
 		{
-			PronunciationRecord ??= await pronunciationRecordSynthesizer.SynthesizePronunciationRecord(StudiedLanguage, TextInStudiedLanguage, cancellationToken);
+			PronunciationRecord ??= await SynthesizePronunciationRecord(cancellationToken);
 
 			await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
+		}
+
+		private Task<PronunciationRecord> SynthesizePronunciationRecord(CancellationToken cancellationToken)
+		{
+			return pronunciationRecordSynthesizer.SynthesizePronunciationRecord(StudiedLanguage, TextInStudiedLanguage, cancellationToken);
 		}
 
 		private async Task SaveChanges(CancellationToken cancellationToken)
