@@ -183,6 +183,11 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task CheckText(CancellationToken cancellationToken)
 		{
+			if (String.IsNullOrWhiteSpace(TextInStudiedLanguage))
+			{
+				return;
+			}
+
 			var languageText = new LanguageText
 			{
 				Language = StudiedLanguage,

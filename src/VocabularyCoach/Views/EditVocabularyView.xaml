@@ -45,7 +45,8 @@
 
             <Label Grid.Row="0" Grid.Column="0" Padding="0,5,5,0" Margin="0,10,0,0" Content="{Binding StudiedLanguage.Name}" ContentStringFormat="Text in {0} language:" />
             <TextBox Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{Binding TextInStudiedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                     helpers:FocusHelper.IsFocused="{Binding TextInStudiedLanguageIsFocused}">
+                     helpers:FocusHelper.IsFocused="{Binding TextInStudiedLanguageIsFocused}"
+                     helpers:TextBoxPasteBehavior.PasteCommand="{Binding CheckTextCommand}">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding SaveChangesCommand}" Key="Enter" />
                 </TextBox.InputBindings>
