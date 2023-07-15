@@ -16,9 +16,10 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -56,7 +57,12 @@
                    Visibility="{Binding TextIsTypedIncorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
 
-        <UniformGrid Grid.Row="3" Margin="20" Rows="1" Columns="2" HorizontalAlignment="Center">
+        <Grid Grid.Row="3" Margin="20,0">
+            <ProgressBar Height="30" Maximum="{Binding NumberOfTextsForCheck}" Value="{Binding CurrentTextForCheckNumber, Mode=OneWay}" />
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressInfo}" />
+        </Grid>
+
+        <UniformGrid Grid.Row="4" Margin="20" Rows="1" Columns="2" HorizontalAlignment="Center">
             <Button Margin="0,0,20,0" Width="80" Content="Check" Command="{Binding CheckTypedTextCommand}"
                     Visibility="{Binding CheckResultIsShown, Converter={StaticResource InvertedVisibilityCollapsedValueConverter}}" />
             <Button Margin="0,0,20,0" Width="80" Content="Next" Command="{Binding SwitchToNextTextCommand}" IsEnabled="{Binding CanSwitchToNextText}"

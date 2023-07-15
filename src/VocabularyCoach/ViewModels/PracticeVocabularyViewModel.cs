@@ -41,6 +41,22 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
+		public int NumberOfTextsForCheck => TextsForCheck.Count;
+
+		private int currentTextForCheckNumber;
+
+		public int CurrentTextForCheckNumber
+		{
+			get => currentTextForCheckNumber;
+			private set
+			{
+				SetProperty(ref currentTextForCheckNumber, value);
+				OnPropertyChanged(nameof(ProgressInfo));
+			}
+		}
+
+		public string ProgressInfo => $"{CurrentTextForCheckNumber} / {NumberOfTextsForCheck}";
+
 		private StudiedText currentTextForCheck;
 
 		public StudiedText CurrentTextForCheck
@@ -158,6 +174,7 @@ namespace VocabularyCoach.ViewModels
 
 			TextsForCheck = (await vocabularyService.GetTextsForCheck(User, studiedLanguage, knownLanguage, cancellationToken)).ToList();
 			CurrentTextIndex = -1;
+			CurrentTextForCheckNumber = 0;
 
 			CheckResults = new CheckResults();
 
@@ -175,6 +192,8 @@ namespace VocabularyCoach.ViewModels
 			await PlayPronunciationRecord(cancellationToken);
 
 			CheckResults.AddResult(checkResult);
+
+			++CurrentTextForCheckNumber;
 		}
 
 		private async Task SwitchToNextText(CancellationToken cancellationToken)

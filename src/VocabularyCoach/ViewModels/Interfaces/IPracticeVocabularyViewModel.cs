@@ -7,6 +7,12 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IPracticeVocabularyViewModel : IPageViewModel
 	{
+		int NumberOfTextsForCheck { get; }
+
+		int CurrentTextForCheckNumber { get; }
+
+		string ProgressInfo { get; }
+
 		StudiedText CurrentTextForCheck { get; }
 
 		string DisplayedTextInKnownLanguage { get; }
