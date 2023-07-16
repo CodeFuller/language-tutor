@@ -83,7 +83,7 @@
         </Grid>
 
         <UniformGrid Grid.Row="2" Margin="20" Rows="1" Columns="2" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Button Margin="0,0,20,0" Width="160" Content="Practice Vocabulary" Command="{Binding PracticeVocabularyCommand}" />
+            <Button Margin="0,0,20,0" Width="160" Content="Practice Vocabulary" IsEnabled="{Binding HasTextsForPractice}" Command="{Binding PracticeVocabularyCommand}" />
             <Button Margin="20,0,0,0" Width="160" Content="Edit Vocabulary" Command="{Binding EditVocabularyCommand}" />
         </UniformGrid>
     </Grid>

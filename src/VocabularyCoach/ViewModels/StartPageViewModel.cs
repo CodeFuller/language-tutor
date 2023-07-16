@@ -38,7 +38,20 @@ namespace VocabularyCoach.ViewModels
 			set => SetProperty(ref selectedKnownLanguage, value);
 		}
 
-		public VocabularyStatisticsData VocabularyStatistics { get; private set; }
+		private VocabularyStatisticsData vocabularyStatistics;
+
+		public VocabularyStatisticsData VocabularyStatistics
+		{
+			get => vocabularyStatistics;
+			private set
+			{
+				SetProperty(ref vocabularyStatistics, value);
+
+				OnPropertyChanged(nameof(HasTextsForPractice));
+			}
+		}
+
+		public bool HasTextsForPractice => VocabularyStatistics?.NumberOfTextsToPracticeToday > 0;
 
 		public ICommand PracticeVocabularyCommand { get; }
 

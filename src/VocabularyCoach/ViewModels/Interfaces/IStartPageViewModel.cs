@@ -17,6 +17,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		VocabularyStatisticsData VocabularyStatistics { get; }
 
+		bool HasTextsForPractice { get; }
+
 		ICommand PracticeVocabularyCommand { get; }
 
 		ICommand EditVocabularyCommand { get; }
