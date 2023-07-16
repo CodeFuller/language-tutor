@@ -16,6 +16,8 @@ namespace VocabularyCoach.Services.Interfaces
 
 		Task<CheckResultType> CheckTypedText(User user, StudiedText studiedText, string typedText, CancellationToken cancellationToken);
 
-		Task<VocabularyStatisticsData> GetVocabularyStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
+		Task<UserStatisticsData> GetUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
+
+		Task StoreUserStatistics(User user, Language studiedLanguage, Language knownLanguage, UserStatisticsData statistics, CancellationToken cancellationToken);
 	}
 }

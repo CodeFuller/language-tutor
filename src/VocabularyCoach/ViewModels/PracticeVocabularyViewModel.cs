@@ -27,6 +27,10 @@ namespace VocabularyCoach.ViewModels
 
 		private User User { get; set; }
 
+		private Language StudiedLanguage { get; set; }
+
+		private Language KnownLanguage { get; set; }
+
 		private IReadOnlyList<StudiedText> TextsForCheck { get; set; }
 
 		private int currentTextIndex;
@@ -143,7 +147,7 @@ namespace VocabularyCoach.ViewModels
 
 		public bool CanSwitchToNextText => CheckResultIsShown && CurrentTextIndex + 1 < TextsForCheck.Count;
 
-		private CheckResults CheckResults { get; set; }
+		private PracticeResults PracticeResults { get; set; }
 
 		public ICommand CheckTypedTextCommand { get; }
 
@@ -171,12 +175,14 @@ namespace VocabularyCoach.ViewModels
 		public async Task Load(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
 			User = user;
+			StudiedLanguage = studiedLanguage;
+			KnownLanguage = knownLanguage;
 
 			TextsForCheck = (await vocabularyService.GetTextsForPractice(User, studiedLanguage, knownLanguage, cancellationToken)).ToList();
 			CurrentTextIndex = -1;
 			CurrentTextForCheckNumber = 0;
 
-			CheckResults = new CheckResults();
+			PracticeResults = new PracticeResults();
 
 			await SwitchToNextText(cancellationToken);
 		}
@@ -191,7 +197,7 @@ namespace VocabularyCoach.ViewModels
 
 			await PlayPronunciationRecord(cancellationToken);
 
-			CheckResults.AddResult(checkResult);
+			PracticeResults.AddResult(checkResult);
 
 			++CurrentTextForCheckNumber;
 		}
@@ -240,7 +246,7 @@ namespace VocabularyCoach.ViewModels
 
 		private void FinishPractice()
 		{
-			messenger.Send(new SwitchToCheckResultsPageEventArgs(CheckResults));
+			messenger.Send(new SwitchToPracticeResultsPageEventArgs(StudiedLanguage, KnownLanguage, PracticeResults));
 		}
 	}
 }

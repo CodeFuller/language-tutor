@@ -15,7 +15,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		Language SelectedKnownLanguage { get; set; }
 
-		VocabularyStatisticsData VocabularyStatistics { get; }
+		UserStatisticsData UserStatistics { get; }
 
 		bool HasTextsForPractice { get; }
 

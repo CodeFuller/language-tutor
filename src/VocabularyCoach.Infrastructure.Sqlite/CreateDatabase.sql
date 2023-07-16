@@ -1,6 +1,7 @@
 CREATE TABLE [Users] (
   [Id] INTEGER NOT NULL,
   [Name] ntext NOT NULL,
+
   CONSTRAINT [sqlite_master_PK_Users] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Users] UNIQUE ([Name])
 );
@@ -8,6 +9,7 @@ CREATE TABLE [Users] (
 CREATE TABLE [Languages] (
   [Id] INTEGER NOT NULL,
   [Name] ntext NOT NULL,
+
   CONSTRAINT [sqlite_master_PK_Languages] PRIMARY KEY ([Id]),
   CONSTRAINT [sqlite_master_UC_Languages] UNIQUE ([Name])
 );
@@ -18,6 +20,7 @@ CREATE TABLE [Texts] (
   [UserId] int NULL,
   [Text] ntext NOT NULL,
   [Note] ntext NULL,
+
   CONSTRAINT [sqlite_master_PK_Texts] PRIMARY KEY ([Id]),
   FOREIGN KEY ([LanguageId]) REFERENCES [Languages] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
@@ -28,6 +31,7 @@ CREATE INDEX [IX_Texts_LanguageId] ON [Texts] ([LanguageId]);
 CREATE TABLE [Translations] (
   [TextId1] int NOT NULL,
   [TextId2] int NOT NULL,
+
   CONSTRAINT [sqlite_master_PK_Translations] PRIMARY KEY ([TextId1], [TextId2]),
   FOREIGN KEY ([TextId1]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([TextId2]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
@@ -44,6 +48,7 @@ CREATE TABLE [PronunciationRecords] (
   [Path] ntext NOT NULL,
   [DataLength] int NOT NULL,
   [DataChecksum] int NOT NULL,
+
   CONSTRAINT [sqlite_master_PK_PronunciationRecords] PRIMARY KEY ([Id]),
   FOREIGN KEY ([TextId]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT [sqlite_master_UC_PronunciationRecords] UNIQUE ([TextId])
@@ -57,9 +62,26 @@ CREATE TABLE [CheckResults] (
   [TextId] int NOT NULL,
   [DateTime] datetime NOT NULL,
   [ResultType] int NOT NULL,
+
   CONSTRAINT [sqlite_master_PK_CheckResults] PRIMARY KEY ([Id]),
   FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([TextId]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE [UserStatistics] (
+  [UserId] int NOT NULL,
+  [StudiedLanguageId] int NOT NULL,
+  [KnownLanguageId] int NOT NULL,
+  [Date] datetime NOT NULL,
+  [TotalTextsNumber] int NOT NULL,
+  [TotalLearnedTextsNumber] int NOT NULL,
+  [RestNumberOfTextsToPractice] int NOT NULL,
+  [NumberOfPracticedTexts] int NOT NULL,
+
+  CONSTRAINT [sqlite_master_PK_UserStatistics] PRIMARY KEY ([UserId], [StudiedLanguageId], [KnownLanguageId], [Date]),
+  FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ([StudiedLanguageId]) REFERENCES [Languages] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ([KnownLanguageId]) REFERENCES [Languages] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE INDEX [IX_CheckResults_UserId] ON [CheckResults] ([UserId]);

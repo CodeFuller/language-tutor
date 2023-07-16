@@ -1,9 +1,13 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Events;
+using VocabularyCoach.Models;
+using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -11,14 +15,16 @@ namespace VocabularyCoach.ViewModels
 {
 	public class PracticeResultsViewModel : ObservableObject, IPracticeResultsViewModel
 	{
-		private CheckResults checkResults;
+		private readonly IVocabularyService vocabularyService;
 
-		public CheckResults CheckResults
+		private PracticeResults practiceResults;
+
+		public PracticeResults PracticeResults
 		{
-			get => checkResults;
+			get => practiceResults;
 			private set
 			{
-				checkResults = value;
+				practiceResults = value;
 
 				OnPropertyChanged(nameof(PracticedTextsStatistics));
 				OnPropertyChanged(nameof(CorrectTextStatistics));
@@ -27,26 +33,30 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
-		public string PracticedTextsStatistics => $"{checkResults.CheckedTextsCount:N0}";
+		public string PracticedTextsStatistics => $"{practiceResults.CheckedTextsCount:N0}";
 
-		public string CorrectTextStatistics => GetStatistics(checkResults.CorrectTextsCount, checkResults.CheckedTextsCount);
+		public string CorrectTextStatistics => GetStatistics(practiceResults.CorrectTextsCount, practiceResults.CheckedTextsCount);
 
-		public string IncorrectTextStatistics => GetStatistics(checkResults.IncorrectTextsCount, checkResults.CheckedTextsCount);
+		public string IncorrectTextStatistics => GetStatistics(practiceResults.IncorrectTextsCount, practiceResults.CheckedTextsCount);
 
-		public string SkippedTextStatistics => GetStatistics(checkResults.SkippedTextsCount, checkResults.CheckedTextsCount);
+		public string SkippedTextStatistics => GetStatistics(practiceResults.SkippedTextsCount, practiceResults.CheckedTextsCount);
 
 		public ICommand GoToStartPageCommand { get; }
 
-		public PracticeResultsViewModel(IMessenger messenger)
+		public PracticeResultsViewModel(IVocabularyService vocabularyService, IMessenger messenger)
 		{
+			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			GoToStartPageCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
 		}
 
-		public void Load(CheckResults checkResults)
+		public async Task Load(User user, Language studiedLanguage, Language knownLanguage, PracticeResults results, CancellationToken cancellationToken)
 		{
-			CheckResults = checkResults;
+			PracticeResults = results;
+
+			var userStatistics = await vocabularyService.GetUserStatistics(user, studiedLanguage, knownLanguage, cancellationToken);
+			await vocabularyService.StoreUserStatistics(user, studiedLanguage, knownLanguage, userStatistics, cancellationToken);
 		}
 
 		private static string GetStatistics(int statisticsCount, int totalCount)

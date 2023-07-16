@@ -3,7 +3,7 @@ using VocabularyCoach.Models;
 
 namespace VocabularyCoach.ViewModels.Data
 {
-	public class CheckResults
+	public class PracticeResults
 	{
 		public int CheckedTextsCount { get; private set; }
 

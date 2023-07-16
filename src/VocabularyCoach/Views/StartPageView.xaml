@@ -68,16 +68,16 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Number of texts:" />
-                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding VocabularyStatistics.NumberOfTexts}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding UserStatistics.TotalNumberOfTexts}" HorizontalAlignment="Right" />
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Number of learned texts:" />
-                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding VocabularyStatistics.NumberOfLearnedTexts}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding UserStatistics.TotalNumberOfLearnedTexts}" HorizontalAlignment="Right" />
 
                     <Label Grid.Row="2" Grid.Column="0" Content="To practice today:" />
-                    <Label Grid.Row="2" Grid.Column="1" Content="{Binding VocabularyStatistics.NumberOfTextsToPracticeToday}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="2" Grid.Column="1" Content="{Binding UserStatistics.RestNumberOfTextsToPracticeToday}" HorizontalAlignment="Right" />
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Practiced today:" />
-                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding VocabularyStatistics.NumberOfTextsPracticedToday}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding UserStatistics.NumberOfTextsPracticedToday}" HorizontalAlignment="Right" />
                 </Grid>
             </Grid>
         </Grid>

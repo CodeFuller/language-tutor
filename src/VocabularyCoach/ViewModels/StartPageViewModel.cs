@@ -38,20 +38,20 @@ namespace VocabularyCoach.ViewModels
 			set => SetProperty(ref selectedKnownLanguage, value);
 		}
 
-		private VocabularyStatisticsData vocabularyStatistics;
+		private UserStatisticsData userStatistics;
 
-		public VocabularyStatisticsData VocabularyStatistics
+		public UserStatisticsData UserStatistics
 		{
-			get => vocabularyStatistics;
+			get => userStatistics;
 			private set
 			{
-				SetProperty(ref vocabularyStatistics, value);
+				SetProperty(ref userStatistics, value);
 
 				OnPropertyChanged(nameof(HasTextsForPractice));
 			}
 		}
 
-		public bool HasTextsForPractice => VocabularyStatistics?.NumberOfTextsToPracticeToday > 0;
+		public bool HasTextsForPractice => UserStatistics?.RestNumberOfTextsToPracticeToday > 0;
 
 		public ICommand PracticeVocabularyCommand { get; }
 
@@ -78,7 +78,7 @@ namespace VocabularyCoach.ViewModels
 			SelectedKnownLanguage = AvailableLanguages.Last();
 
 			// TODO: Handle change in language selection.
-			VocabularyStatistics = await vocabularyService.GetVocabularyStatistics(user, SelectedStudiedLanguage, SelectedKnownLanguage, cancellationToken);
+			UserStatistics = await vocabularyService.GetUserStatistics(user, SelectedStudiedLanguage, SelectedKnownLanguage, cancellationToken);
 		}
 	}
 }

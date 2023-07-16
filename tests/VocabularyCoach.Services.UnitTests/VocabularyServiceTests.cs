@@ -60,7 +60,7 @@ namespace VocabularyCoach.Services.UnitTests
 			};
 
 			var mocker = StubStudiedTexts(studiedTexts);
-			StubTodayDate(mocker, new DateTime(2023, 07, 11));
+			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
 
 			var target = mocker.CreateInstance<VocabularyService>();
 
@@ -142,7 +142,7 @@ namespace VocabularyCoach.Services.UnitTests
 			};
 
 			var mocker = StubStudiedTexts(studiedTexts);
-			StubTodayDate(mocker, new DateTime(2023, 07, 21));
+			StubTodayDate(mocker, new DateOnly(2023, 07, 21));
 
 			var target = mocker.CreateInstance<VocabularyService>();
 
@@ -214,7 +214,7 @@ namespace VocabularyCoach.Services.UnitTests
 			};
 
 			var mocker = StubStudiedTexts(studiedTexts);
-			StubTodayDate(mocker, new DateTime(2023, 07, 11));
+			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
 
 			var target = mocker.CreateInstance<VocabularyService>();
 
@@ -323,7 +323,7 @@ namespace VocabularyCoach.Services.UnitTests
 			};
 
 			var mocker = StubStudiedTexts(studiedTexts);
-			StubTodayDate(mocker, new DateTime(2023, 07, 21));
+			StubTodayDate(mocker, new DateOnly(2023, 07, 21));
 
 			var target = mocker.CreateInstance<VocabularyService>();
 
@@ -384,7 +384,7 @@ namespace VocabularyCoach.Services.UnitTests
 			};
 
 			var mocker = StubStudiedTexts(studiedTexts);
-			StubTodayDate(mocker, new DateTime(2023, 07, 11));
+			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
 
 			var target = mocker.CreateInstance<VocabularyService>();
 
@@ -432,10 +432,10 @@ namespace VocabularyCoach.Services.UnitTests
 			return mocker;
 		}
 
-		private static void StubTodayDate(AutoMocker mocker, DateTime dateTime)
+		private static void StubTodayDate(AutoMocker mocker, DateOnly todayDate)
 		{
 			var systemClockStub = new Mock<ISystemClock>();
-			systemClockStub.Setup(x => x.Now).Returns(dateTime);
+			systemClockStub.Setup(x => x.Today).Returns(todayDate);
 
 			mocker.Use(systemClockStub);
 		}

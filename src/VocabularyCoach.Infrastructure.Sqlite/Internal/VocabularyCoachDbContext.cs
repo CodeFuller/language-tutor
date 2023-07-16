@@ -15,6 +15,8 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Internal
 
 		public DbSet<CheckResultEntity> CheckResults { get; set; }
 
+		public DbSet<UserStatisticsEntity> UserStatistics { get; set; }
+
 		public VocabularyCoachDbContext(DbContextOptions options)
 			: base(options)
 		{
@@ -26,9 +28,12 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Internal
 
 			modelBuilder.Entity<TranslationEntity>(builder =>
 			{
-				builder.ToTable("Translations");
-
 				builder.HasKey(x => new { x.TextId1, x.TextId2 });
+			});
+
+			modelBuilder.Entity<UserStatisticsEntity>(builder =>
+			{
+				builder.HasKey(x => new { x.UserId, x.StudiedLanguageId, x.KnownLanguageId, x.Date });
 			});
 		}
 	}

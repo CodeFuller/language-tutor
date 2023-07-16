@@ -1,4 +1,7 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using VocabularyCoach.Models;
 using VocabularyCoach.ViewModels.Data;
 
 namespace VocabularyCoach.ViewModels.Interfaces
@@ -15,6 +18,6 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		ICommand GoToStartPageCommand { get; }
 
-		void Load(CheckResults checkResults);
+		Task Load(User user, Language studiedLanguage, Language knownLanguage, PracticeResults results, CancellationToken cancellationToken);
 	}
 }
