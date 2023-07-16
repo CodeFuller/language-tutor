@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using VocabularyCoach.Models;
+using VocabularyCoach.Services.Data;
 
 namespace VocabularyCoach.ViewModels.Interfaces
 {
@@ -14,10 +15,12 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		Language SelectedKnownLanguage { get; set; }
 
+		VocabularyStatisticsData VocabularyStatistics { get; }
+
 		ICommand PracticeVocabularyCommand { get; }
 
 		ICommand EditVocabularyCommand { get; }
 
-		Task Load(CancellationToken cancellationToken);
+		Task Load(User user, CancellationToken cancellationToken);
 	}
 }

@@ -68,7 +68,7 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task LoadAndSetStartPage(CancellationToken cancellationToken)
 		{
-			await StartPageViewModel.Load(cancellationToken);
+			await StartPageViewModel.Load(CurrentUser, cancellationToken);
 
 			CurrentPage = StartPageViewModel;
 		}

@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Events;
 using VocabularyCoach.Extensions;
 using VocabularyCoach.Models;
+using VocabularyCoach.Services.Data;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -37,6 +38,8 @@ namespace VocabularyCoach.ViewModels
 			set => SetProperty(ref selectedKnownLanguage, value);
 		}
 
+		public VocabularyStatisticsData VocabularyStatistics { get; private set; }
+
 		public ICommand PracticeVocabularyCommand { get; }
 
 		public ICommand EditVocabularyCommand { get; }
@@ -50,18 +53,19 @@ namespace VocabularyCoach.ViewModels
 			EditVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToEditVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 		}
 
-		public async Task Load(CancellationToken cancellationToken)
+		public async Task Load(User user, CancellationToken cancellationToken)
 		{
 			var languages = await vocabularyService.GetLanguages(cancellationToken);
 
 			AvailableLanguages.Clear();
 			AvailableLanguages.AddRange(languages);
 
-			// TODO: Load last studied language from settings.
+			// TODO: Load last languages from application settings.
 			SelectedStudiedLanguage = AvailableLanguages.First();
-
-			// TODO: Load last known language from settings.
 			SelectedKnownLanguage = AvailableLanguages.Last();
+
+			// TODO: Handle change in language selection.
+			VocabularyStatistics = await vocabularyService.GetVocabularyStatistics(user, SelectedStudiedLanguage, SelectedKnownLanguage, cancellationToken);
 		}
 	}
 }

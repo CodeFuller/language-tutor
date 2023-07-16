@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VocabularyCoach.Models;
+using VocabularyCoach.Services.Data;
 using VocabularyCoach.Services.Extensions;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.Services.Interfaces.Repositories;
@@ -61,6 +62,11 @@ namespace VocabularyCoach.Services
 		{
 			var studiedTexts = await languageTextRepository.GetStudiedTexts(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
 
+			return SelectTextsForTodayPractice(studiedTexts);
+		}
+
+		private IReadOnlyCollection<StudiedText> SelectTextsForTodayPractice(IEnumerable<StudiedText> studiedTexts)
+		{
 			return studiedTexts
 				.Select(x => new
 				{
@@ -121,6 +127,35 @@ namespace VocabularyCoach.Services
 			studiedText.AddCheckResult(checkResult);
 
 			return checkResult.CheckResultType;
+		}
+
+		public async Task<VocabularyStatisticsData> GetVocabularyStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		{
+			var studiedTexts = await languageTextRepository.GetStudiedTexts(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+
+			var textsForPractice = SelectTextsForTodayPractice(studiedTexts);
+
+			var today = systemClock.Now.Date;
+
+			return new VocabularyStatisticsData
+			{
+				NumberOfTexts = studiedTexts.Count,
+				NumberOfLearnedTexts = studiedTexts.Count(TextIsLearned),
+				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.Date == today)),
+				NumberOfTextsToPracticeToday = textsForPractice.Count,
+			};
+		}
+
+		private static bool TextIsLearned(StudiedText text)
+		{
+			// We consider text as learned, if 3 last checks are successful.
+			const int learnedTextChecksNumber = 3;
+
+			var lastChecks = text.CheckResults
+				.Take(learnedTextChecksNumber)
+				.ToList();
+
+			return lastChecks.Count >= 3 && lastChecks.All(x => x.CheckResultType == CheckResultType.Ok);
 		}
 
 		private static CheckResultType GetCheckResultType(LanguageText languageText, string typedText)
