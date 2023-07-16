@@ -3,7 +3,7 @@ using VocabularyCoach.ViewModels.Data;
 
 namespace VocabularyCoach.ViewModels.Interfaces
 {
-	public interface ICheckResultsViewModel : IPageViewModel
+	public interface IPracticeResultsViewModel : IPageViewModel
 	{
 		string CheckedTextsStatistics { get; }
 

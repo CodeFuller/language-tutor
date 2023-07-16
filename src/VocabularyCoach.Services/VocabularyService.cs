@@ -58,7 +58,7 @@ namespace VocabularyCoach.Services
 			return languages.OrderBy(x => x.Name).ToList();
 		}
 
-		public async Task<IReadOnlyCollection<StudiedText>> GetTextsForCheck(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<StudiedText>> GetTextsForPractice(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
 			var studiedTexts = await languageTextRepository.GetStudiedTexts(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
 

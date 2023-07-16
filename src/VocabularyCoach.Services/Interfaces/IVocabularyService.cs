@@ -10,7 +10,7 @@ namespace VocabularyCoach.Services.Interfaces
 	{
 		Task<IReadOnlyCollection<Language>> GetLanguages(CancellationToken cancellationToken);
 
-		Task<IReadOnlyCollection<StudiedText>> GetTextsForCheck(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<StudiedText>> GetTextsForPractice(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
 
 		Task<PronunciationRecord> GetPronunciationRecord(ItemId textId, CancellationToken cancellationToken);
 

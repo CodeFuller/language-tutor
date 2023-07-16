@@ -172,7 +172,7 @@ namespace VocabularyCoach.ViewModels
 		{
 			User = user;
 
-			TextsForCheck = (await vocabularyService.GetTextsForCheck(User, studiedLanguage, knownLanguage, cancellationToken)).ToList();
+			TextsForCheck = (await vocabularyService.GetTextsForPractice(User, studiedLanguage, knownLanguage, cancellationToken)).ToList();
 			CurrentTextIndex = -1;
 			CurrentTextForCheckNumber = 0;
 

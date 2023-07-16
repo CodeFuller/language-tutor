@@ -23,8 +23,8 @@
         <DataTemplate DataType="{x:Type viewModels:PracticeVocabularyViewModel}">
             <views:PracticeVocabularyView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:CheckResultsViewModel}">
-            <views:CheckResultsView />
+        <DataTemplate DataType="{x:Type viewModels:PracticeResultsViewModel}">
+            <views:PracticeResultsView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:EditVocabularyViewModel}">
             <views:EditVocabularyView />

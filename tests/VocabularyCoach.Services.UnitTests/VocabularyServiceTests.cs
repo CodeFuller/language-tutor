@@ -33,7 +33,7 @@ namespace VocabularyCoach.Services.UnitTests
 		};
 
 		[TestMethod]
-		public async Task GetTextsForCheck_ForMissingStudiedTexts_ReturnsEmptyCollection()
+		public async Task GetTextsForPractice_ForMissingStudiedTexts_ReturnsEmptyCollection()
 		{
 			// Arrange
 
@@ -42,7 +42,7 @@ namespace VocabularyCoach.Services.UnitTests
 
 			// Act
 
-			var result = await target.GetTextsForCheck(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
 
 			// Assert
 
@@ -50,7 +50,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForCheck_ForTextsWithNoChecks_ReturnsSuchTexts()
+		public async Task GetTextsForPractice_ForTextsWithNoChecks_ReturnsSuchTexts()
 		{
 			// Arrange
 
@@ -66,7 +66,7 @@ namespace VocabularyCoach.Services.UnitTests
 
 			// Act
 
-			var result = await target.GetTextsForCheck(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
 
 			// Assert
 
@@ -74,7 +74,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForCheck_ForTextsWithSmallNumberOfAllSuccessfulChecks_TreatsFirstMissingCheckAsFailed()
+		public async Task GetTextsForPractice_ForTextsWithSmallNumberOfAllSuccessfulChecks_TreatsFirstMissingCheckAsFailed()
 		{
 			// Arrange
 
@@ -148,7 +148,7 @@ namespace VocabularyCoach.Services.UnitTests
 
 			// Act
 
-			var result = await target.GetTextsForCheck(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
 
 			// Assert
 
@@ -164,7 +164,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForCheck_ForTextsWithAllSuccessfulChecks_AppliesCorrectCheckInterval()
+		public async Task GetTextsForPractice_ForTextsWithAllSuccessfulChecks_AppliesCorrectCheckInterval()
 		{
 			// Arrange
 
@@ -220,7 +220,7 @@ namespace VocabularyCoach.Services.UnitTests
 
 			// Act
 
-			var result = await target.GetTextsForCheck(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
 
 			// Assert
 
@@ -235,7 +235,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForCheck_ForTextsWithFailedCheck_AppliesCorrectCheckInterval()
+		public async Task GetTextsForPractice_ForTextsWithFailedCheck_AppliesCorrectCheckInterval()
 		{
 			// Arrange
 
@@ -329,7 +329,7 @@ namespace VocabularyCoach.Services.UnitTests
 
 			// Act
 
-			var result = await target.GetTextsForCheck(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
 
 			// Assert
 
@@ -346,7 +346,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForCheck_ForTextsWithDifferentNextCheckDate_OrdersChecksByNextCheckDate()
+		public async Task GetTextsForPractice_ForTextsWithDifferentNextCheckDate_OrdersChecksByNextCheckDate()
 		{
 			// Arrange
 
@@ -390,7 +390,7 @@ namespace VocabularyCoach.Services.UnitTests
 
 			// Act
 
-			var result = await target.GetTextsForCheck(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
 
 			// Assert
 

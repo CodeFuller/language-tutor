@@ -9,7 +9,7 @@ using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels
 {
-	public class CheckResultsViewModel : ObservableObject, ICheckResultsViewModel
+	public class PracticeResultsViewModel : ObservableObject, IPracticeResultsViewModel
 	{
 		private CheckResults checkResults;
 
@@ -37,7 +37,7 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand GoToStartPageCommand { get; }
 
-		public CheckResultsViewModel(IMessenger messenger)
+		public PracticeResultsViewModel(IMessenger messenger)
 		{
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 

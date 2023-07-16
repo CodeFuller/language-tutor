@@ -25,7 +25,7 @@ namespace VocabularyCoach.ViewModels
 
 		public IPracticeVocabularyViewModel PracticeVocabularyViewModel { get; }
 
-		public ICheckResultsViewModel CheckResultsViewModel { get; }
+		public IPracticeResultsViewModel PracticeResultsViewModel { get; }
 
 		public IEditVocabularyViewModel EditVocabularyViewModel { get; }
 
@@ -40,11 +40,11 @@ namespace VocabularyCoach.ViewModels
 		public ICommand LoadCommand { get; }
 
 		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPracticeVocabularyViewModel practiceVocabularyViewModel,
-			ICheckResultsViewModel checkResultsViewModel, IEditVocabularyViewModel editVocabularyViewModel, IMessenger messenger)
+			IPracticeResultsViewModel practiceResultsViewModel, IEditVocabularyViewModel editVocabularyViewModel, IMessenger messenger)
 		{
 			StartPageViewModel = startPageViewModel ?? throw new ArgumentNullException(nameof(startPageViewModel));
 			PracticeVocabularyViewModel = practiceVocabularyViewModel ?? throw new ArgumentNullException(nameof(practiceVocabularyViewModel));
-			CheckResultsViewModel = checkResultsViewModel ?? throw new ArgumentNullException(nameof(checkResultsViewModel));
+			PracticeResultsViewModel = practiceResultsViewModel ?? throw new ArgumentNullException(nameof(practiceResultsViewModel));
 			EditVocabularyViewModel = editVocabularyViewModel ?? throw new ArgumentNullException(nameof(editVocabularyViewModel));
 
 			LoadCommand = new AsyncRelayCommand(Load);
@@ -82,9 +82,9 @@ namespace VocabularyCoach.ViewModels
 
 		private void SwitchToCheckResultsPage(CheckResults checkResults)
 		{
-			CheckResultsViewModel.Load(checkResults);
+			PracticeResultsViewModel.Load(checkResults);
 
-			CurrentPage = CheckResultsViewModel;
+			CurrentPage = PracticeResultsViewModel;
 		}
 
 		private async void SwitchToEditVocabularyPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
