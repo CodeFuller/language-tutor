@@ -20,14 +20,14 @@ namespace VocabularyCoach.ViewModels
 			{
 				checkResults = value;
 
-				OnPropertyChanged(nameof(CheckedTextsStatistics));
+				OnPropertyChanged(nameof(PracticedTextsStatistics));
 				OnPropertyChanged(nameof(CorrectTextStatistics));
 				OnPropertyChanged(nameof(IncorrectTextStatistics));
 				OnPropertyChanged(nameof(SkippedTextStatistics));
 			}
 		}
 
-		public string CheckedTextsStatistics => $"{checkResults.CheckedTextsCount:N0}";
+		public string PracticedTextsStatistics => $"{checkResults.CheckedTextsCount:N0}";
 
 		public string CorrectTextStatistics => GetStatistics(checkResults.CorrectTextsCount, checkResults.CheckedTextsCount);
 

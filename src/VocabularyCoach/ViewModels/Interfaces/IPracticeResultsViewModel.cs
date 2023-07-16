@@ -5,7 +5,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IPracticeResultsViewModel : IPageViewModel
 	{
-		string CheckedTextsStatistics { get; }
+		string PracticedTextsStatistics { get; }
 
 		string CorrectTextStatistics { get; }
 

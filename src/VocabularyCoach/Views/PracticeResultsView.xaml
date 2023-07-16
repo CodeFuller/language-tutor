@@ -34,10 +34,10 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Check results" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
+                <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Practice results" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" />
 
-                <Label Grid.Row="1" Grid.Column="0" Content="Checked:" />
-                <Label Grid.Row="1" Grid.Column="1" Content="{Binding CheckedTextsStatistics}" HorizontalAlignment="Right" />
+                <Label Grid.Row="1" Grid.Column="0" Content="Practiced:" />
+                <Label Grid.Row="1" Grid.Column="1" Content="{Binding PracticedTextsStatistics}" HorizontalAlignment="Right" />
 
                 <Label Grid.Row="2" Grid.Column="0" Foreground="Green" Content="Correct:" />
                 <Label Grid.Row="2" Grid.Column="1" Foreground="Green" Content="{Binding CorrectTextStatistics}" HorizontalAlignment="Right" />
