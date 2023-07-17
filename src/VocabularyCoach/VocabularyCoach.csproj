@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ImportGroup Label="Properties">
     <Import Project="..\..\VocabularyCoach.src.props" />
@@ -12,8 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeFuller.Library.Logging" Version="8.1.0" />
-    <PackageReference Include="CodeFuller.Library.Wpf" Version="8.1.0" />
+    <PackageReference Include="CodeFuller.Library.Logging" Version="8.2.0" />
+    <PackageReference Include="CodeFuller.Library.Wpf" Version="8.2.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="NAudio" Version="2.1.0" />

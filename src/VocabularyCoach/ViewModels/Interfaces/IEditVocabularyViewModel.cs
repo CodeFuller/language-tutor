@@ -8,11 +8,13 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IEditVocabularyViewModel : IPageViewModel
 	{
-		ObservableCollection<LanguageText> TextsInStudiedLanguage { get; }
-
 		Language StudiedLanguage { get; }
 
 		Language KnownLanguage { get; }
+
+		ObservableCollection<LanguageTextViewModel> TextsInStudiedLanguage { get; }
+
+		ObservableCollection<LanguageTextViewModel> TextsInKnownLanguage { get; }
 
 		bool TextInStudiedLanguageIsFocused { get; }
 
@@ -25,6 +27,10 @@ namespace VocabularyCoach.ViewModels.Interfaces
 		bool TextInKnownLanguageIsFocused { get; }
 
 		string TextInKnownLanguage { get; set; }
+
+		LanguageTextViewModel SelectedTextInKnownLanguage { get; set; }
+
+		bool ExistingTextInKnownLanguageIsSelected { get; }
 
 		string NoteInKnownLanguage { get; set; }
 

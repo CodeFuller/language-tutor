@@ -6,25 +6,21 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:helpers="clr-namespace:VocabularyCoach.Views.Helpers"
              xmlns:designInstances="clr-namespace:VocabularyCoach.Views.DesignInstances"
+             xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance designInstances:EditVocabularyDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
+    <UserControl.Resources>
+        <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanConverter" />
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Margin="5">
-            <ListBox BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}"
-                     ItemsSource="{Binding TextsInStudiedLanguage}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Text}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
+        <ListBox Grid.Column="0" Margin="5" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}" ItemsSource="{Binding TextsInStudiedLanguage}" />
         <Grid Grid.Column="1" Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -74,15 +70,16 @@
             </StackPanel>
 
             <Label Grid.Row="3" Grid.Column="0" Padding="0,5,5,0" Margin="0,10,0,0" Content="{Binding KnownLanguage.Name}" ContentStringFormat="Text in {0} language:" />
-            <TextBox Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="{Binding TextInKnownLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     helpers:FocusHelper.IsFocused="{Binding TextInKnownLanguageIsFocused}">
-                <TextBox.InputBindings>
+            <ComboBox Grid.Row="4" Grid.Column="0" IsEditable="True" IsTextSearchEnabled="False" ItemsSource="{Binding TextsInKnownLanguage}" Text="{Binding TextInKnownLanguage}"
+                      SelectedItem="{Binding SelectedTextInKnownLanguage}" helpers:FocusHelper.IsFocused="{Binding TextInKnownLanguageIsFocused}">
+                <ComboBox.InputBindings>
                     <KeyBinding Command="{Binding SaveChangesCommand}" Key="Enter" />
-                </TextBox.InputBindings>
-            </TextBox>
+                </ComboBox.InputBindings>
+            </ComboBox>
 
             <Label Grid.Row="6" Grid.Column="0" Padding="0,5,5,0" Margin="0,10,0,0">Note in Russian language (optional):</Label>
-            <TextBox Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{Binding NoteInKnownLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{Binding NoteInKnownLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding ExistingTextInKnownLanguageIsSelected, Converter={StaticResource InverseBooleanConverter}}">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding SaveChangesCommand}" Key="Enter" />
                 </TextBox.InputBindings>

@@ -13,6 +13,8 @@ namespace VocabularyCoach.Services.Interfaces
 
 		Task<Uri> GetUrlForLanguageTextCheck(LanguageText languageText, CancellationToken cancellationToken);
 
-		Task<LanguageText> AddLanguageTextWithTranslation(LanguageTextCreationData languageTextData1, LanguageTextCreationData languageTextData2, CancellationToken cancellationToken);
+		Task<LanguageText> AddLanguageText(LanguageTextCreationData languageTextData, CancellationToken cancellationToken);
+
+		Task AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken);
 	}
 }

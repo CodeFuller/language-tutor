@@ -38,22 +38,7 @@ namespace VocabularyCoach.Services
 			return Task.FromResult(url);
 		}
 
-		public async Task<LanguageText> AddLanguageTextWithTranslation(LanguageTextCreationData languageTextData1, LanguageTextCreationData languageTextData2, CancellationToken cancellationToken)
-		{
-			if (languageTextData1.PronunciationRecord == null)
-			{
-				throw new InvalidOperationException("Pronunciation record is not set");
-			}
-
-			var languageText1 = await AddLanguageText(languageTextData1, cancellationToken);
-			var languageText2 = await AddLanguageText(languageTextData2, cancellationToken);
-
-			await languageTextRepository.AddTranslation(languageText1, languageText2, cancellationToken);
-
-			return languageText1;
-		}
-
-		private async Task<LanguageText> AddLanguageText(LanguageTextCreationData languageTextData, CancellationToken cancellationToken)
+		public async Task<LanguageText> AddLanguageText(LanguageTextCreationData languageTextData, CancellationToken cancellationToken)
 		{
 			var languageText = new LanguageText
 			{
@@ -70,6 +55,11 @@ namespace VocabularyCoach.Services
 			}
 
 			return languageText;
+		}
+
+		public async Task AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken)
+		{
+			await languageTextRepository.AddTranslation(languageText1, languageText2, cancellationToken);
 		}
 	}
 }
