@@ -1,0 +1,75 @@
+<UserControl x:Class="VocabularyCoach.Views.EditLanguageTextView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:helpers="clr-namespace:VocabularyCoach.Views.Helpers"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:designInstances="clr-namespace:VocabularyCoach.Views.DesignInstances"
+             xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
+             mc:Ignorable="d" 
+             d:DesignWidth="250" d:DesignHeight="300"
+             d:DataContext="{d:DesignInstance designInstances:EditTextInStudiedLanguageDesignData, IsDesignTimeCreatable=True}"
+             d:DesignStyle="{StaticResource ApplicationWindowStyle}">
+
+    <UserControl.Resources>
+        <valueConverters:VisibilityHiddenValueConverter x:Key="VisibilityHiddenValueConverter" />
+        <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanConverter" />
+    </UserControl.Resources>
+
+    <GroupBox Header="{Binding Language.Name}" HeaderStringFormat="Text in {0} language" Margin="5" Padding="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                <Label Padding="0" Margin="0" Content="Text:" />
+                <ComboBox IsEditable="True" IsTextSearchEnabled="False" ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
+                          SelectedItem="{Binding SelectedText}" helpers:FocusHelper.IsFocused="{Binding TextIsFocused}"
+                          helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
+                    <ComboBox.InputBindings>
+                        <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
+                    </ComboBox.InputBindings>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="1">
+                <Button Margin="5,0,5,0" Height="Auto" Padding="0" ToolTip="Spell Check" Visibility="{Binding RequireSpellCheck, Converter={StaticResource VisibilityHiddenValueConverter}}"
+                        IsEnabled="{Binding TextIsFilled}" Command="{Binding SpellCheckTextCommand}">
+                    <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="Spellcheck" />
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}">
+                            <Setter Property="Foreground" Value="OrangeRed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding TextWasSpellChecked}" Value="True">
+                                    <Setter Property="Foreground" Value="Green" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Margin="5,5,5,0" Height="Auto" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" ToolTip="Listen"
+                        Visibility="{Binding CreatePronunciationRecord, Converter={StaticResource VisibilityHiddenValueConverter}}" IsEnabled="{Binding TextIsFilled}" Command="{Binding PlayPronunciationRecordCommand}">
+                    <materialDesign:PackIcon Width="Auto" Height="Auto" Kind="VolumeHigh" />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,20,0,0" Orientation="Vertical">
+                <Label Padding="0" Margin="0" Content="Note (Optional):" />
+                <TextBox Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding ExistingTextIsSelected, Converter={StaticResource InverseBooleanConverter}}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </StackPanel>
+        </Grid>
+    </GroupBox>
+</UserControl>

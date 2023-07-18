@@ -8,39 +8,16 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IEditVocabularyViewModel : IPageViewModel
 	{
-		Language StudiedLanguage { get; }
+		IEditLanguageTextViewModel EditTextInStudiedLanguageViewModel { get; }
 
-		Language KnownLanguage { get; }
+		IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
 
-		ObservableCollection<LanguageTextViewModel> TextsInStudiedLanguage { get; }
+		// TODO: Replace with list of translations (text in studied language - text in known language).
+		ObservableCollection<LanguageTextViewModel> ExistingTextsInStudiedLanguage { get; }
 
-		ObservableCollection<LanguageTextViewModel> TextsInKnownLanguage { get; }
+		public ICommand SaveChangesCommand { get; }
 
-		bool TextInStudiedLanguageIsFocused { get; }
-
-		string TextInStudiedLanguage { get; set; }
-
-		bool TextInStudiedLanguageWasChecked { get; }
-
-		bool TextInStudiedLanguageIsFilled { get; }
-
-		bool TextInKnownLanguageIsFocused { get; }
-
-		string TextInKnownLanguage { get; set; }
-
-		LanguageTextViewModel SelectedTextInKnownLanguage { get; set; }
-
-		bool ExistingTextInKnownLanguageIsSelected { get; }
-
-		string NoteInKnownLanguage { get; set; }
-
-		ICommand CheckTextCommand { get; }
-
-		ICommand PlayPronunciationRecordCommand { get; }
-
-		ICommand SaveChangesCommand { get; }
-
-		ICommand ClearChangesCommand { get; }
+		public ICommand ClearChangesCommand { get; }
 
 		ICommand GoToStartPageCommand { get; }
 

@@ -11,7 +11,7 @@ namespace VocabularyCoach.Services.Interfaces
 	{
 		Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(Language language, CancellationToken cancellationToken);
 
-		Task<Uri> GetUrlForLanguageTextCheck(LanguageText languageText, CancellationToken cancellationToken);
+		Task<Uri> GetUrlForSpellCheck(LanguageText languageText, CancellationToken cancellationToken);
 
 		Task<LanguageText> AddLanguageText(LanguageTextCreationData languageTextData, CancellationToken cancellationToken);
 

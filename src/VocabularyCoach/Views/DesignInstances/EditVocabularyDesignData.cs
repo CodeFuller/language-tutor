@@ -11,11 +11,11 @@ namespace VocabularyCoach.Views.DesignInstances
 {
 	internal sealed class EditVocabularyDesignData : IEditVocabularyViewModel
 	{
-		public Language StudiedLanguage => DesignData.StudiedLanguage;
+		public IEditLanguageTextViewModel EditTextInStudiedLanguageViewModel { get; } = new EditTextInStudiedLanguageDesignData();
 
-		public Language KnownLanguage => DesignData.KnownLanguage;
+		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; } = new EditTextInKnownLanguageDesignData();
 
-		public ObservableCollection<LanguageTextViewModel> TextsInStudiedLanguage { get; } = new()
+		public ObservableCollection<LanguageTextViewModel> ExistingTextsInStudiedLanguage { get; } = new()
 		{
 			new LanguageTextViewModel(
 				new LanguageText
@@ -33,48 +33,6 @@ namespace VocabularyCoach.Views.DesignInstances
 					Text = "proszę",
 				}),
 		};
-
-		public ObservableCollection<LanguageTextViewModel> TextsInKnownLanguage { get; } = new()
-		{
-			new LanguageTextViewModel(
-				new LanguageText
-				{
-					Id = new ItemId("3"),
-					Language = DesignData.KnownLanguage,
-					Text = "спасибо",
-				}),
-
-			new LanguageTextViewModel(
-				new LanguageText
-				{
-					Id = new ItemId("4"),
-					Language = DesignData.KnownLanguage,
-					Text = "пожалуйста",
-					Note = "ответ на спасибо",
-				}),
-		};
-
-		public bool TextInStudiedLanguageIsFocused => false;
-
-		public string TextInStudiedLanguage { get; set; } = "samochód";
-
-		public bool TextInStudiedLanguageWasChecked => true;
-
-		public bool TextInStudiedLanguageIsFilled => true;
-
-		public bool TextInKnownLanguageIsFocused => false;
-
-		public string TextInKnownLanguage { get; set; } = "автомобиль";
-
-		public LanguageTextViewModel SelectedTextInKnownLanguage { get; set; }
-
-		public bool ExistingTextInKnownLanguageIsSelected => false;
-
-		public string NoteInKnownLanguage { get; set; } = "машина";
-
-		public ICommand CheckTextCommand => null;
-
-		public ICommand PlayPronunciationRecordCommand => null;
 
 		public ICommand SaveChangesCommand => null;
 

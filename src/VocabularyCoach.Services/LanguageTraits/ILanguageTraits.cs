@@ -8,7 +8,7 @@ namespace VocabularyCoach.Services.LanguageTraits
 	{
 		Language Language { get; }
 
-		Uri GetUrlForTextCheck(string text);
+		Uri GetUrlForSpellCheck(string text);
 
 		VoiceSelectionParams GetSynthesisVoiceConfiguration();
 	}

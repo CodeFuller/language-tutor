@@ -8,7 +8,7 @@ namespace VocabularyCoach.Services.LanguageTraits
 	{
 		public Language Language => SupportedLanguages.Polish;
 
-		public Uri GetUrlForTextCheck(string text)
+		public Uri GetUrlForSpellCheck(string text)
 		{
 			return new Uri($"https://pl.wiktionary.org/wiki/{text}");
 		}

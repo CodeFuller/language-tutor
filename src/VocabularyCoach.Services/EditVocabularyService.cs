@@ -30,10 +30,10 @@ namespace VocabularyCoach.Services
 			return languageTextRepository.GetLanguageTexts(language.Id, cancellationToken);
 		}
 
-		public Task<Uri> GetUrlForLanguageTextCheck(LanguageText languageText, CancellationToken cancellationToken)
+		public Task<Uri> GetUrlForSpellCheck(LanguageText languageText, CancellationToken cancellationToken)
 		{
 			var url = supportedLanguageTraits.GetLanguageTraits(languageText.Language)
-				.GetUrlForTextCheck(languageText.Text);
+				.GetUrlForSpellCheck(languageText.Text);
 
 			return Task.FromResult(url);
 		}

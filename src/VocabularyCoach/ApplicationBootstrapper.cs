@@ -36,6 +36,10 @@ namespace VocabularyCoach
 			services.AddSingleton<IPracticeVocabularyViewModel, PracticeVocabularyViewModel>();
 			services.AddSingleton<IPracticeResultsViewModel, PracticeResultsViewModel>();
 			services.AddSingleton<IEditVocabularyViewModel, EditVocabularyViewModel>();
+
+			// We register IEditLanguageTextViewModel as transient dependency, because two different instances must be injected into EditVocabularyViewModel.
+			// TODO: Add UT verifying that different instances are injected into EditVocabularyViewModel.
+			services.AddTransient<IEditLanguageTextViewModel, EditLanguageTextViewModel>();
 		}
 
 		protected override void BootstrapLogging(ILoggerFactory loggerFactory, IConfiguration configuration)
