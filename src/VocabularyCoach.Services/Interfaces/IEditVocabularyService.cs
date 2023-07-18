@@ -11,10 +11,12 @@ namespace VocabularyCoach.Services.Interfaces
 	{
 		Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(Language language, CancellationToken cancellationToken);
 
+		Task<IReadOnlyCollection<Translation>> GetTranslations(Language language1, Language language2, CancellationToken cancellationToken);
+
 		Task<Uri> GetUrlForSpellCheck(LanguageText languageText, CancellationToken cancellationToken);
 
 		Task<LanguageText> AddLanguageText(LanguageTextCreationData languageTextData, CancellationToken cancellationToken);
 
-		Task AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken);
+		Task<Translation> AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken);
 	}
 }

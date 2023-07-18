@@ -28,7 +28,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Internal
 
 			modelBuilder.Entity<TranslationEntity>(builder =>
 			{
-				builder.HasKey(x => new { x.TextId1, x.TextId2 });
+				builder.HasKey(x => new { x.Text1Id, x.Text2Id });
 			});
 
 			modelBuilder.Entity<UserStatisticsEntity>(builder =>

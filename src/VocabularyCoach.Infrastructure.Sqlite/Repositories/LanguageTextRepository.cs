@@ -33,14 +33,28 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			return texts.Select(x => x.ToModel()).ToList();
 		}
 
+		public async Task<IReadOnlyCollection<Translation>> GetTranslations(ItemId languageId1, ItemId languageId2, CancellationToken cancellationToken)
+		{
+			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
+
+			var translations = await context.Translations
+				.Include(x => x.Text1).ThenInclude(x => x.Language)
+				.Include(x => x.Text2).ThenInclude(x => x.Language)
+				.Where(x => x.Text1.LanguageId == languageId1.ToInt32())
+				.Where(x => x.Text2.LanguageId == languageId2.ToInt32())
+				.ToListAsync(cancellationToken);
+
+			return translations.Select(x => x.ToModel()).ToList();
+		}
+
 		public async Task<IReadOnlyCollection<StudiedText>> GetStudiedTexts(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken)
 		{
 			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var translations = from text1 in context.Texts.Include(x => x.Language)
 							   where text1.LanguageId == studiedLanguageId.ToInt32()
-							   join translation in context.Translations on text1.Id equals translation.TextId1
-							   join text2 in context.Texts.Include(x => x.Language).Where(x => x.LanguageId == knownLanguageId.ToInt32()) on translation.TextId2 equals text2.Id
+							   join translation in context.Translations on text1.Id equals translation.Text1Id
+							   join text2 in context.Texts.Include(x => x.Language).Where(x => x.LanguageId == knownLanguageId.ToInt32()) on translation.Text2Id equals text2.Id
 							   select new
 							   {
 								   TextInStudiedLanguage = text1,
@@ -76,15 +90,11 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			languageText.Id = textEntity.Id.ToItemId();
 		}
 
-		public async Task AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken)
+		public async Task AddTranslation(Translation translation, CancellationToken cancellationToken)
 		{
 			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			var translationEntity = new TranslationEntity
-			{
-				TextId1 = languageText1.Id.ToInt32(),
-				TextId2 = languageText2.Id.ToInt32(),
-			};
+			var translationEntity = translation.ToEntity();
 
 			await context.Translations.AddAsync(translationEntity, cancellationToken);
 			await context.SaveChangesAsync(cancellationToken);

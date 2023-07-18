@@ -12,8 +12,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
 
-		// TODO: Replace with list of translations (text in studied language - text in known language).
-		ObservableCollection<LanguageTextViewModel> ExistingTextsInStudiedLanguage { get; }
+		ObservableCollection<TranslationViewModel> Translations { get; }
 
 		public ICommand SaveChangesCommand { get; }
 

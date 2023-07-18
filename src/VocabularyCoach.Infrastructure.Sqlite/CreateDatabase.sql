@@ -29,16 +29,16 @@ CREATE TABLE [Texts] (
 CREATE INDEX [IX_Texts_LanguageId] ON [Texts] ([LanguageId]);
 
 CREATE TABLE [Translations] (
-  [TextId1] int NOT NULL,
-  [TextId2] int NOT NULL,
+  [Text1Id] int NOT NULL,
+  [Text2Id] int NOT NULL,
 
-  CONSTRAINT [sqlite_master_PK_Translations] PRIMARY KEY ([TextId1], [TextId2]),
-  FOREIGN KEY ([TextId1]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY ([TextId2]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT [sqlite_master_PK_Translations] PRIMARY KEY ([Text1Id], [Text2Id]),
+  FOREIGN KEY ([Text1Id]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ([Text2Id]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- We do not create index for TextId1, because PK index will be used for the search via (TextId1) - https://stackoverflow.com/questions/19384837
-CREATE INDEX [IX_Translations_TextId2] ON [Translations] ([TextId2]);
+-- We do not create index for Text1Id, because PK index will be used for the search via (Text1Id) - https://stackoverflow.com/questions/19384837
+CREATE INDEX [IX_Translations_Text2Id] ON [Translations] ([Text2Id]);
 
 CREATE TABLE [PronunciationRecords] (
   [Id] INTEGER NOT NULL,

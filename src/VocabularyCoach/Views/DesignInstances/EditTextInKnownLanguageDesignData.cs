@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using VocabularyCoach.Models;
 using VocabularyCoach.ViewModels;
 
@@ -12,25 +13,7 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public override bool CreatePronunciationRecord => false;
 
-		public override ObservableCollection<LanguageTextViewModel> ExistingTexts { get; } = new()
-		{
-			new LanguageTextViewModel(
-				new LanguageText
-				{
-					Id = new ItemId("3"),
-					Language = DesignData.KnownLanguage,
-					Text = "спасибо",
-				}),
-
-			new LanguageTextViewModel(
-				new LanguageText
-				{
-					Id = new ItemId("4"),
-					Language = DesignData.KnownLanguage,
-					Text = "пожалуйста",
-					Note = "ответ на спасибо",
-				}),
-		};
+		public override ObservableCollection<LanguageTextViewModel> ExistingTexts { get; } = new(DesignData.TextsInKnownLanguage.Select(x => new LanguageTextViewModel(x)));
 
 		public override string Text { get; set; } = "автомобиль";
 

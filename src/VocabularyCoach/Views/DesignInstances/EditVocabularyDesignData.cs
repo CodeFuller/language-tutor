@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,24 +16,7 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; } = new EditTextInKnownLanguageDesignData();
 
-		public ObservableCollection<LanguageTextViewModel> ExistingTextsInStudiedLanguage { get; } = new()
-		{
-			new LanguageTextViewModel(
-				new LanguageText
-				{
-					Id = new ItemId("1"),
-					Language = DesignData.StudiedLanguage,
-					Text = "dziękuję",
-				}),
-
-			new LanguageTextViewModel(
-				new LanguageText
-				{
-					Id = new ItemId("2"),
-					Language = DesignData.StudiedLanguage,
-					Text = "proszę",
-				}),
-		};
+		public ObservableCollection<TranslationViewModel> Translations { get; } = new(DesignData.Translations.Select(x => new TranslationViewModel(x)));
 
 		public ICommand SaveChangesCommand => null;
 

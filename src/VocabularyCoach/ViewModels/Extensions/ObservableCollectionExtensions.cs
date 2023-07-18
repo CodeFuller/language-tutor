@@ -6,13 +6,13 @@ namespace VocabularyCoach.ViewModels.Extensions
 {
 	internal static class ObservableCollectionExtensions
 	{
-		public static void AddTextToSortedCollection(this ObservableCollection<LanguageTextViewModel> textsCollection, LanguageText languageText)
+		public static void AddToSortedCollection<T>(this ObservableCollection<T> collection, T item)
 		{
-			for (var i = 0; i < textsCollection.Count + 1; ++i)
+			for (var i = 0; i < collection.Count + 1; ++i)
 			{
-				if (i == textsCollection.Count || String.Compare(languageText.Text, textsCollection[i].Text, LanguageTextComparison.IgnoreCase) < 0)
+				if (i == collection.Count || String.Compare(item.ToString(), collection[i].ToString(), LanguageTextComparison.IgnoreCase) < 0)
 				{
-					textsCollection.Insert(i, new LanguageTextViewModel(languageText));
+					collection.Insert(i, item);
 					break;
 				}
 			}

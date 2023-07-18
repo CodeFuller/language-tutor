@@ -241,7 +241,7 @@ namespace VocabularyCoach.ViewModels
 			};
 
 			var newText = await editVocabularyService.AddLanguageText(textCreationData, cancellationToken);
-			ExistingTexts.AddTextToSortedCollection(newText);
+			ExistingTexts.AddToSortedCollection(new LanguageTextViewModel(newText));
 
 			return newText;
 		}

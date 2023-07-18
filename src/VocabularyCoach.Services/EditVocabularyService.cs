@@ -30,6 +30,11 @@ namespace VocabularyCoach.Services
 			return languageTextRepository.GetLanguageTexts(language.Id, cancellationToken);
 		}
 
+		public Task<IReadOnlyCollection<Translation>> GetTranslations(Language language1, Language language2, CancellationToken cancellationToken)
+		{
+			return languageTextRepository.GetTranslations(language1.Id, language2.Id, cancellationToken);
+		}
+
 		public Task<Uri> GetUrlForSpellCheck(LanguageText languageText, CancellationToken cancellationToken)
 		{
 			var url = supportedLanguageTraits.GetLanguageTraits(languageText.Language)
@@ -57,9 +62,17 @@ namespace VocabularyCoach.Services
 			return languageText;
 		}
 
-		public async Task AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken)
+		public async Task<Translation> AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken)
 		{
-			await languageTextRepository.AddTranslation(languageText1, languageText2, cancellationToken);
+			var translation = new Translation
+			{
+				Text1 = languageText1,
+				Text2 = languageText2,
+			};
+
+			await languageTextRepository.AddTranslation(translation, cancellationToken);
+
+			return translation;
 		}
 	}
 }

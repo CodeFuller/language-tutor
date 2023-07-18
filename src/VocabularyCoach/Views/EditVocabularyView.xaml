@@ -11,10 +11,11 @@
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="7*" />
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" Margin="5" BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}" ItemsSource="{Binding ExistingTextsInStudiedLanguage}" />
+        <ListBox Grid.Column="0" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsSource="{Binding Translations}"
+                 BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}" />
         <Grid Grid.Column="1" Margin="5,0,5,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

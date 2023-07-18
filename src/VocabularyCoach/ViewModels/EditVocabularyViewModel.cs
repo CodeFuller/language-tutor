@@ -25,7 +25,7 @@ namespace VocabularyCoach.ViewModels
 
 		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
 
-		public ObservableCollection<LanguageTextViewModel> ExistingTextsInStudiedLanguage { get; } = new();
+		public ObservableCollection<TranslationViewModel> Translations { get; } = new();
 
 		public ICommand SaveChangesCommand { get; }
 
@@ -57,10 +57,10 @@ namespace VocabularyCoach.ViewModels
 
 		public async Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var existingTextsInStudiedLanguage = await editVocabularyService.GetLanguageTexts(studiedLanguage, cancellationToken);
+			var translations = await editVocabularyService.GetTranslations(studiedLanguage, knownLanguage, cancellationToken);
 
-			ExistingTextsInStudiedLanguage.Clear();
-			ExistingTextsInStudiedLanguage.AddRange(existingTextsInStudiedLanguage.OrderBy(x => x.Text).Select(x => new LanguageTextViewModel(x)));
+			Translations.Clear();
+			Translations.AddRange(translations.Select(x => new TranslationViewModel(x)).OrderBy(x => x.ToString()));
 
 			await EditTextInStudiedLanguageViewModel.Load(studiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
 			await EditTextInKnownLanguageViewModel.Load(knownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
@@ -81,9 +81,9 @@ namespace VocabularyCoach.ViewModels
 			var textInStudiedLanguage = await EditTextInStudiedLanguageViewModel.SaveChanges(cancellationToken);
 			var textInKnownLanguage = await EditTextInKnownLanguageViewModel.SaveChanges(cancellationToken);
 
-			await editVocabularyService.AddTranslation(textInStudiedLanguage, textInKnownLanguage, cancellationToken);
+			var newTranslation = await editVocabularyService.AddTranslation(textInStudiedLanguage, textInKnownLanguage, cancellationToken);
 
-			ExistingTextsInStudiedLanguage.AddTextToSortedCollection(textInStudiedLanguage);
+			Translations.AddToSortedCollection(new TranslationViewModel(newTranslation));
 
 			ClearFilledData();
 		}
