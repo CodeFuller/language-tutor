@@ -10,7 +10,9 @@ namespace VocabularyCoach.Models
 
 		public LanguageText TextInStudiedLanguage { get; init; }
 
-		public LanguageText TextInKnownLanguage { get; init; }
+		public IReadOnlyCollection<LanguageText> OtherSynonymsInStudiedLanguage { get; init; }
+
+		public IReadOnlyCollection<LanguageText> SynonymsInKnownLanguage { get; init; }
 
 		// The check results order is from the latest (most significant) to the earliest (less significant).
 		public IReadOnlyList<CheckResult> CheckResults => checkResults.OrderByDescending(x => x.DateTime).ToList();

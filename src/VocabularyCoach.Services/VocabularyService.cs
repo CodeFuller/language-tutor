@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Data;
-using VocabularyCoach.Services.Extensions;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.Services.Interfaces.Repositories;
 using VocabularyCoach.Services.Internal;
@@ -14,23 +13,6 @@ namespace VocabularyCoach.Services
 {
 	internal sealed class VocabularyService : IVocabularyService
 	{
-		private static readonly IReadOnlyList<int> CheckIntervals = new List<int>
-		{
-			// If the last (^1) check was failed, we add 1 day to the last check date.
-			+1,
-
-			// If ^1 check was successful, but ^2 check was failed, we add 2 days to the last check date.
-			+2,
-
-			// ...
-			+3,
-			+7,
-			+14,
-
-			// The last interval is added for texts with all successful checks.
-			+30,
-		};
-
 		private readonly ILanguageRepository languageRepository;
 
 		private readonly ILanguageTextRepository languageTextRepository;
@@ -41,18 +23,25 @@ namespace VocabularyCoach.Services
 
 		private readonly IStatisticsRepository statisticsRepository;
 
+		private readonly ISynonymGrouper synonymGrouper;
+
+		private readonly ITextsForPracticeSelector textsForPracticeSelector;
+
 		private readonly ISystemClock systemClock;
 
 		private DateOnly Today => systemClock.Today;
 
-		public VocabularyService(ILanguageRepository languageRepository, ILanguageTextRepository languageTextRepository, IPronunciationRecordRepository pronunciationRecordRepository,
-			ICheckResultRepository checkResultRepository, IStatisticsRepository statisticsRepository, ISystemClock systemClock)
+		public VocabularyService(ILanguageRepository languageRepository, ILanguageTextRepository languageTextRepository,
+			IPronunciationRecordRepository pronunciationRecordRepository, ICheckResultRepository checkResultRepository,
+			IStatisticsRepository statisticsRepository, ISynonymGrouper synonymGrouper, ITextsForPracticeSelector textsForPracticeSelector, ISystemClock systemClock)
 		{
 			this.languageRepository = languageRepository ?? throw new ArgumentNullException(nameof(languageRepository));
 			this.languageTextRepository = languageTextRepository ?? throw new ArgumentNullException(nameof(languageTextRepository));
 			this.pronunciationRecordRepository = pronunciationRecordRepository ?? throw new ArgumentNullException(nameof(pronunciationRecordRepository));
 			this.checkResultRepository = checkResultRepository ?? throw new ArgumentNullException(nameof(checkResultRepository));
 			this.statisticsRepository = statisticsRepository ?? throw new ArgumentNullException(nameof(statisticsRepository));
+			this.synonymGrouper = synonymGrouper ?? throw new ArgumentNullException(nameof(synonymGrouper));
+			this.textsForPracticeSelector = textsForPracticeSelector ?? throw new ArgumentNullException(nameof(textsForPracticeSelector));
 			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
 		}
 
@@ -65,53 +54,16 @@ namespace VocabularyCoach.Services
 
 		public async Task<IReadOnlyCollection<StudiedText>> GetTextsForPractice(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var studiedTexts = await languageTextRepository.GetStudiedTexts(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+			var studiedTexts = await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken);
 
-			return SelectTextsForTodayPractice(studiedTexts);
+			return textsForPracticeSelector.SelectTextsForTodayPractice(studiedTexts);
 		}
 
-		private IReadOnlyCollection<StudiedText> SelectTextsForTodayPractice(IEnumerable<StudiedText> studiedTexts)
+		private async Task<IEnumerable<StudiedText>> GetStudiedTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			return studiedTexts
-				.Select(x => new
-				{
-					StudiedText = x,
-					NextCheckDateTime = GetNextCheckDateTimeForStudiedText(x.CheckResults),
-				})
-				.Where(x => x.NextCheckDateTime <= Today)
-				.GroupBy(x => x.NextCheckDateTime, x => x.StudiedText)
-				.OrderBy(x => x.Key)
-				.SelectMany(x => x.Randomize())
-				.ToList();
-		}
+			var studiedTranslations = await languageTextRepository.GetStudiedTranslations(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
 
-		private static DateOnly GetNextCheckDateTimeForStudiedText(IReadOnlyList<CheckResult> checkResults)
-		{
-			if (!checkResults.Any())
-			{
-				// If text was not yet checked, this is the highest priority for practice.
-				return DateOnly.MinValue;
-			}
-
-			var lastCheckDate = DateOnly.FromDateTime(checkResults[0].DateTime.Date);
-
-			for (var i = 0; i < Math.Max(checkResults.Count, CheckIntervals.Count); ++i)
-			{
-				// If all text checks are successful, however they are not enough - we add interval for first missing check.
-				if (i >= checkResults.Count)
-				{
-					return lastCheckDate.AddDays(CheckIntervals[i]);
-				}
-
-				// If some check in the past is failed, we add interval for latest failed check.
-				if (checkResults[i].CheckResultType != CheckResultType.Ok)
-				{
-					return lastCheckDate.AddDays(CheckIntervals[i]);
-				}
-			}
-
-			// If all checks are successful, we add the last interval.
-			return lastCheckDate.AddDays(CheckIntervals[^1]);
+			return synonymGrouper.GroupStudiedTranslationsBySynonyms(studiedTranslations);
 		}
 
 		public Task<PronunciationRecord> GetPronunciationRecord(ItemId textId, CancellationToken cancellationToken)
@@ -136,9 +88,9 @@ namespace VocabularyCoach.Services
 
 		public async Task<UserStatisticsData> GetUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var studiedTexts = await languageTextRepository.GetStudiedTexts(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+			var studiedTexts = (await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken)).ToList();
 
-			var textsForPractice = SelectTextsForTodayPractice(studiedTexts);
+			var textsForPractice = textsForPracticeSelector.SelectTextsForTodayPractice(studiedTexts);
 
 			return new UserStatisticsData
 			{
@@ -154,12 +106,12 @@ namespace VocabularyCoach.Services
 			await statisticsRepository.UpdateUserStatistics(user.Id, studiedLanguage.Id, knownLanguage.Id, Today, statistics, cancellationToken);
 		}
 
-		private static bool TextIsLearned(StudiedText text)
+		private static bool TextIsLearned(StudiedText studiedText)
 		{
 			// We consider text as learned, if 3 last checks are successful.
 			const int learnedTextChecksNumber = 3;
 
-			var lastChecks = text.CheckResults
+			var lastChecks = studiedText.CheckResults
 				.Take(learnedTextChecksNumber)
 				.ToList();
 

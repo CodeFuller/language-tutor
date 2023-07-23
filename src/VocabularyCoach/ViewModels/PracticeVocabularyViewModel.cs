@@ -9,9 +9,11 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Events;
 using VocabularyCoach.Interfaces;
+using VocabularyCoach.Internal;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Data;
+using VocabularyCoach.ViewModels.Extensions;
 using VocabularyCoach.ViewModels.Interfaces;
 using static VocabularyCoach.ViewModels.Extensions.FocusHelpers;
 
@@ -70,6 +72,7 @@ namespace VocabularyCoach.ViewModels
 			{
 				SetProperty(ref currentTextForCheck, value);
 				OnPropertyChanged(nameof(DisplayedTextInKnownLanguage));
+				OnPropertyChanged(nameof(HintForOtherSynonyms));
 			}
 		}
 
@@ -77,9 +80,23 @@ namespace VocabularyCoach.ViewModels
 		{
 			get
 			{
-				var textInKnownLanguage = CurrentTextForCheck.TextInKnownLanguage;
+				var sortedSynonyms = CurrentTextForCheck.SynonymsInKnownLanguage.Order(new LanguageTextComparer());
 
-				return String.IsNullOrEmpty(textInKnownLanguage.Note) ? textInKnownLanguage.Text : $"{textInKnownLanguage.Text} ({textInKnownLanguage.Note})";
+				return String.Join(", ", sortedSynonyms.Select(x => x.GetTextWithNote()));
+			}
+		}
+
+		public string HintForOtherSynonyms
+		{
+			get
+			{
+				if (!CurrentTextForCheck.OtherSynonymsInStudiedLanguage.Any())
+				{
+					return String.Empty;
+				}
+
+				var sortedSynonyms = CurrentTextForCheck.OtherSynonymsInStudiedLanguage.Order(new LanguageTextComparer());
+				return $"synonyms: {String.Join(", ", sortedSynonyms.Select(x => x.Text))}";
 			}
 		}
 

@@ -25,16 +25,21 @@ namespace VocabularyCoach.Views.DesignInstances
 				Text = "zamek",
 			},
 
-			TextInKnownLanguage = new()
+			SynonymsInKnownLanguage = new[]
 			{
-				Id = new ItemId("2"),
-				Language = DesignData.KnownLanguage,
-				Text = "замок",
-				Note = "строение",
+				new LanguageText
+				{
+					Id = new ItemId("2"),
+					Language = DesignData.KnownLanguage,
+					Text = "замок",
+					Note = "строение",
+				},
 			},
 		};
 
 		public string DisplayedTextInKnownLanguage => "замок (строение)";
+
+		public string HintForOtherSynonyms => "synonyms: warownia, twierdza";
 
 		public bool PronunciationRecordExists => true;
 

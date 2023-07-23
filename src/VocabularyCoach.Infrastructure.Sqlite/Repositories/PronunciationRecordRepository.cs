@@ -29,9 +29,9 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 
 		public async Task<PronunciationRecord> GetPronunciationRecord(ItemId languageTextId, CancellationToken cancellationToken)
 		{
-			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			var pronunciationRecordEntity = await context.PronunciationRecords.SingleOrDefaultAsync(x => x.TextId == languageTextId.ToInt32(), cancellationToken);
+			var pronunciationRecordEntity = await dbContext.PronunciationRecords.SingleOrDefaultAsync(x => x.TextId == languageTextId.ToInt32(), cancellationToken);
 
 			if (pronunciationRecordEntity == null)
 			{
@@ -76,10 +76,10 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			var recordDataPath = GetPathForPronunciationRecordDataFile(pronunciationRecordEntity);
 			await File.WriteAllBytesAsync(recordDataPath, pronunciationRecord.Data, cancellationToken);
 
-			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			await context.PronunciationRecords.AddAsync(pronunciationRecordEntity, cancellationToken);
-			await context.SaveChangesAsync(cancellationToken);
+			await dbContext.PronunciationRecords.AddAsync(pronunciationRecordEntity, cancellationToken);
+			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 
 		private static string GetExtensionForPronunciationRecordDataFile(PronunciationRecord pronunciationRecord)

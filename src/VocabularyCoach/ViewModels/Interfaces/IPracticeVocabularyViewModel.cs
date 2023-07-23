@@ -17,6 +17,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		string DisplayedTextInKnownLanguage { get; }
 
+		string HintForOtherSynonyms { get; }
+
 		bool PronunciationRecordExists { get; }
 
 		bool TypedTextIsFocused { get; }

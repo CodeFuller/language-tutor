@@ -1,48 +1,31 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.AutoMock;
 using VocabularyCoach.Models;
-using VocabularyCoach.Services.Interfaces.Repositories;
 using VocabularyCoach.Services.Internal;
 using VocabularyCoach.Services.UnitTests.Helpers;
 
-namespace VocabularyCoach.Services.UnitTests
+namespace VocabularyCoach.Services.UnitTests.Internal
 {
 	[TestClass]
-	public class VocabularyServiceTests
+	public class TextsForPracticeSelectorTests
 	{
-		private static User TestUser { get; } = new()
-		{
-			Id = new ItemId("1"),
-		};
-
-		private static Language TestStudiedLanguage { get; } = new()
-		{
-			Id = new ItemId("1"),
-		};
-
-		private static Language TestKnownLanguage { get; } = new()
-		{
-			Id = new ItemId("2"),
-		};
-
 		[TestMethod]
-		public async Task GetTextsForPractice_ForMissingStudiedTexts_ReturnsEmptyCollection()
+		public void SelectTextsForTodayPractice_ForMissingStudiedTexts_ReturnsEmptyCollection()
 		{
 			// Arrange
 
-			var mocker = StubStudiedTexts(Array.Empty<StudiedText>());
-			var target = mocker.CreateInstance<VocabularyService>();
+			var studiedTexts = Array.Empty<StudiedText>();
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = target.SelectTextsForTodayPractice(studiedTexts);
 
 			// Assert
 
@@ -50,7 +33,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForPractice_ForTextsWithNoChecks_ReturnsSuchTexts()
+		public void SelectTextsForTodayPractice_ForTextsWithNoChecks_ReturnsSuchTexts()
 		{
 			// Arrange
 
@@ -59,14 +42,14 @@ namespace VocabularyCoach.Services.UnitTests
 				Array.Empty<CheckResult>().ToStudiedText("Text with no checks"),
 			};
 
-			var mocker = StubStudiedTexts(studiedTexts);
+			var mocker = new AutoMocker();
 			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
 
-			var target = mocker.CreateInstance<VocabularyService>();
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = target.SelectTextsForTodayPractice(studiedTexts);
 
 			// Assert
 
@@ -74,7 +57,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForPractice_ForTextsWithSmallNumberOfAllSuccessfulChecks_TreatsFirstMissingCheckAsFailed()
+		public void SelectTextsForTodayPractice_ForTextsWithSmallNumberOfAllSuccessfulChecks_TreatsFirstMissingCheckAsFailed()
 		{
 			// Arrange
 
@@ -141,14 +124,14 @@ namespace VocabularyCoach.Services.UnitTests
 				}.ToStudiedText("Text with 4 successful checks - not returned"),
 			};
 
-			var mocker = StubStudiedTexts(studiedTexts);
+			var mocker = new AutoMocker();
 			StubTodayDate(mocker, new DateOnly(2023, 07, 21));
 
-			var target = mocker.CreateInstance<VocabularyService>();
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = target.SelectTextsForTodayPractice(studiedTexts);
 
 			// Assert
 
@@ -164,7 +147,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForPractice_ForTextsWithAllSuccessfulChecks_AppliesCorrectCheckInterval()
+		public void SelectTextsForTodayPractice_ForTextsWithAllSuccessfulChecks_AppliesCorrectCheckInterval()
 		{
 			// Arrange
 
@@ -213,14 +196,14 @@ namespace VocabularyCoach.Services.UnitTests
 				}.ToStudiedText("Text with 5 successful checks and old failed check - returned"),
 			};
 
-			var mocker = StubStudiedTexts(studiedTexts);
+			var mocker = new AutoMocker();
 			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
 
-			var target = mocker.CreateInstance<VocabularyService>();
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = target.SelectTextsForTodayPractice(studiedTexts);
 
 			// Assert
 
@@ -235,7 +218,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForPractice_ForTextsWithFailedCheck_AppliesCorrectCheckInterval()
+		public void SelectTextsForTodayPractice_ForTextsWithFailedCheck_AppliesCorrectCheckInterval()
 		{
 			// Arrange
 
@@ -322,14 +305,14 @@ namespace VocabularyCoach.Services.UnitTests
 				}.ToStudiedText("Text with 5th failed check - not returned"),
 			};
 
-			var mocker = StubStudiedTexts(studiedTexts);
+			var mocker = new AutoMocker();
 			StubTodayDate(mocker, new DateOnly(2023, 07, 21));
 
-			var target = mocker.CreateInstance<VocabularyService>();
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = target.SelectTextsForTodayPractice(studiedTexts);
 
 			// Assert
 
@@ -346,7 +329,7 @@ namespace VocabularyCoach.Services.UnitTests
 		}
 
 		[TestMethod]
-		public async Task GetTextsForPractice_ForTextsWithDifferentNextCheckDate_OrdersChecksByNextCheckDate()
+		public void SelectTextsForTodayPractice_ForTextsWithDifferentNextCheckDate_OrdersChecksByNextCheckDate()
 		{
 			// Arrange
 
@@ -383,14 +366,14 @@ namespace VocabularyCoach.Services.UnitTests
 				}.ToStudiedText("Text with next check on 2023.07.10 - #2"),
 			};
 
-			var mocker = StubStudiedTexts(studiedTexts);
+			var mocker = new AutoMocker();
 			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
 
-			var target = mocker.CreateInstance<VocabularyService>();
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = await target.GetTextsForPractice(TestUser, TestStudiedLanguage, TestKnownLanguage, CancellationToken.None);
+			var result = target.SelectTextsForTodayPractice(studiedTexts);
 
 			// Assert
 
@@ -417,19 +400,6 @@ namespace VocabularyCoach.Services.UnitTests
 				DateTime = dateTime,
 				CheckResultType = CheckResultType.Ok,
 			};
-		}
-
-		private static AutoMocker StubStudiedTexts(IReadOnlyCollection<StudiedText> studiedTexts)
-		{
-			var mocker = new AutoMocker();
-
-			var languageTextRepositoryStub = new Mock<ILanguageTextRepository>();
-			languageTextRepositoryStub.Setup(x => x.GetStudiedTexts(TestUser.Id, TestStudiedLanguage.Id, TestKnownLanguage.Id, It.IsAny<CancellationToken>()))
-				.ReturnsAsync(studiedTexts);
-
-			mocker.Use(languageTextRepositoryStub);
-
-			return mocker;
 		}
 
 		private static void StubTodayDate(AutoMocker mocker, DateOnly todayDate)

@@ -21,6 +21,8 @@ namespace VocabularyCoach.Services
 
 			services.AddHttpClient<IPronunciationRecordSynthesizer, GoogleTextToSpeechSynthesizer>();
 
+			services.AddSingleton<ISynonymGrouper, SynonymGrouper>();
+			services.AddSingleton<ITextsForPracticeSelector, TextsForPracticeSelector>();
 			services.AddSingleton<ISystemClock, SystemClock>();
 
 			return services;

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 {
 	internal sealed class TextEntity
@@ -11,5 +13,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 		public string Text { get; set; }
 
 		public string Note { get; set; }
+
+		public IReadOnlyCollection<CheckResultEntity> CheckResults { get; set; }
 	}
 }

@@ -22,9 +22,9 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 
 		public async Task UpdateUserStatistics(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, DateOnly statisticsDate, UserStatisticsData statistics, CancellationToken cancellationToken)
 		{
-			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			var existingStatisticsEntity = await context.UserStatistics
+			var existingStatisticsEntity = await dbContext.UserStatistics
 				.SingleOrDefaultAsync(
 					x => x.UserId == userId.ToInt32() && x.StudiedLanguageId == studiedLanguageId.ToInt32() &&
 					     x.KnownLanguageId == knownLanguageId.ToInt32() && x.Date == statisticsDate, cancellationToken);
@@ -41,14 +41,14 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 
 				CopyStatistics(statistics, newStatisticsEntity);
 
-				await context.UserStatistics.AddAsync(newStatisticsEntity, cancellationToken);
+				await dbContext.UserStatistics.AddAsync(newStatisticsEntity, cancellationToken);
 			}
 			else
 			{
 				CopyStatistics(statistics, existingStatisticsEntity);
 			}
 
-			await context.SaveChangesAsync(cancellationToken);
+			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 
 		private static void CopyStatistics(UserStatisticsData source, UserStatisticsEntity target)

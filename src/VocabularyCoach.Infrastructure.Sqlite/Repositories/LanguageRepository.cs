@@ -22,9 +22,9 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 
 		public async Task<IReadOnlyCollection<Language>> GetLanguages(CancellationToken cancellationToken)
 		{
-			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			var languages = await context.Languages.ToListAsync(cancellationToken);
+			var languages = await dbContext.Languages.ToListAsync(cancellationToken);
 
 			return languages.Select(x => x.ToModel()).ToList();
 		}

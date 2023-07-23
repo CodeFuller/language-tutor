@@ -22,10 +22,10 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 		{
 			var checkResultEntity = checkResult.ToEntity(userId, languageTextId);
 
-			await using var context = await contextFactory.CreateDbContextAsync(cancellationToken);
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			await context.CheckResults.AddAsync(checkResultEntity, cancellationToken);
-			await context.SaveChangesAsync(cancellationToken);
+			await dbContext.CheckResults.AddAsync(checkResultEntity, cancellationToken);
+			await dbContext.SaveChangesAsync(cancellationToken);
 
 			checkResult.Id = checkResultEntity.Id.ToItemId();
 		}

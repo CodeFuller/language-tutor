@@ -1,5 +1,6 @@
 using System;
 using VocabularyCoach.Models;
+using VocabularyCoach.ViewModels.Extensions;
 
 namespace VocabularyCoach.ViewModels
 {
@@ -11,7 +12,7 @@ namespace VocabularyCoach.ViewModels
 
 		public string Note => LanguageText.Note;
 
-		public string TextWithNote => String.IsNullOrEmpty(LanguageText.Note) ? LanguageText.Text : $"{LanguageText.Text} ({LanguageText.Note})";
+		public string TextWithNote => LanguageText.GetTextWithNote();
 
 		public LanguageTextViewModel(LanguageText languageText)
 		{

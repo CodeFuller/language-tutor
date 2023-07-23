@@ -11,6 +11,8 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 
 		public int TextId { get; set; }
 
+		public TextEntity Text { get; set; }
+
 		public DateTimeOffset DateTime { get; set; }
 
 		public CheckResultType ResultType { get; set; }
