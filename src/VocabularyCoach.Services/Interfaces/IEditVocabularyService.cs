@@ -18,5 +18,9 @@ namespace VocabularyCoach.Services.Interfaces
 		Task<LanguageText> AddLanguageText(LanguageTextCreationData languageTextData, CancellationToken cancellationToken);
 
 		Task<Translation> AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken);
+
+		Task DeleteLanguageText(LanguageText languageText, CancellationToken cancellationToken);
+
+		Task DeleteTranslation(Translation translation, CancellationToken cancellationToken);
 	}
 }

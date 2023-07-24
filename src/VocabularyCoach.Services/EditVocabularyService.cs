@@ -74,5 +74,15 @@ namespace VocabularyCoach.Services
 
 			return translation;
 		}
+
+		public Task DeleteLanguageText(LanguageText languageText, CancellationToken cancellationToken)
+		{
+			return languageTextRepository.DeleteLanguageText(languageText, cancellationToken);
+		}
+
+		public Task DeleteTranslation(Translation translation, CancellationToken cancellationToken)
+		{
+			return languageTextRepository.DeleteTranslation(translation, cancellationToken);
+		}
 	}
 }

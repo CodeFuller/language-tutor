@@ -17,5 +17,9 @@ namespace VocabularyCoach.Services.Interfaces.Repositories
 		Task AddLanguageText(LanguageText languageText, CancellationToken cancellationToken);
 
 		Task AddTranslation(Translation translation, CancellationToken cancellationToken);
+
+		Task DeleteLanguageText(LanguageText languageText, CancellationToken cancellationToken);
+
+		Task DeleteTranslation(Translation translation, CancellationToken cancellationToken);
 	}
 }

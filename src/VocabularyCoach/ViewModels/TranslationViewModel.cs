@@ -1,22 +1,26 @@
+using System;
 using VocabularyCoach.Models;
 
 namespace VocabularyCoach.ViewModels
 {
 	public class TranslationViewModel
 	{
-		private readonly LanguageTextViewModel languageText1;
+		public Translation Translation { get; }
 
-		private readonly LanguageTextViewModel languageText2;
+		public LanguageTextViewModel LanguageText1 { get; }
+
+		public LanguageTextViewModel LanguageText2 { get; }
 
 		public TranslationViewModel(Translation translation)
 		{
-			languageText1 = new LanguageTextViewModel(translation.Text1);
-			languageText2 = new LanguageTextViewModel(translation.Text2);
+			Translation = translation ?? throw new ArgumentNullException(nameof(translation));
+			LanguageText1 = new LanguageTextViewModel(translation.Text1);
+			LanguageText2 = new LanguageTextViewModel(translation.Text2);
 		}
 
 		public override string ToString()
 		{
-			return $"{languageText1} - {languageText2}";
+			return $"{LanguageText1} - {LanguageText2}";
 		}
 	}
 }

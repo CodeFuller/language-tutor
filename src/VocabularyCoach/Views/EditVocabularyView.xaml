@@ -14,7 +14,8 @@
             <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="7*" />
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto" ItemsSource="{Binding Translations}"
+        <ListBox Name="TranslationsListBox" Grid.Column="0" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ItemsSource="{Binding Translations}" SelectedItem="{Binding SelectedTranslation}"
                  BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}" />
         <Grid Grid.Column="1" Margin="5,0,5,0">
             <Grid.RowDefinitions>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -11,6 +12,7 @@ using VocabularyCoach.Events;
 using VocabularyCoach.Extensions;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Interfaces;
+using VocabularyCoach.ViewModels.ContextMenu;
 using VocabularyCoach.ViewModels.Extensions;
 using VocabularyCoach.ViewModels.Interfaces;
 using static VocabularyCoach.ViewModels.Extensions.FocusHelpers;
@@ -25,13 +27,59 @@ namespace VocabularyCoach.ViewModels
 
 		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
 
+		private Language StudiedLanguage { get; set; }
+
+		private Language KnownLanguage { get; set; }
+
 		public ObservableCollection<TranslationViewModel> Translations { get; } = new();
+
+		public TranslationViewModel SelectedTranslation { get; set; }
 
 		public ICommand SaveChangesCommand { get; }
 
 		public ICommand ClearChangesCommand { get; }
 
 		public ICommand GoToStartPageCommand { get; }
+
+		public IEnumerable<ContextMenuItem> ContextMenuItems
+		{
+			get
+			{
+				var selectedTranslation = SelectedTranslation;
+
+				if (selectedTranslation == null)
+				{
+					yield break;
+				}
+
+				var languageText1 = selectedTranslation.LanguageText1;
+				var languageText2 = selectedTranslation.LanguageText2;
+
+				yield return new ContextMenuItem
+				{
+					Header = "Delete Translation",
+					Command = new AsyncRelayCommand(cancellationToken => DeleteTranslation(selectedTranslation.Translation, cancellationToken)),
+				};
+
+				yield return new ContextMenuItem
+				{
+					Header = $"Delete Text '{languageText1.TextWithNote}' and {GetNumberOfAffectedTranslations(languageText1.LanguageText)} translation(s)",
+					Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageText(languageText1.LanguageText, cancellationToken)),
+				};
+
+				yield return new ContextMenuItem
+				{
+					Header = $"Delete Text '{languageText2.TextWithNote}' and {GetNumberOfAffectedTranslations(languageText2.LanguageText)} translation(s)",
+					Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageText(languageText2.LanguageText, cancellationToken)),
+				};
+
+				yield return new ContextMenuItem
+				{
+					Header = $"Delete Both Texts and {GetNumberOfAffectedTranslations(languageText1.LanguageText, languageText2.LanguageText)} translation(s)",
+					Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageTexts(languageText1.LanguageText, languageText2.LanguageText, cancellationToken)),
+				};
+			}
+		}
 
 		public EditVocabularyViewModel(IEditVocabularyService editVocabularyService, IMessenger messenger,
 			IEditLanguageTextViewModel editTextInStudiedLanguageViewModel, IEditLanguageTextViewModel textInKnownLanguageViewModel)
@@ -57,13 +105,21 @@ namespace VocabularyCoach.ViewModels
 
 		public async Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var translations = await editVocabularyService.GetTranslations(studiedLanguage, knownLanguage, cancellationToken);
+			StudiedLanguage = studiedLanguage;
+			KnownLanguage = knownLanguage;
+
+			await ReloadData(cancellationToken);
+		}
+
+		private async Task ReloadData(CancellationToken cancellationToken)
+		{
+			var translations = await editVocabularyService.GetTranslations(StudiedLanguage, KnownLanguage, cancellationToken);
 
 			Translations.Clear();
 			Translations.AddRange(translations.Select(x => new TranslationViewModel(x)).OrderBy(x => x.ToString()));
 
-			await EditTextInStudiedLanguageViewModel.Load(studiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
-			await EditTextInKnownLanguageViewModel.Load(knownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
+			await EditTextInStudiedLanguageViewModel.Load(StudiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
+			await EditTextInKnownLanguageViewModel.Load(KnownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
 
 			ClearFilledData();
 		}
@@ -99,6 +155,35 @@ namespace VocabularyCoach.ViewModels
 			EditTextInKnownLanguageViewModel.ClearFilledData();
 
 			SetFocus(() => EditTextInStudiedLanguageViewModel.TextIsFocused);
+		}
+
+		private async Task DeleteTranslation(Translation translation, CancellationToken cancellationToken)
+		{
+			await editVocabularyService.DeleteTranslation(translation, cancellationToken);
+
+			await ReloadData(cancellationToken);
+		}
+
+		private async Task DeleteLanguageText(LanguageText languageText, CancellationToken cancellationToken)
+		{
+			await editVocabularyService.DeleteLanguageText(languageText, cancellationToken);
+
+			await ReloadData(cancellationToken);
+		}
+
+		private async Task DeleteLanguageTexts(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken)
+		{
+			await editVocabularyService.DeleteLanguageText(languageText1, cancellationToken);
+			await editVocabularyService.DeleteLanguageText(languageText2, cancellationToken);
+
+			await ReloadData(cancellationToken);
+		}
+
+		private int GetNumberOfAffectedTranslations(params LanguageText[] languageTexts)
+		{
+			return Translations
+				.Select(x => x.Translation)
+				.Count(translation => languageTexts.Any(text => text.Id == translation.Text1.Id || text.Id == translation.Text2.Id));
 		}
 	}
 }
