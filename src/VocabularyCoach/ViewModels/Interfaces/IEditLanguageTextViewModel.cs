@@ -8,6 +8,10 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IEditLanguageTextViewModel
 	{
+		bool NewTextIsEdited { get; }
+
+		bool ExistingTextIsEdited { get; }
+
 		Language Language { get; }
 
 		bool RequireSpellCheck { get; }
@@ -40,7 +44,9 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		ICommand ProcessEnterKeyCommand { get; }
 
-		Task Load(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken);
+		Task LoadForNewText(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken);
+
+		Task LoadForEditText(LanguageText editedLanguageText, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken);
 
 		Task<LanguageText> SaveChanges(CancellationToken cancellationToken);
 

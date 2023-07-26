@@ -18,6 +18,10 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; } = new EditTextInKnownLanguageDesignData();
 
+		public bool EditTextInStudiedLanguageIsEnabled => true;
+
+		public bool EditTextInKnownLanguageIsEnabled => true;
+
 		public ObservableCollection<TranslationViewModel> Translations { get; } = new(DesignData.Translations.Select(x => new TranslationViewModel(x)));
 
 		public TranslationViewModel SelectedTranslation { get; set; }

@@ -31,13 +31,21 @@
 
             <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                 <Label Padding="0" Margin="0" Content="Text:" />
-                <ComboBox IsEditable="True" IsTextSearchEnabled="False" ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
+                <ComboBox Visibility="{Binding NewTextIsEdited, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          IsEditable="True" IsTextSearchEnabled="False" ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
                           SelectedItem="{Binding SelectedText}" helpers:FocusHelper.IsFocused="{Binding TextIsFocused}"
                           helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
                     <ComboBox.InputBindings>
                         <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
                     </ComboBox.InputBindings>
                 </ComboBox>
+                <TextBox Visibility="{Binding ExistingTextIsEdited, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                         Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         helpers:FocusHelper.IsFocused="{Binding TextIsFocused}" helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
+                    </TextBox.InputBindings>
+                </TextBox>
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="1">

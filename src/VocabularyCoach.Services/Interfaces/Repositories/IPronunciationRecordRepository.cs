@@ -9,5 +9,7 @@ namespace VocabularyCoach.Services.Interfaces.Repositories
 		Task<PronunciationRecord> GetPronunciationRecord(ItemId languageTextId, CancellationToken cancellationToken);
 
 		Task AddPronunciationRecord(ItemId languageTextId, PronunciationRecord pronunciationRecord, CancellationToken cancellationToken);
+
+		Task UpdatePronunciationRecord(ItemId languageTextId, PronunciationRecord pronunciationRecord, CancellationToken cancellationToken);
 	}
 }

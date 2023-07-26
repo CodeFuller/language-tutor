@@ -21,11 +21,37 @@ namespace VocabularyCoach.ViewModels
 {
 	public class EditVocabularyViewModel : ObservableObject, IEditVocabularyViewModel
 	{
+		private enum EditMode
+		{
+			None,
+			NewTranslation,
+			EditTextInStudiedLanguage,
+			EditTextInKnownLanguage,
+		}
+
 		private readonly IEditVocabularyService editVocabularyService;
 
 		public IEditLanguageTextViewModel EditTextInStudiedLanguageViewModel { get; }
 
 		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
+
+		public bool EditTextInStudiedLanguageIsEnabled => CurrentEditMode is EditMode.NewTranslation or EditMode.EditTextInStudiedLanguage;
+
+		public bool EditTextInKnownLanguageIsEnabled => CurrentEditMode is EditMode.NewTranslation or EditMode.EditTextInKnownLanguage;
+
+		private EditMode editMode;
+
+		private EditMode CurrentEditMode
+		{
+			get => editMode;
+			set
+			{
+				editMode = value;
+
+				OnPropertyChanged(nameof(EditTextInStudiedLanguageIsEnabled));
+				OnPropertyChanged(nameof(EditTextInKnownLanguageIsEnabled));
+			}
+		}
 
 		private Language StudiedLanguage { get; set; }
 
@@ -54,6 +80,18 @@ namespace VocabularyCoach.ViewModels
 
 				var languageText1 = selectedTranslation.LanguageText1;
 				var languageText2 = selectedTranslation.LanguageText2;
+
+				yield return new ContextMenuItem
+				{
+					Header = $"Edit Text '{languageText1.TextWithNote}'",
+					Command = new AsyncRelayCommand(cancellationToken => EditLanguageTextInStudiedLanguage(languageText1.LanguageText, cancellationToken)),
+				};
+
+				yield return new ContextMenuItem
+				{
+					Header = $"Edit Text '{languageText2.TextWithNote}'",
+					Command = new AsyncRelayCommand(cancellationToken => EditLanguageTextInKnownLanguage(languageText2.LanguageText, cancellationToken)),
+				};
 
 				yield return new ContextMenuItem
 				{
@@ -109,6 +147,8 @@ namespace VocabularyCoach.ViewModels
 			KnownLanguage = knownLanguage;
 
 			await ReloadData(cancellationToken);
+
+			CurrentEditMode = EditMode.NewTranslation;
 		}
 
 		private async Task ReloadData(CancellationToken cancellationToken)
@@ -118,13 +158,34 @@ namespace VocabularyCoach.ViewModels
 			Translations.Clear();
 			Translations.AddRange(translations.Select(x => new TranslationViewModel(x)).OrderBy(x => x.ToString()));
 
-			await EditTextInStudiedLanguageViewModel.Load(StudiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
-			await EditTextInKnownLanguageViewModel.Load(KnownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
+			await EditTextInStudiedLanguageViewModel.LoadForNewText(StudiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
+			await EditTextInKnownLanguageViewModel.LoadForNewText(KnownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
 
 			ClearFilledData();
 		}
 
 		private async Task SaveChanges(CancellationToken cancellationToken)
+		{
+			switch (CurrentEditMode)
+			{
+				case EditMode.NewTranslation:
+					await SaveChangesForNewTranslation(cancellationToken);
+					break;
+
+				case EditMode.EditTextInStudiedLanguage:
+					await SaveChangesForLanguageText(EditTextInStudiedLanguageViewModel, cancellationToken);
+					break;
+
+				case EditMode.EditTextInKnownLanguage:
+					await SaveChangesForLanguageText(EditTextInKnownLanguageViewModel, cancellationToken);
+					break;
+
+				default:
+					throw new NotSupportedException($"Saving changes for mode {CurrentEditMode} is not supported");
+			}
+		}
+
+		private async Task SaveChangesForNewTranslation(CancellationToken cancellationToken)
 		{
 			EditTextInStudiedLanguageViewModel.ValidationIsEnabled = true;
 			EditTextInKnownLanguageViewModel.ValidationIsEnabled = true;
@@ -144,6 +205,21 @@ namespace VocabularyCoach.ViewModels
 			ClearFilledData();
 		}
 
+		private async Task SaveChangesForLanguageText(IEditLanguageTextViewModel editLanguageTextViewModel, CancellationToken cancellationToken)
+		{
+			editLanguageTextViewModel.ValidationIsEnabled = true;
+
+			if (editLanguageTextViewModel.HasErrors)
+			{
+				return;
+			}
+
+			await editLanguageTextViewModel.SaveChanges(cancellationToken);
+
+			// We reload data so that all translations with edited text are updated.
+			await ReloadData(cancellationToken);
+		}
+
 		private async void ProcessEnterKeyPressed(CancellationToken cancellationToken)
 		{
 			await SaveChanges(cancellationToken);
@@ -154,7 +230,27 @@ namespace VocabularyCoach.ViewModels
 			EditTextInStudiedLanguageViewModel.ClearFilledData();
 			EditTextInKnownLanguageViewModel.ClearFilledData();
 
+			CurrentEditMode = EditMode.NewTranslation;
+
 			SetFocus(() => EditTextInStudiedLanguageViewModel.TextIsFocused);
+		}
+
+		private async Task EditLanguageTextInStudiedLanguage(LanguageText languageText, CancellationToken cancellationToken)
+		{
+			await EditTextInStudiedLanguageViewModel.LoadForEditText(languageText, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
+
+			EditTextInKnownLanguageViewModel.ClearFilledData();
+
+			CurrentEditMode = EditMode.EditTextInStudiedLanguage;
+		}
+
+		private async Task EditLanguageTextInKnownLanguage(LanguageText languageText, CancellationToken cancellationToken)
+		{
+			await EditTextInKnownLanguageViewModel.LoadForEditText(languageText, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
+
+			EditTextInStudiedLanguageViewModel.ClearFilledData();
+
+			CurrentEditMode = EditMode.EditTextInKnownLanguage;
 		}
 
 		private async Task DeleteTranslation(Translation translation, CancellationToken cancellationToken)

@@ -14,6 +14,10 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
 
+		bool EditTextInStudiedLanguageIsEnabled { get; }
+
+		bool EditTextInKnownLanguageIsEnabled { get; }
+
 		ObservableCollection<TranslationViewModel> Translations { get; }
 
 		TranslationViewModel SelectedTranslation { get; set; }

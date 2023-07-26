@@ -2,7 +2,7 @@ using VocabularyCoach.Models;
 
 namespace VocabularyCoach.Services.Data
 {
-	public class LanguageTextCreationData
+	public class LanguageTextData
 	{
 		public Language Language { get; init; }
 

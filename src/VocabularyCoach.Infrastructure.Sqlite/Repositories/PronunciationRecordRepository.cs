@@ -66,20 +66,48 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			var pronunciationRecordEntity = new PronunciationRecordEntity
 			{
 				TextId = languageTextId.ToInt32(),
-				Format = pronunciationRecord.Format,
-				Source = pronunciationRecord.Source,
-				Path = Path.ChangeExtension(Guid.NewGuid().ToString("D"), GetExtensionForPronunciationRecordDataFile(pronunciationRecord)),
-				DataLength = pronunciationRecord.Data.Length,
-				DataChecksum = (int)checksumCalculator.CalculateChecksum(pronunciationRecord.Data),
 			};
 
-			var recordDataPath = GetPathForPronunciationRecordDataFile(pronunciationRecordEntity);
-			await File.WriteAllBytesAsync(recordDataPath, pronunciationRecord.Data, cancellationToken);
+			FillPronunciationRecordEntity(pronunciationRecordEntity, pronunciationRecord);
+
+			await StorePronunciationRecordData(pronunciationRecordEntity, pronunciationRecord, cancellationToken);
 
 			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			await dbContext.PronunciationRecords.AddAsync(pronunciationRecordEntity, cancellationToken);
 			await dbContext.SaveChangesAsync(cancellationToken);
+		}
+
+		public async Task UpdatePronunciationRecord(ItemId languageTextId, PronunciationRecord pronunciationRecord, CancellationToken cancellationToken)
+		{
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
+
+			var pronunciationRecordEntity = await dbContext.PronunciationRecords.SingleAsync(x => x.TextId == languageTextId.ToInt32(), cancellationToken);
+
+			var oldDataFilePath = GetPathForPronunciationRecordDataFile(pronunciationRecordEntity);
+
+			FillPronunciationRecordEntity(pronunciationRecordEntity, pronunciationRecord);
+
+			await StorePronunciationRecordData(pronunciationRecordEntity, pronunciationRecord, cancellationToken);
+
+			await dbContext.SaveChangesAsync(cancellationToken);
+
+			File.Delete(oldDataFilePath);
+		}
+
+		private void FillPronunciationRecordEntity(PronunciationRecordEntity pronunciationRecordEntity, PronunciationRecord pronunciationRecord)
+		{
+			pronunciationRecordEntity.Format = pronunciationRecord.Format;
+			pronunciationRecordEntity.Source = pronunciationRecord.Source;
+			pronunciationRecordEntity.Path = Path.ChangeExtension(Guid.NewGuid().ToString("D"), GetExtensionForPronunciationRecordDataFile(pronunciationRecord));
+			pronunciationRecordEntity.DataLength = pronunciationRecord.Data.Length;
+			pronunciationRecordEntity.DataChecksum = (int)checksumCalculator.CalculateChecksum(pronunciationRecord.Data);
+		}
+
+		private async Task StorePronunciationRecordData(PronunciationRecordEntity pronunciationRecordEntity, PronunciationRecord pronunciationRecord, CancellationToken cancellationToken)
+		{
+			var recordDataPath = GetPathForPronunciationRecordDataFile(pronunciationRecordEntity);
+			await File.WriteAllBytesAsync(recordDataPath, pronunciationRecord.Data, cancellationToken);
 		}
 
 		private static string GetExtensionForPronunciationRecordDataFile(PronunciationRecord pronunciationRecord)

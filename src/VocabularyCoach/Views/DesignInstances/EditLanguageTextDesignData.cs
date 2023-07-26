@@ -11,6 +11,10 @@ namespace VocabularyCoach.Views.DesignInstances
 {
 	internal abstract class EditLanguageTextDesignData : IEditLanguageTextViewModel
 	{
+		public bool NewTextIsEdited => true;
+
+		public bool ExistingTextIsEdited => !NewTextIsEdited;
+
 		public abstract Language Language { get; }
 
 		public abstract bool RequireSpellCheck { get; }
@@ -43,7 +47,12 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public ICommand ProcessEnterKeyCommand => null;
 
-		public Task Load(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
+		public Task LoadForNewText(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task LoadForEditText(LanguageText editedLanguageText, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}

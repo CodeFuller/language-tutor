@@ -43,14 +43,9 @@ namespace VocabularyCoach.Services
 			return Task.FromResult(url);
 		}
 
-		public async Task<LanguageText> AddLanguageText(LanguageTextCreationData languageTextData, CancellationToken cancellationToken)
+		public async Task<LanguageText> AddLanguageText(LanguageTextData languageTextData, CancellationToken cancellationToken)
 		{
-			var languageText = new LanguageText
-			{
-				Language = languageTextData.Language,
-				Text = languageTextData.Text,
-				Note = String.IsNullOrWhiteSpace(languageTextData.Note) ? null : languageTextData.Note,
-			};
+			var languageText = CreateLanguageText(null, languageTextData);
 
 			await languageTextRepository.AddLanguageText(languageText, cancellationToken);
 
@@ -60,6 +55,17 @@ namespace VocabularyCoach.Services
 			}
 
 			return languageText;
+		}
+
+		private static LanguageText CreateLanguageText(ItemId id, LanguageTextData languageTextData)
+		{
+			return new LanguageText
+			{
+				Id = id,
+				Language = languageTextData.Language,
+				Text = languageTextData.Text,
+				Note = String.IsNullOrWhiteSpace(languageTextData.Note) ? null : languageTextData.Note,
+			};
 		}
 
 		public async Task<Translation> AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken)
@@ -73,6 +79,22 @@ namespace VocabularyCoach.Services
 			await languageTextRepository.AddTranslation(translation, cancellationToken);
 
 			return translation;
+		}
+
+		public async Task<LanguageText> UpdateLanguageText(LanguageText languageText, LanguageTextData newLanguageTextData, CancellationToken cancellationToken)
+		{
+			var newLanguageText = CreateLanguageText(languageText.Id, newLanguageTextData);
+
+			await languageTextRepository.UpdateLanguageText(newLanguageText, cancellationToken);
+
+			// Currently we support only update of pronunciation record.
+			// We do not support adding or deletion of pronunciation record.
+			if (newLanguageTextData.PronunciationRecord != null)
+			{
+				await pronunciationRecordRepository.UpdatePronunciationRecord(languageText.Id, newLanguageTextData.PronunciationRecord, cancellationToken);
+			}
+
+			return newLanguageText;
 		}
 
 		public Task DeleteLanguageText(LanguageText languageText, CancellationToken cancellationToken)

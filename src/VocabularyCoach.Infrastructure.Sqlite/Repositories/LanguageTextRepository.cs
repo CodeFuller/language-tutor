@@ -93,6 +93,17 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 
+		public async Task UpdateLanguageText(LanguageText languageText, CancellationToken cancellationToken)
+		{
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
+
+			var textEntity = await dbContext.Texts.SingleAsync(x => x.Id == languageText.Id.ToInt32(), cancellationToken);
+
+			textEntity.Text = languageText.Text;
+			textEntity.Note = languageText.Note;
+			await dbContext.SaveChangesAsync(cancellationToken);
+		}
+
 		public async Task DeleteLanguageText(LanguageText languageText, CancellationToken cancellationToken)
 		{
 			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);

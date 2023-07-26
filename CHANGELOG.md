@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added display of progress for the current practice session.
 - Extended start page with vocabulary statistics.
 - Added support of synonyms.
-- Added removal of texts and translations.
+- Added ability to remove texts and translations.
+- Added ability to edit texts.
 
 ## 1.0.0 - 2023-07-12
 - Initial version.
