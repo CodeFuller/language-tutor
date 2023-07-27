@@ -9,6 +9,7 @@
         xmlns:designInstances="clr-namespace:VocabularyCoach.Views.DesignInstances"
         mc:Ignorable="d"
         Title="Vocabulary Coach" Width="800" Height="450"
+        ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance designInstances:ApplicationDesignData, IsDesignTimeCreatable=True}">
 
     <Window.Style>
