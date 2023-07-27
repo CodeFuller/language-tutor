@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,7 +17,9 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		bool EditTextInKnownLanguageIsEnabled { get; }
 
-		ObservableCollection<TranslationViewModel> Translations { get; }
+		string TranslationFilter { get; set; }
+
+		IReadOnlyCollection<TranslationViewModel> FilteredTranslations { get; }
 
 		TranslationViewModel SelectedTranslation { get; set; }
 

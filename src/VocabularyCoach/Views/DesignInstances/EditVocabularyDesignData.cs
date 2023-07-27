@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +21,9 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public bool EditTextInKnownLanguageIsEnabled => true;
 
-		public ObservableCollection<TranslationViewModel> Translations { get; } = new(DesignData.Translations.Select(x => new TranslationViewModel(x)));
+		public string TranslationFilter { get; set; }
+
+		public IReadOnlyCollection<TranslationViewModel> FilteredTranslations => DesignData.Translations.Select(x => new TranslationViewModel(x)).ToList();
 
 		public TranslationViewModel SelectedTranslation { get; set; }
 

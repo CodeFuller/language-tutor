@@ -57,7 +57,22 @@ namespace VocabularyCoach.ViewModels
 
 		private Language KnownLanguage { get; set; }
 
-		public ObservableCollection<TranslationViewModel> Translations { get; } = new();
+		private string translationFilter;
+
+		public string TranslationFilter
+		{
+			get => translationFilter;
+			set
+			{
+				SetProperty(ref translationFilter, value);
+
+				OnPropertyChanged(nameof(FilteredTranslations));
+			}
+		}
+
+		private ObservableCollection<TranslationViewModel> Translations { get; } = new();
+
+		public IReadOnlyCollection<TranslationViewModel> FilteredTranslations => Translations.Where(TranslationMatchesFilter).ToList();
 
 		public TranslationViewModel SelectedTranslation { get; set; }
 
@@ -139,6 +154,8 @@ namespace VocabularyCoach.ViewModels
 
 			messenger.Register<EnterKeyPressedEventArgs>(this, (_, _) => ProcessEnterKeyPressed(CancellationToken.None));
 			messenger.Register<EditedTextSpellCheckedEventArgs>(this, (_, _) => SetFocus(() => EditTextInKnownLanguageViewModel.TextIsFocused));
+
+			Translations.CollectionChanged += (_, _) => OnPropertyChanged(nameof(FilteredTranslations));
 		}
 
 		public async Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
@@ -147,6 +164,8 @@ namespace VocabularyCoach.ViewModels
 			KnownLanguage = knownLanguage;
 
 			await ReloadData(cancellationToken);
+
+			TranslationFilter = String.Empty;
 
 			CurrentEditMode = EditMode.NewTranslation;
 		}
@@ -280,6 +299,11 @@ namespace VocabularyCoach.ViewModels
 			return Translations
 				.Select(x => x.Translation)
 				.Count(translation => languageTexts.Any(text => text.Id == translation.Text1.Id || text.Id == translation.Text2.Id));
+		}
+
+		private bool TranslationMatchesFilter(TranslationViewModel translation)
+		{
+			return String.IsNullOrEmpty(TranslationFilter) || translation.ToString().Contains(TranslationFilter, LanguageTextComparison.IgnoreCase);
 		}
 	}
 }
