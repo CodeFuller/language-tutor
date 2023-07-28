@@ -213,11 +213,13 @@ namespace VocabularyCoach.ViewModels
 
 			EditedLanguageText = editedLanguageText;
 
+			// SelectedText should be set before Note, because its setter updates Note.
+			SelectedText = null;
+
 			Text = editedLanguageText.Text;
 			TextWasSpellChecked = true;
 
 			Note = editedLanguageText.Note;
-			SelectedText = null;
 
 			if (createPronunciationRecord)
 			{
