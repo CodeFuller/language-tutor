@@ -8,7 +8,7 @@
              xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
              xmlns:designInstances="clr-namespace:VocabularyCoach.Views.DesignInstances"
              mc:Ignorable="d"
-             d:DesignWidth="785" d:DesignHeight="410"
+             d:DesignWidth="785" d:DesignHeight="460"
              d:DataContext="{d:DesignInstance designInstances:PracticeVocabularyDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <UserControl.Resources>

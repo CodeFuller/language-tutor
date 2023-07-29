@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -152,6 +153,7 @@ namespace VocabularyCoach.ViewModels
 			get
 			{
 				yield return nameof(Text);
+				yield return nameof(Note);
 			}
 		}
 
@@ -385,6 +387,7 @@ namespace VocabularyCoach.ViewModels
 			return propertyName switch
 			{
 				nameof(Text) => NewTextIsEdited ? GetValidationErrorForNewText() : GetValidationErrorForEditText(),
+				nameof(Note) => GetValidationErrorForNote(),
 				_ => String.Empty,
 			};
 		}
@@ -404,6 +407,12 @@ namespace VocabularyCoach.ViewModels
 			if (SelectedText == null && String.IsNullOrEmpty(TextWithoutNote))
 			{
 				return "Please type new or pick existing text";
+			}
+
+			var validationErrorForTextContent = GetValidationErrorForTextContent(TextWithoutNote);
+			if (!String.IsNullOrEmpty(validationErrorForTextContent))
+			{
+				return validationErrorForTextContent;
 			}
 
 			if (RequireSpellCheck && !TextWasSpellChecked)
@@ -451,6 +460,12 @@ namespace VocabularyCoach.ViewModels
 				return "Please type text";
 			}
 
+			var validationErrorForTextContent = GetValidationErrorForTextContent(TextWithoutNote);
+			if (!String.IsNullOrEmpty(validationErrorForTextContent))
+			{
+				return validationErrorForTextContent;
+			}
+
 			if (RequireSpellCheck && !TextWasSpellChecked)
 			{
 				return "Please perform text spell check";
@@ -470,6 +485,43 @@ namespace VocabularyCoach.ViewModels
 				{
 					return $"Same text with the same note in {Language.Name} language already exists";
 				}
+			}
+
+			return String.Empty;
+		}
+
+		private string GetValidationErrorForNote()
+		{
+			if (!String.IsNullOrEmpty(Note))
+			{
+				var validationErrorForNoteContent = GetValidationErrorForTextContent(Note);
+				if (!String.IsNullOrEmpty(validationErrorForNoteContent))
+				{
+					return validationErrorForNoteContent;
+				}
+			}
+
+			return String.Empty;
+		}
+
+		private static string GetValidationErrorForTextContent(string content)
+		{
+			var leadingWhitespacesRegex = new Regex(@"^\s+");
+			if (leadingWhitespacesRegex.IsMatch(content))
+			{
+				return "Please remove leading whitespaces";
+			}
+
+			var trailingWhitespacesRegex = new Regex(@"\s+$");
+			if (trailingWhitespacesRegex.IsMatch(content))
+			{
+				return "Please remove trailing whitespaces";
+			}
+
+			var duplicatedWhitespacesRegex = new Regex(@"\s{2,}");
+			if (duplicatedWhitespacesRegex.IsMatch(content))
+			{
+				return "Please remove duplicated whitespaces";
 			}
 
 			return String.Empty;

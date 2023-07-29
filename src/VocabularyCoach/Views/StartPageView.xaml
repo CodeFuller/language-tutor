@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:designInstances="clr-namespace:VocabularyCoach.Views.DesignInstances"
              mc:Ignorable="d" 
-             d:DesignWidth="785" d:DesignHeight="410"
+             d:DesignWidth="785" d:DesignHeight="460"
              d:DataContext="{d:DesignInstance designInstances:StartPageDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <Grid>

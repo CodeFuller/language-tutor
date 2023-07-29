@@ -71,7 +71,8 @@
 
             <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,20,0,0" Orientation="Vertical">
                 <Label Padding="0" Margin="0" Content="Note (Optional):" />
-                <TextBox Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <!-- We set bottom margin for note validation error -->
+                <TextBox Margin="0,0,0,15" VerticalAlignment="Center" Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          IsEnabled="{Binding ExistingTextIsSelected, Converter={StaticResource InverseBooleanConverter}}">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
