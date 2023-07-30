@@ -31,9 +31,29 @@ namespace VocabularyCoach.ViewModels
 
 		private readonly IEditVocabularyService editVocabularyService;
 
-		public IEditLanguageTextViewModel EditTextInStudiedLanguageViewModel { get; }
+		private readonly ICreateOrPickTextViewModel createOrPickTextInStudiedLanguageViewModel;
 
-		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
+		private readonly ICreateOrPickTextViewModel createOrPickTextInKnownLanguageViewModel;
+
+		private readonly IEditExistingTextViewModel editExistingTextInStudiedLanguageViewModel;
+
+		private readonly IEditExistingTextViewModel editExistingTextInKnownLanguageViewModel;
+
+		private IBasicEditTextViewModel currentTextInStudiedLanguageViewModel;
+
+		public IBasicEditTextViewModel CurrentTextInStudiedLanguageViewModel
+		{
+			get => currentTextInStudiedLanguageViewModel;
+			private set => SetProperty(ref currentTextInStudiedLanguageViewModel, value);
+		}
+
+		private IBasicEditTextViewModel currentTextInKnownLanguageViewModel;
+
+		public IBasicEditTextViewModel CurrentTextInKnownLanguageViewModel
+		{
+			get => currentTextInKnownLanguageViewModel;
+			private set => SetProperty(ref currentTextInKnownLanguageViewModel, value);
+		}
 
 		public bool EditTextInStudiedLanguageIsEnabled => CurrentEditMode is EditMode.NewTranslation or EditMode.EditTextInStudiedLanguage;
 
@@ -135,25 +155,33 @@ namespace VocabularyCoach.ViewModels
 		}
 
 		public EditVocabularyViewModel(IEditVocabularyService editVocabularyService, IMessenger messenger,
-			IEditLanguageTextViewModel editTextInStudiedLanguageViewModel, IEditLanguageTextViewModel textInKnownLanguageViewModel)
+			ICreateOrPickTextViewModel createOrPickTextInStudiedLanguageViewModel, ICreateOrPickTextViewModel createOrPickTextInKnownLanguageViewModel,
+			IEditExistingTextViewModel editExistingTextInStudiedLanguageViewModel, IEditExistingTextViewModel editExistingTextInKnownLanguageViewModel)
 		{
 			this.editVocabularyService = editVocabularyService ?? throw new ArgumentNullException(nameof(editVocabularyService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			if (Object.ReferenceEquals(editTextInStudiedLanguageViewModel, textInKnownLanguageViewModel))
+			if (Object.ReferenceEquals(createOrPickTextInStudiedLanguageViewModel, createOrPickTextInKnownLanguageViewModel))
 			{
-				throw new ArgumentException($"The same instance is injected for {nameof(editTextInStudiedLanguageViewModel)} and {nameof(textInKnownLanguageViewModel)}");
+				throw new ArgumentException($"The same instance is injected for {nameof(createOrPickTextInStudiedLanguageViewModel)} and {nameof(createOrPickTextInKnownLanguageViewModel)}");
 			}
 
-			EditTextInStudiedLanguageViewModel = editTextInStudiedLanguageViewModel ?? throw new ArgumentNullException(nameof(editTextInStudiedLanguageViewModel));
-			EditTextInKnownLanguageViewModel = textInKnownLanguageViewModel ?? throw new ArgumentNullException(nameof(textInKnownLanguageViewModel));
+			if (Object.ReferenceEquals(editExistingTextInStudiedLanguageViewModel, editExistingTextInKnownLanguageViewModel))
+			{
+				throw new ArgumentException($"The same instance is injected for {nameof(editExistingTextInStudiedLanguageViewModel)} and {nameof(editExistingTextInKnownLanguageViewModel)}");
+			}
+
+			this.createOrPickTextInStudiedLanguageViewModel = createOrPickTextInStudiedLanguageViewModel ?? throw new ArgumentNullException(nameof(createOrPickTextInStudiedLanguageViewModel));
+			this.createOrPickTextInKnownLanguageViewModel = createOrPickTextInKnownLanguageViewModel ?? throw new ArgumentNullException(nameof(createOrPickTextInKnownLanguageViewModel));
+			this.editExistingTextInStudiedLanguageViewModel = editExistingTextInStudiedLanguageViewModel ?? throw new ArgumentNullException(nameof(editExistingTextInStudiedLanguageViewModel));
+			this.editExistingTextInKnownLanguageViewModel = editExistingTextInKnownLanguageViewModel ?? throw new ArgumentNullException(nameof(editExistingTextInKnownLanguageViewModel));
 
 			SaveChangesCommand = new AsyncRelayCommand(SaveChanges);
 			ClearChangesCommand = new RelayCommand(ClearFilledData);
 			GoToStartPageCommand = new RelayCommand(() => messenger.Send(new SwitchToStartPageEventArgs()));
 
 			messenger.Register<EnterKeyPressedEventArgs>(this, (_, _) => ProcessEnterKeyPressed(CancellationToken.None));
-			messenger.Register<EditedTextSpellCheckedEventArgs>(this, (_, _) => SetFocus(() => EditTextInKnownLanguageViewModel.TextIsFocused));
+			messenger.Register<EditedTextSpellCheckedEventArgs>(this, (_, _) => ProcessEditedTextSpellCheckedEvent());
 
 			Translations.CollectionChanged += (_, _) => OnPropertyChanged(nameof(FilteredTranslations));
 		}
@@ -177,8 +205,8 @@ namespace VocabularyCoach.ViewModels
 			Translations.Clear();
 			Translations.AddRange(translations.Select(x => new TranslationViewModel(x)).OrderBy(x => x.ToString()));
 
-			await EditTextInStudiedLanguageViewModel.LoadForNewText(StudiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
-			await EditTextInKnownLanguageViewModel.LoadForNewText(KnownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
+			await createOrPickTextInStudiedLanguageViewModel.Load(StudiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
+			await createOrPickTextInKnownLanguageViewModel.Load(KnownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
 
 			ClearFilledData();
 		}
@@ -192,11 +220,11 @@ namespace VocabularyCoach.ViewModels
 					break;
 
 				case EditMode.EditTextInStudiedLanguage:
-					await SaveChangesForLanguageText(EditTextInStudiedLanguageViewModel, cancellationToken);
+					await SaveChangesForLanguageText(editExistingTextInStudiedLanguageViewModel, cancellationToken);
 					break;
 
 				case EditMode.EditTextInKnownLanguage:
-					await SaveChangesForLanguageText(EditTextInKnownLanguageViewModel, cancellationToken);
+					await SaveChangesForLanguageText(editExistingTextInKnownLanguageViewModel, cancellationToken);
 					break;
 
 				default:
@@ -206,16 +234,16 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task SaveChangesForNewTranslation(CancellationToken cancellationToken)
 		{
-			EditTextInStudiedLanguageViewModel.ValidationIsEnabled = true;
-			EditTextInKnownLanguageViewModel.ValidationIsEnabled = true;
+			createOrPickTextInStudiedLanguageViewModel.ValidationIsEnabled = true;
+			createOrPickTextInKnownLanguageViewModel.ValidationIsEnabled = true;
 
-			if (EditTextInStudiedLanguageViewModel.HasErrors || EditTextInKnownLanguageViewModel.HasErrors)
+			if (createOrPickTextInStudiedLanguageViewModel.HasErrors || createOrPickTextInKnownLanguageViewModel.HasErrors)
 			{
 				return;
 			}
 
-			var textInStudiedLanguage = await EditTextInStudiedLanguageViewModel.SaveChanges(cancellationToken);
-			var textInKnownLanguage = await EditTextInKnownLanguageViewModel.SaveChanges(cancellationToken);
+			var textInStudiedLanguage = await createOrPickTextInStudiedLanguageViewModel.SaveChanges(cancellationToken);
+			var textInKnownLanguage = await createOrPickTextInKnownLanguageViewModel.SaveChanges(cancellationToken);
 
 			var newTranslation = await editVocabularyService.AddTranslation(textInStudiedLanguage, textInKnownLanguage, cancellationToken);
 
@@ -224,7 +252,7 @@ namespace VocabularyCoach.ViewModels
 			ClearFilledData();
 		}
 
-		private async Task SaveChangesForLanguageText(IEditLanguageTextViewModel editLanguageTextViewModel, CancellationToken cancellationToken)
+		private async Task SaveChangesForLanguageText(IBasicEditTextViewModel editLanguageTextViewModel, CancellationToken cancellationToken)
 		{
 			editLanguageTextViewModel.ValidationIsEnabled = true;
 
@@ -244,30 +272,49 @@ namespace VocabularyCoach.ViewModels
 			await SaveChanges(cancellationToken);
 		}
 
+		private void ProcessEditedTextSpellCheckedEvent()
+		{
+			if (CurrentEditMode == EditMode.NewTranslation)
+			{
+				SetFocus(() => createOrPickTextInKnownLanguageViewModel.TextIsFocused);
+			}
+		}
+
 		private void ClearFilledData()
 		{
-			EditTextInStudiedLanguageViewModel.ClearFilledData();
-			EditTextInKnownLanguageViewModel.ClearFilledData();
+			createOrPickTextInStudiedLanguageViewModel.ClearFilledData();
+			createOrPickTextInKnownLanguageViewModel.ClearFilledData();
+
+			CurrentTextInStudiedLanguageViewModel = createOrPickTextInStudiedLanguageViewModel;
+			CurrentTextInKnownLanguageViewModel = createOrPickTextInKnownLanguageViewModel;
 
 			CurrentEditMode = EditMode.NewTranslation;
 
-			SetFocus(() => EditTextInStudiedLanguageViewModel.TextIsFocused);
+			SetFocus(() => createOrPickTextInStudiedLanguageViewModel.TextIsFocused);
 		}
 
 		private async Task EditLanguageTextInStudiedLanguage(LanguageText languageText, CancellationToken cancellationToken)
 		{
-			await EditTextInStudiedLanguageViewModel.LoadForEditText(languageText, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
+			await editExistingTextInStudiedLanguageViewModel.Load(languageText, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
 
-			EditTextInKnownLanguageViewModel.ClearFilledData();
+			editExistingTextInKnownLanguageViewModel.ClearFilledData();
+			CurrentTextInStudiedLanguageViewModel = editExistingTextInStudiedLanguageViewModel;
+
+			createOrPickTextInKnownLanguageViewModel.ClearFilledData();
+			CurrentTextInKnownLanguageViewModel = createOrPickTextInKnownLanguageViewModel;
 
 			CurrentEditMode = EditMode.EditTextInStudiedLanguage;
 		}
 
 		private async Task EditLanguageTextInKnownLanguage(LanguageText languageText, CancellationToken cancellationToken)
 		{
-			await EditTextInKnownLanguageViewModel.LoadForEditText(languageText, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
+			await editExistingTextInKnownLanguageViewModel.Load(languageText, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
 
-			EditTextInStudiedLanguageViewModel.ClearFilledData();
+			createOrPickTextInStudiedLanguageViewModel.ClearFilledData();
+			CurrentTextInStudiedLanguageViewModel = createOrPickTextInStudiedLanguageViewModel;
+
+			editExistingTextInStudiedLanguageViewModel.ClearFilledData();
+			CurrentTextInKnownLanguageViewModel = editExistingTextInKnownLanguageViewModel;
 
 			CurrentEditMode = EditMode.EditTextInKnownLanguage;
 		}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public Task Load(User user, CancellationToken cancellationToken)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }

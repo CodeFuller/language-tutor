@@ -9,9 +9,9 @@ namespace VocabularyCoach.ViewModels.Interfaces
 {
 	public interface IEditVocabularyViewModel : IPageViewModel
 	{
-		IEditLanguageTextViewModel EditTextInStudiedLanguageViewModel { get; }
+		IBasicEditTextViewModel CurrentTextInStudiedLanguageViewModel { get; }
 
-		IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; }
+		IBasicEditTextViewModel CurrentTextInKnownLanguageViewModel { get; }
 
 		bool EditTextInStudiedLanguageIsEnabled { get; }
 

@@ -5,7 +5,7 @@ using VocabularyCoach.ViewModels;
 
 namespace VocabularyCoach.Views.DesignInstances
 {
-	internal sealed class EditTextInStudiedLanguageDesignData : EditLanguageTextDesignData
+	internal sealed class CreateOrPickTextInStudiedLanguageDesignData : BasicCreateOrPickTextDesignData
 	{
 		public override Language Language => DesignData.StudiedLanguage;
 
@@ -13,12 +13,14 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public override bool CreatePronunciationRecord => true;
 
-		public override ObservableCollection<LanguageTextViewModel> ExistingTexts { get; } = new(DesignData.TextsInStudiedLanguage.Select(x => new LanguageTextViewModel(x)));
-
 		public override string Text { get; set; } = "samochód";
 
-		public override bool TextWasSpellChecked => false;
+		public override bool TextWasSpellChecked => true;
+
+		public override bool TextIsFilled => true;
 
 		public override string Note { get; set; } = "auto";
+
+		public override ObservableCollection<LanguageTextViewModel> ExistingTexts { get; } = new(DesignData.TextsInStudiedLanguage.Select(x => new LanguageTextViewModel(x)));
 	}
 }

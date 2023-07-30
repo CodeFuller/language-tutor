@@ -7,14 +7,15 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:designInstances="clr-namespace:VocabularyCoach.Views.DesignInstances"
              xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
+             xmlns:viewModels="clr-namespace:VocabularyCoach.ViewModels"
              mc:Ignorable="d" 
              d:DesignWidth="490" d:DesignHeight="175"
-             d:DataContext="{d:DesignInstance designInstances:EditTextInStudiedLanguageDesignData, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance designInstances:CreateOrPickTextInStudiedLanguageDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
 
     <UserControl.Resources>
         <valueConverters:VisibilityHiddenValueConverter x:Key="VisibilityHiddenValueConverter" />
-        <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanConverter" />
+        <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanValueConverter" />
     </UserControl.Resources>
 
     <GroupBox Header="{Binding Language.Name}" HeaderStringFormat="Text in {0} language" Margin="5" Padding="5">
@@ -31,21 +32,28 @@
 
             <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                 <Label Padding="0" Margin="0" Content="Text:" />
-                <ComboBox Visibility="{Binding NewTextIsEdited, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          IsEditable="True" IsTextSearchEnabled="False" ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
-                          SelectedItem="{Binding SelectedText}" helpers:FocusHelper.IsFocused="{Binding TextIsFocused}"
-                          helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
-                    <ComboBox.InputBindings>
-                        <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
-                    </ComboBox.InputBindings>
-                </ComboBox>
-                <TextBox Visibility="{Binding ExistingTextIsEdited, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                         Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         helpers:FocusHelper.IsFocused="{Binding TextIsFocused}" helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
-                    </TextBox.InputBindings>
-                </TextBox>
+                <ContentPresenter Content="{Binding}">
+                    <ContentPresenter.Resources>
+                        <DataTemplate DataType="{x:Type viewModels:CreateOrPickTextViewModel}">
+                            <ComboBox IsEditable="True" IsReadOnly="{Binding AllowTextEdit, Converter={StaticResource InverseBooleanValueConverter}}" IsTextSearchEnabled="False"
+                                      ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
+                                      SelectedItem="{Binding SelectedText}" helpers:FocusHelper.IsFocused="{Binding TextIsFocused}"
+                                      helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
+                                <ComboBox.InputBindings>
+                                    <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
+                                </ComboBox.InputBindings>
+                            </ComboBox>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type viewModels:EditExistingTextViewModel}">
+                            <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     helpers:FocusHelper.IsFocused="{Binding TextIsFocused}" helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </DataTemplate>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
             </StackPanel>
 
             <StackPanel Grid.Row="0" Grid.Column="1">
@@ -73,7 +81,7 @@
                 <Label Padding="0" Margin="0" Content="Note (Optional):" />
                 <!-- We set bottom margin for note validation error -->
                 <TextBox Margin="0,0,0,15" VerticalAlignment="Center" Text="{Binding Note, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         IsEnabled="{Binding ExistingTextIsSelected, Converter={StaticResource InverseBooleanConverter}}">
+                         IsEnabled="{Binding AllowNoteEdit}">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
                     </TextBox.InputBindings>

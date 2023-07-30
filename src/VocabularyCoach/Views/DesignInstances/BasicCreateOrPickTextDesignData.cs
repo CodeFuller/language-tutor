@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,37 +11,41 @@ using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.Views.DesignInstances
 {
-	internal abstract class EditLanguageTextDesignData : IEditLanguageTextViewModel
+	internal abstract class BasicCreateOrPickTextDesignData : ICreateOrPickTextViewModel
 	{
-		public bool NewTextIsEdited => true;
-
-		public bool ExistingTextIsEdited => !NewTextIsEdited;
-
 		public abstract Language Language { get; }
 
 		public abstract bool RequireSpellCheck { get; }
 
 		public abstract bool CreatePronunciationRecord { get; }
 
-		public abstract ObservableCollection<LanguageTextViewModel> ExistingTexts { get; }
+		public abstract string Text { get; set; }
 
 		public bool TextIsFocused { get; set; }
 
-		public abstract string Text { get; set; }
-
 		public abstract bool TextWasSpellChecked { get; }
 
-		public bool TextIsFilled => true;
-
-		public LanguageTextViewModel SelectedText { get; set; }
-
-		public bool ExistingTextIsSelected => false;
+		public abstract bool TextIsFilled { get; }
 
 		public abstract string Note { get; set; }
+
+		public bool AllowTextEdit => true;
+
+		public bool AllowNoteEdit => true;
+
+		public abstract ObservableCollection<LanguageTextViewModel> ExistingTexts { get; }
+
+		public LanguageTextViewModel SelectedText { get; set; }
 
 		public bool ValidationIsEnabled { get; set; }
 
 		public bool HasErrors => false;
+
+		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged
+		{
+			add { }
+			remove { }
+		}
 
 		public ICommand SpellCheckTextCommand => null;
 
@@ -47,12 +53,7 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public ICommand ProcessEnterKeyCommand => null;
 
-		public Task LoadForNewText(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task LoadForEditText(LanguageText editedLanguageText, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
+		public Task Load(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}
@@ -63,6 +64,11 @@ namespace VocabularyCoach.Views.DesignInstances
 		}
 
 		public void ClearFilledData()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable GetErrors(string propertyName)
 		{
 			throw new NotImplementedException();
 		}

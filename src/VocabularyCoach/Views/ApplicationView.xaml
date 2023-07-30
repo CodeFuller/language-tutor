@@ -16,29 +16,29 @@
         <Style TargetType="{x:Type Window}" BasedOn="{StaticResource ApplicationWindowStyle}" />
     </Window.Style>
 
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type viewModels:StartPageViewModel}">
-            <views:StartPageView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type designInstances:StartPageDesignData}">
-            <views:StartPageView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:PracticeVocabularyViewModel}">
-            <views:PracticeVocabularyView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:PracticeResultsViewModel}">
-            <views:PracticeResultsView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:EditVocabularyViewModel}">
-            <views:EditVocabularyView />
-        </DataTemplate>
-    </Window.Resources>
-
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding LoadCommand}" />
         </b:EventTrigger>
     </b:Interaction.Triggers>
 
-    <ContentControl Content="{Binding CurrentPage}" Margin="5" />
+    <ContentControl Content="{Binding CurrentPage}" Margin="5">
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type viewModels:StartPageViewModel}">
+                <views:StartPageView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type designInstances:StartPageDesignData}">
+                <views:StartPageView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:PracticeVocabularyViewModel}">
+                <views:PracticeVocabularyView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:PracticeResultsViewModel}">
+                <views:PracticeResultsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:EditVocabularyViewModel}">
+                <views:EditVocabularyView />
+            </DataTemplate>
+        </ContentControl.Resources>
+    </ContentControl>
 </Window>

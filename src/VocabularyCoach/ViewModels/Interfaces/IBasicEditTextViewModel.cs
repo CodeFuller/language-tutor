@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -6,47 +6,35 @@ using VocabularyCoach.Models;
 
 namespace VocabularyCoach.ViewModels.Interfaces
 {
-	public interface IEditLanguageTextViewModel
+	public interface IBasicEditTextViewModel : INotifyDataErrorInfo
 	{
-		bool NewTextIsEdited { get; }
-
-		bool ExistingTextIsEdited { get; }
-
 		Language Language { get; }
 
 		bool RequireSpellCheck { get; }
 
 		bool CreatePronunciationRecord { get; }
 
-		ObservableCollection<LanguageTextViewModel> ExistingTexts { get; }
+		string Text { get; set; }
 
 		bool TextIsFocused { get; set; }
-
-		string Text { get; set; }
 
 		bool TextWasSpellChecked { get; }
 
 		bool TextIsFilled { get; }
 
-		LanguageTextViewModel SelectedText { get; set; }
-
-		bool ExistingTextIsSelected { get; }
-
 		string Note { get; set; }
 
-		bool ValidationIsEnabled { get; set; }
+		bool AllowTextEdit { get; }
 
-		bool HasErrors { get; }
+		bool AllowNoteEdit { get; }
+
+		bool ValidationIsEnabled { get; set; }
 
 		ICommand SpellCheckTextCommand { get; }
 
 		ICommand PlayPronunciationRecordCommand { get; }
 
 		ICommand ProcessEnterKeyCommand { get; }
-
-		Task LoadForNewText(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken);
-
-		Task LoadForEditText(LanguageText editedLanguageText, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken);
 
 		Task<LanguageText> SaveChanges(CancellationToken cancellationToken);
 

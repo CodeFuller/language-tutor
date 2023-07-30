@@ -13,9 +13,9 @@ namespace VocabularyCoach.Views.DesignInstances
 {
 	internal sealed class EditVocabularyDesignData : IEditVocabularyViewModel
 	{
-		public IEditLanguageTextViewModel EditTextInStudiedLanguageViewModel { get; } = new EditTextInStudiedLanguageDesignData();
+		public IBasicEditTextViewModel CurrentTextInStudiedLanguageViewModel { get; } = new CreateOrPickTextInStudiedLanguageDesignData();
 
-		public IEditLanguageTextViewModel EditTextInKnownLanguageViewModel { get; } = new EditTextInKnownLanguageDesignData();
+		public IBasicEditTextViewModel CurrentTextInKnownLanguageViewModel { get; } = new CreateOrPickTextInKnownLanguageDesignData();
 
 		public bool EditTextInStudiedLanguageIsEnabled => true;
 
