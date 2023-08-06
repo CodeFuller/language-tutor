@@ -25,6 +25,9 @@ namespace VocabularyCoach.Services
 			services.AddSingleton<ITextsForPracticeSelector, TextsForPracticeSelector>();
 			services.AddSingleton<ISystemClock, SystemClock>();
 
+			services.AddSingleton<ISpellCheckService, SpellCheckService>();
+			services.AddSingleton<IWebBrowser, DefaultSystemWebBrowser>();
+
 			return services;
 		}
 	}

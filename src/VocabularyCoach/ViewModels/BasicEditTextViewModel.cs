@@ -20,13 +20,15 @@ namespace VocabularyCoach.ViewModels
 {
 	public abstract class BasicEditTextViewModel : ObservableObject, IBasicEditTextViewModel
 	{
+		private readonly ISpellCheckService spellCheckService;
+
 		private readonly IPronunciationRecordSynthesizer pronunciationRecordSynthesizer;
 
 		private readonly IPronunciationRecordPlayer pronunciationRecordPlayer;
 
-		private readonly IWebBrowser webBrowser;
-
 		private readonly IMessenger messenger;
+
+		protected IVocabularyService VocabularyService { get; }
 
 		protected IEditVocabularyService EditVocabularyService { get; }
 
@@ -101,11 +103,11 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
-		private bool validationIsEnabled;
-
 		public abstract bool AllowTextEdit { get; }
 
 		public abstract bool AllowNoteEdit { get; }
+
+		private bool validationIsEnabled;
 
 		public bool ValidationIsEnabled
 		{
@@ -121,19 +123,20 @@ namespace VocabularyCoach.ViewModels
 
 		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-		public ICommand SpellCheckTextCommand { get; }
+		public IAsyncRelayCommand SpellCheckTextCommand { get; }
 
-		public ICommand PlayPronunciationRecordCommand { get; }
+		public IAsyncRelayCommand PlayPronunciationRecordCommand { get; }
 
 		public ICommand ProcessEnterKeyCommand { get; }
 
-		protected BasicEditTextViewModel(IEditVocabularyService editVocabularyService, IPronunciationRecordSynthesizer pronunciationRecordSynthesizer,
-			IPronunciationRecordPlayer pronunciationRecordPlayer, IWebBrowser webBrowser, IMessenger messenger)
+		protected BasicEditTextViewModel(IVocabularyService vocabularyService, IEditVocabularyService editVocabularyService, ISpellCheckService spellCheckService,
+			IPronunciationRecordSynthesizer pronunciationRecordSynthesizer, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
 		{
+			VocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 			EditVocabularyService = editVocabularyService ?? throw new ArgumentNullException(nameof(editVocabularyService));
+			this.spellCheckService = spellCheckService ?? throw new ArgumentNullException(nameof(spellCheckService));
 			this.pronunciationRecordSynthesizer = pronunciationRecordSynthesizer ?? throw new ArgumentNullException(nameof(pronunciationRecordSynthesizer));
 			this.pronunciationRecordPlayer = pronunciationRecordPlayer ?? throw new ArgumentNullException(nameof(pronunciationRecordPlayer));
-			this.webBrowser = webBrowser ?? throw new ArgumentNullException(nameof(webBrowser));
 			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			SpellCheckTextCommand = new AsyncRelayCommand(SpellCheckText);
@@ -143,23 +146,43 @@ namespace VocabularyCoach.ViewModels
 
 		protected async Task LoadData(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
 		{
-			ClearFilledData();
-
 			Language = language;
 			RequireSpellCheck = requireSpellCheck;
 			CreatePronunciationRecord = createPronunciationRecord;
 
+			Text = String.Empty;
+			Note = String.Empty;
+
+			ValidationIsEnabled = false;
+
 			ExistingLanguageTexts = await EditVocabularyService.GetLanguageTexts(language, cancellationToken);
 		}
 
-		public abstract Task<LanguageText> SaveChanges(CancellationToken cancellationToken);
+		public Task<LanguageText> SaveChanges(CancellationToken cancellationToken)
+		{
+			if (!ValidationIsEnabled)
+			{
+				throw new InvalidOperationException("Validation should be enabled before saving changes");
+			}
 
+			if (HasErrors)
+			{
+				throw new InvalidOperationException("ViewModel has validation errors");
+			}
+
+			return SaveLanguageText(cancellationToken);
+		}
+
+		protected abstract Task<LanguageText> SaveLanguageText(CancellationToken cancellationToken);
+
+		/// <summary>
+		/// Clears data modified since last LoadData call.
+		/// The state after this method is the same as after LoadData call.
+		/// </summary>
 		public virtual void ClearFilledData()
 		{
 			Text = String.Empty;
 			Note = String.Empty;
-
-			PronunciationRecord = null;
 
 			ValidationIsEnabled = false;
 		}
@@ -168,7 +191,12 @@ namespace VocabularyCoach.ViewModels
 
 		private async Task SpellCheckText(CancellationToken cancellationToken)
 		{
-			if (!RequireSpellCheck || String.IsNullOrWhiteSpace(Text))
+			if (!RequireSpellCheck)
+			{
+				throw new InvalidOperationException("Spell check is disabled for current ViewModel");
+			}
+
+			if (String.IsNullOrWhiteSpace(Text))
 			{
 				return;
 			}
@@ -179,9 +207,11 @@ namespace VocabularyCoach.ViewModels
 				Text = Text,
 			};
 
-			var url = await EditVocabularyService.GetUrlForSpellCheck(languageText, cancellationToken);
-
-			webBrowser.OpenPage(url);
+			TextWasSpellChecked = await spellCheckService.PerformSpellCheck(languageText, cancellationToken);
+			if (!TextWasSpellChecked)
+			{
+				return;
+			}
 
 			if (CreatePronunciationRecord && PronunciationRecord == null)
 			{
@@ -190,16 +220,24 @@ namespace VocabularyCoach.ViewModels
 				await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
 			}
 
-			TextWasSpellChecked = true;
-
 			messenger.Send(new EditedTextSpellCheckedEventArgs());
 		}
 
-		private async Task LoadAndPlayPronunciationRecord(CancellationToken cancellationToken)
+		internal async Task LoadAndPlayPronunciationRecord(CancellationToken cancellationToken)
 		{
-			PronunciationRecord ??= await SynthesizePronunciationRecord(cancellationToken);
+			if (!CreatePronunciationRecord)
+			{
+				throw new InvalidOperationException("Pronunciation record is disabled for current ViewModel");
+			}
+
+			PronunciationRecord ??= await GetPronunciationRecordForCurrentText(cancellationToken);
 
 			await pronunciationRecordPlayer.PlayPronunciationRecord(PronunciationRecord, cancellationToken);
+		}
+
+		protected virtual Task<PronunciationRecord> GetPronunciationRecordForCurrentText(CancellationToken cancellationToken)
+		{
+			return SynthesizePronunciationRecord(cancellationToken);
 		}
 
 		private Task<PronunciationRecord> SynthesizePronunciationRecord(CancellationToken cancellationToken)
@@ -284,16 +322,7 @@ namespace VocabularyCoach.ViewModels
 
 		private string GetValidationErrorForNote()
 		{
-			if (!String.IsNullOrEmpty(Note))
-			{
-				var validationErrorForNoteContent = GetValidationErrorForTextContent(Note);
-				if (!String.IsNullOrEmpty(validationErrorForNoteContent))
-				{
-					return validationErrorForNoteContent;
-				}
-			}
-
-			return String.Empty;
+			return String.IsNullOrEmpty(Note) ? String.Empty : GetValidationErrorForTextContent(Note);
 		}
 
 		protected static string GetValidationErrorForTextContent(string content)

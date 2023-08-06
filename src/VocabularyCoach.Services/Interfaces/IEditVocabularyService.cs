@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,8 +11,6 @@ namespace VocabularyCoach.Services.Interfaces
 		Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(Language language, CancellationToken cancellationToken);
 
 		Task<IReadOnlyCollection<Translation>> GetTranslations(Language language1, Language language2, CancellationToken cancellationToken);
-
-		Task<Uri> GetUrlForSpellCheck(LanguageText languageText, CancellationToken cancellationToken);
 
 		Task<LanguageText> AddLanguageText(LanguageTextData languageTextData, CancellationToken cancellationToken);
 

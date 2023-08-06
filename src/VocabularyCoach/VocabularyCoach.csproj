@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="VocabularyCoach.UnitTests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="conf/**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

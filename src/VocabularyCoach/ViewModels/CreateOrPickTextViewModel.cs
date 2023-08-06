@@ -27,11 +27,11 @@ namespace VocabularyCoach.ViewModels
 			{
 				SetProperty(ref selectedText, value);
 
+				Text = selectedText?.Text ?? String.Empty;
 				Note = selectedText?.Note ?? String.Empty;
 
 				OnPropertyChanged(nameof(AllowTextEdit));
 				OnPropertyChanged(nameof(AllowNoteEdit));
-				OnErrorsChanged(nameof(Text));
 			}
 		}
 
@@ -41,9 +41,9 @@ namespace VocabularyCoach.ViewModels
 
 		public override bool AllowNoteEdit => !ExistingTextIsSelected;
 
-		public CreateOrPickTextViewModel(IEditVocabularyService editVocabularyService, IPronunciationRecordSynthesizer pronunciationRecordSynthesizer,
-			IPronunciationRecordPlayer pronunciationRecordPlayer, IWebBrowser webBrowser, IMessenger messenger)
-			: base(editVocabularyService, pronunciationRecordSynthesizer, pronunciationRecordPlayer, webBrowser, messenger)
+		public CreateOrPickTextViewModel(IVocabularyService vocabularyService, IEditVocabularyService editVocabularyService, ISpellCheckService spellCheckService,
+			IPronunciationRecordSynthesizer pronunciationRecordSynthesizer, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
+			: base(vocabularyService, editVocabularyService, spellCheckService, pronunciationRecordSynthesizer, pronunciationRecordPlayer, messenger)
 		{
 		}
 
@@ -58,7 +58,14 @@ namespace VocabularyCoach.ViewModels
 			ExistingTexts.AddRange(existingTexts.OrderBy(x => x.Text).Select(x => new LanguageTextViewModel(x)));
 		}
 
-		public override async Task<LanguageText> SaveChanges(CancellationToken cancellationToken)
+		protected override Task<PronunciationRecord> GetPronunciationRecordForCurrentText(CancellationToken cancellationToken)
+		{
+			return ExistingTextIsSelected
+				? VocabularyService.GetPronunciationRecord(SelectedText.LanguageText.Id, cancellationToken)
+				: base.GetPronunciationRecordForCurrentText(cancellationToken);
+		}
+
+		protected override async Task<LanguageText> SaveLanguageText(CancellationToken cancellationToken)
 		{
 			if (ExistingTextIsSelected)
 			{

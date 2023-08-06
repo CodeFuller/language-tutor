@@ -6,41 +6,38 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using FluentAssertions.Equivalency;
 using VocabularyCoach.Models;
 using VocabularyCoach.ViewModels;
 using VocabularyCoach.ViewModels.Interfaces;
 
-namespace VocabularyCoach.Views.DesignInstances
+namespace VocabularyCoach.UnitTests.Helpers
 {
-	internal abstract class BasicCreateOrPickTextDesignData : ICreateOrPickTextViewModel
+	internal sealed class CreateOrPickTextViewModelData : ICreateOrPickTextViewModel
 	{
-		public abstract Language Language { get; }
+		public Language Language { get; set; }
 
-		public abstract bool RequireSpellCheck { get; }
+		public bool RequireSpellCheck { get; set; }
 
-		public abstract bool CreatePronunciationRecord { get; }
+		public bool CreatePronunciationRecord { get; set; }
 
-		public abstract string Text { get; set; }
+		public string Text { get; set; }
 
 		public bool TextIsFocused { get; set; }
 
-		public abstract bool TextWasSpellChecked { get; }
+		public bool TextWasSpellChecked { get; set; }
 
-		public abstract bool TextIsFilled { get; }
+		public bool TextIsFilled { get; set; }
 
-		public abstract string Note { get; set; }
+		public string Note { get; set; }
 
-		public bool AllowTextEdit => true;
+		public bool AllowTextEdit { get; set; }
 
-		public bool AllowNoteEdit => true;
-
-		public abstract ObservableCollection<LanguageTextViewModel> ExistingTexts { get; }
-
-		public LanguageTextViewModel SelectedText { get; set; }
+		public bool AllowNoteEdit { get; set; }
 
 		public bool ValidationIsEnabled { get; set; }
 
-		public bool HasErrors => false;
+		public bool HasErrors { get; set; }
 
 		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged
 		{
@@ -53,6 +50,21 @@ namespace VocabularyCoach.Views.DesignInstances
 		public IAsyncRelayCommand PlayPronunciationRecordCommand => null;
 
 		public ICommand ProcessEnterKeyCommand => null;
+
+		public static Func<EquivalencyAssertionOptions<CreateOrPickTextViewModelData>, EquivalencyAssertionOptions<CreateOrPickTextViewModelData>> ExcludingCommands
+		{
+			get
+			{
+				return x => x
+					.Excluding(y => y.SpellCheckTextCommand)
+					.Excluding(y => y.PlayPronunciationRecordCommand)
+					.Excluding(y => y.ProcessEnterKeyCommand);
+			}
+		}
+
+		public ObservableCollection<LanguageTextViewModel> ExistingTexts { get; set; }
+
+		public LanguageTextViewModel SelectedText { get; set; }
 
 		public Task Load(Language language, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
 		{

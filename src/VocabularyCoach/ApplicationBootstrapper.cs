@@ -24,8 +24,6 @@ namespace VocabularyCoach
 
 			services.AddSingleton<IPronunciationRecordPlayer, PronunciationRecordPlayer>();
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
-
-			services.AddSingleton<IWebBrowser, DefaultSystemWebBrowser>();
 		}
 
 		private static void RegisterViewModels(IServiceCollection services)

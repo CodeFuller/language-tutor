@@ -1,8 +1,7 @@
 using System;
 using System.Diagnostics;
-using VocabularyCoach.Interfaces;
 
-namespace VocabularyCoach.Internal
+namespace VocabularyCoach.Services.Internal
 {
 	internal sealed class DefaultSystemWebBrowser : IWebBrowser
 	{

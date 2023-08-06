@@ -12,8 +12,6 @@ namespace VocabularyCoach.ViewModels
 {
 	public class EditExistingTextViewModel : BasicEditTextViewModel, IEditExistingTextViewModel
 	{
-		private readonly IVocabularyService vocabularyService;
-
 		private LanguageText EditedLanguageText { get; set; }
 
 		private PronunciationRecord OriginalPronunciationRecord { get; set; }
@@ -22,12 +20,10 @@ namespace VocabularyCoach.ViewModels
 
 		public override bool AllowNoteEdit => true;
 
-		public EditExistingTextViewModel(IVocabularyService vocabularyService, IEditVocabularyService editVocabularyService,
-			IPronunciationRecordSynthesizer pronunciationRecordSynthesizer, IPronunciationRecordPlayer pronunciationRecordPlayer,
-			IWebBrowser webBrowser, IMessenger messenger)
-			: base(editVocabularyService, pronunciationRecordSynthesizer, pronunciationRecordPlayer, webBrowser, messenger)
+		public EditExistingTextViewModel(IVocabularyService vocabularyService, IEditVocabularyService editVocabularyService, ISpellCheckService spellCheckService,
+			IPronunciationRecordSynthesizer pronunciationRecordSynthesizer, IPronunciationRecordPlayer pronunciationRecordPlayer, IMessenger messenger)
+			: base(vocabularyService, editVocabularyService, spellCheckService, pronunciationRecordSynthesizer, pronunciationRecordPlayer, messenger)
 		{
-			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 		}
 
 		public async Task Load(LanguageText editedLanguageText, bool requireSpellCheck, bool createPronunciationRecord, CancellationToken cancellationToken)
@@ -43,13 +39,13 @@ namespace VocabularyCoach.ViewModels
 
 			if (createPronunciationRecord)
 			{
-				PronunciationRecord = await vocabularyService.GetPronunciationRecord(editedLanguageText.Id, cancellationToken);
+				PronunciationRecord = await VocabularyService.GetPronunciationRecord(editedLanguageText.Id, cancellationToken);
 			}
 
 			OriginalPronunciationRecord = PronunciationRecord;
 		}
 
-		public override async Task<LanguageText> SaveChanges(CancellationToken cancellationToken)
+		protected override async Task<LanguageText> SaveLanguageText(CancellationToken cancellationToken)
 		{
 			if (CreatePronunciationRecord && PronunciationRecord == null)
 			{

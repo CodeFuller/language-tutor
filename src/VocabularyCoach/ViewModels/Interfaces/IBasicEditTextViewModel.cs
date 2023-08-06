@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using VocabularyCoach.Models;
 
 namespace VocabularyCoach.ViewModels.Interfaces
@@ -30,9 +31,9 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		bool ValidationIsEnabled { get; set; }
 
-		ICommand SpellCheckTextCommand { get; }
+		IAsyncRelayCommand SpellCheckTextCommand { get; }
 
-		ICommand PlayPronunciationRecordCommand { get; }
+		IAsyncRelayCommand PlayPronunciationRecordCommand { get; }
 
 		ICommand ProcessEnterKeyCommand { get; }
 

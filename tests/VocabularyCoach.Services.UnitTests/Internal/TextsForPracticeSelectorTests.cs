@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using Moq.AutoMock;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Internal;
@@ -404,10 +403,8 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 
 		private static void StubTodayDate(AutoMocker mocker, DateOnly todayDate)
 		{
-			var systemClockStub = new Mock<ISystemClock>();
-			systemClockStub.Setup(x => x.Today).Returns(todayDate);
-
-			mocker.Use(systemClockStub);
+			mocker.GetMock<ISystemClock>()
+				.Setup(x => x.Today).Returns(todayDate);
 		}
 	}
 }

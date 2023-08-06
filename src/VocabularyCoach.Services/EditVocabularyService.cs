@@ -16,13 +16,10 @@ namespace VocabularyCoach.Services
 
 		private readonly IPronunciationRecordRepository pronunciationRecordRepository;
 
-		private readonly ISupportedLanguageTraits supportedLanguageTraits;
-
 		public EditVocabularyService(ILanguageTextRepository languageTextRepository, IPronunciationRecordRepository pronunciationRecordRepository, ISupportedLanguageTraits supportedLanguageTraits)
 		{
 			this.languageTextRepository = languageTextRepository ?? throw new ArgumentNullException(nameof(languageTextRepository));
 			this.pronunciationRecordRepository = pronunciationRecordRepository ?? throw new ArgumentNullException(nameof(pronunciationRecordRepository));
-			this.supportedLanguageTraits = supportedLanguageTraits ?? throw new ArgumentNullException(nameof(supportedLanguageTraits));
 		}
 
 		public Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(Language language, CancellationToken cancellationToken)
@@ -33,14 +30,6 @@ namespace VocabularyCoach.Services
 		public Task<IReadOnlyCollection<Translation>> GetTranslations(Language language1, Language language2, CancellationToken cancellationToken)
 		{
 			return languageTextRepository.GetTranslations(language1.Id, language2.Id, cancellationToken);
-		}
-
-		public Task<Uri> GetUrlForSpellCheck(LanguageText languageText, CancellationToken cancellationToken)
-		{
-			var url = supportedLanguageTraits.GetLanguageTraits(languageText.Language)
-				.GetUrlForSpellCheck(languageText.Text);
-
-			return Task.FromResult(url);
 		}
 
 		public async Task<LanguageText> AddLanguageText(LanguageTextData languageTextData, CancellationToken cancellationToken)
