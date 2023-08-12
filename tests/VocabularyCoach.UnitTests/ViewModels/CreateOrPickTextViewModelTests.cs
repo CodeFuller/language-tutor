@@ -216,7 +216,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 
 			// Assert
 
-			var expectedViewModel = new CreateOrPickTextViewModelData
+			var expectedViewModelData = new CreateOrPickTextViewModelData
 			{
 				Language = TestLanguage,
 				RequireSpellCheck = true,
@@ -233,7 +233,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				ExistingTexts = TestExistingLanguageTextViewModels,
 			};
 
-			target.Should().BeEquivalentTo(expectedViewModel, CreateOrPickTextViewModelData.ExcludingCommands);
+			target.Should().BeEquivalentTo(expectedViewModelData, CreateOrPickTextViewModelData.ExcludingCommands);
 		}
 
 		[TestMethod]
@@ -261,7 +261,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 
 			// Assert
 
-			var expectedViewModel = new CreateOrPickTextViewModelData
+			var expectedViewModelData = new CreateOrPickTextViewModelData
 			{
 				Language = TestLanguage,
 				RequireSpellCheck = true,
@@ -278,7 +278,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				ExistingTexts = TestExistingLanguageTextViewModels,
 			};
 
-			target.Should().BeEquivalentTo(expectedViewModel, CreateOrPickTextViewModelData.ExcludingCommands);
+			target.Should().BeEquivalentTo(expectedViewModelData, CreateOrPickTextViewModelData.ExcludingCommands);
 		}
 
 		[TestMethod]
@@ -520,7 +520,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 
 			// Assert
 
-			var expectedViewModel = new CreateOrPickTextViewModelData
+			var expectedViewModelData = new CreateOrPickTextViewModelData
 			{
 				Language = TestLanguage,
 				RequireSpellCheck = true,
@@ -537,7 +537,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				ExistingTexts = new ObservableCollection<LanguageTextViewModel>(TestExistingLanguageTextViewModels),
 			};
 
-			target.Should().BeEquivalentTo(expectedViewModel, CreateOrPickTextViewModelData.ExcludingCommands);
+			target.Should().BeEquivalentTo(expectedViewModelData, CreateOrPickTextViewModelData.ExcludingCommands);
 		}
 
 		[TestMethod]

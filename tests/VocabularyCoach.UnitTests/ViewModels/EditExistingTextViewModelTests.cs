@@ -68,7 +68,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 
 			// Assert
 
-			var expectedViewModel = new EditExistingTextViewModelData
+			var expectedViewModelData = new EditExistingTextViewModelData
 			{
 				Language = TestLanguage,
 				RequireSpellCheck = true,
@@ -84,7 +84,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				HasErrors = false,
 			};
 
-			target.Should().BeEquivalentTo(expectedViewModel, EditExistingTextViewModelData.ExcludingCommands);
+			target.Should().BeEquivalentTo(expectedViewModelData, EditExistingTextViewModelData.ExcludingCommands);
 		}
 
 		[TestMethod]
@@ -115,7 +115,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 
 			// Assert
 
-			var expectedViewModel = new EditExistingTextViewModelData
+			var expectedViewModelData = new EditExistingTextViewModelData
 			{
 				Language = TestLanguage,
 				RequireSpellCheck = true,
@@ -131,7 +131,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				HasErrors = false,
 			};
 
-			target.Should().BeEquivalentTo(expectedViewModel, EditExistingTextViewModelData.ExcludingCommands);
+			target.Should().BeEquivalentTo(expectedViewModelData, EditExistingTextViewModelData.ExcludingCommands);
 		}
 
 		[TestMethod]
@@ -289,7 +289,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 
 			// Assert
 
-			var expectedViewModel = new EditExistingTextViewModelData
+			var expectedViewModelData = new EditExistingTextViewModelData
 			{
 				Language = TestLanguage,
 				RequireSpellCheck = true,
@@ -305,7 +305,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				HasErrors = false,
 			};
 
-			target.Should().BeEquivalentTo(expectedViewModel, EditExistingTextViewModelData.ExcludingCommands);
+			target.Should().BeEquivalentTo(expectedViewModelData, EditExistingTextViewModelData.ExcludingCommands);
 		}
 	}
 }

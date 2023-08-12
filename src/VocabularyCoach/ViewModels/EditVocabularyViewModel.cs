@@ -96,63 +96,11 @@ namespace VocabularyCoach.ViewModels
 
 		public TranslationViewModel SelectedTranslation { get; set; }
 
-		public ICommand SaveChangesCommand { get; }
+		public IAsyncRelayCommand SaveChangesCommand { get; }
 
 		public ICommand ClearChangesCommand { get; }
 
 		public ICommand GoToStartPageCommand { get; }
-
-		public IEnumerable<ContextMenuItem> ContextMenuItems
-		{
-			get
-			{
-				var selectedTranslation = SelectedTranslation;
-
-				if (selectedTranslation == null)
-				{
-					yield break;
-				}
-
-				var languageText1 = selectedTranslation.LanguageText1;
-				var languageText2 = selectedTranslation.LanguageText2;
-
-				yield return new ContextMenuItem
-				{
-					Header = $"Edit Text '{languageText1.TextWithNote}'",
-					Command = new AsyncRelayCommand(cancellationToken => EditLanguageTextInStudiedLanguage(languageText1.LanguageText, cancellationToken)),
-				};
-
-				yield return new ContextMenuItem
-				{
-					Header = $"Edit Text '{languageText2.TextWithNote}'",
-					Command = new AsyncRelayCommand(cancellationToken => EditLanguageTextInKnownLanguage(languageText2.LanguageText, cancellationToken)),
-				};
-
-				yield return new ContextMenuItem
-				{
-					Header = "Delete Translation",
-					Command = new AsyncRelayCommand(cancellationToken => DeleteTranslation(selectedTranslation.Translation, cancellationToken)),
-				};
-
-				yield return new ContextMenuItem
-				{
-					Header = $"Delete Text '{languageText1.TextWithNote}' and {GetNumberOfAffectedTranslations(languageText1.LanguageText)} translation(s)",
-					Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageText(languageText1.LanguageText, cancellationToken)),
-				};
-
-				yield return new ContextMenuItem
-				{
-					Header = $"Delete Text '{languageText2.TextWithNote}' and {GetNumberOfAffectedTranslations(languageText2.LanguageText)} translation(s)",
-					Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageText(languageText2.LanguageText, cancellationToken)),
-				};
-
-				yield return new ContextMenuItem
-				{
-					Header = $"Delete Both Texts and {GetNumberOfAffectedTranslations(languageText1.LanguageText, languageText2.LanguageText)} translation(s)",
-					Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageTexts(languageText1.LanguageText, languageText2.LanguageText, cancellationToken)),
-				};
-			}
-		}
 
 		public EditVocabularyViewModel(IEditVocabularyService editVocabularyService, IMessenger messenger,
 			ICreateOrPickTextViewModel createOrPickTextInStudiedLanguageViewModel, ICreateOrPickTextViewModel createOrPickTextInKnownLanguageViewModel,
@@ -194,8 +142,7 @@ namespace VocabularyCoach.ViewModels
 			await ReloadData(cancellationToken);
 
 			TranslationFilter = String.Empty;
-
-			CurrentEditMode = EditMode.NewTranslation;
+			SelectedTranslation = null;
 		}
 
 		private async Task ReloadData(CancellationToken cancellationToken)
@@ -205,10 +152,14 @@ namespace VocabularyCoach.ViewModels
 			Translations.Clear();
 			Translations.AddRange(translations.Select(x => new TranslationViewModel(x)).OrderBy(x => x.ToString()));
 
+			// We are doing this just in case (and for UT).
+			// Selected item will be cleared anyway because the list of items is reloaded.
+			SelectedTranslation = null;
+
 			await createOrPickTextInStudiedLanguageViewModel.Load(StudiedLanguage, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
 			await createOrPickTextInKnownLanguageViewModel.Load(KnownLanguage, requireSpellCheck: false, createPronunciationRecord: false, cancellationToken);
 
-			ClearFilledData();
+			SwitchToNewTranslationMode();
 		}
 
 		private async Task SaveChanges(CancellationToken cancellationToken)
@@ -249,7 +200,9 @@ namespace VocabularyCoach.ViewModels
 
 			Translations.AddToSortedCollection(new TranslationViewModel(newTranslation));
 
-			ClearFilledData();
+			createOrPickTextInStudiedLanguageViewModel.ClearFilledData();
+			createOrPickTextInKnownLanguageViewModel.ClearFilledData();
+			SetFocus(() => createOrPickTextInStudiedLanguageViewModel.TextIsFocused);
 		}
 
 		private async Task SaveChangesForLanguageText(IBasicEditTextViewModel editLanguageTextViewModel, CancellationToken cancellationToken)
@@ -285,6 +238,12 @@ namespace VocabularyCoach.ViewModels
 			createOrPickTextInStudiedLanguageViewModel.ClearFilledData();
 			createOrPickTextInKnownLanguageViewModel.ClearFilledData();
 
+			SwitchToNewTranslationMode();
+		}
+
+		// The caller of this method should take care of calling Load() or ClearFilledData() on view models.
+		private void SwitchToNewTranslationMode()
+		{
 			CurrentTextInStudiedLanguageViewModel = createOrPickTextInStudiedLanguageViewModel;
 			CurrentTextInKnownLanguageViewModel = createOrPickTextInKnownLanguageViewModel;
 
@@ -293,11 +252,58 @@ namespace VocabularyCoach.ViewModels
 			SetFocus(() => createOrPickTextInStudiedLanguageViewModel.TextIsFocused);
 		}
 
+		public IEnumerable<ContextMenuItem> GetContextMenuItemsForSelectedTranslation()
+		{
+			var selectedTranslation = SelectedTranslation;
+
+			if (selectedTranslation == null)
+			{
+				yield break;
+			}
+
+			var languageText1 = selectedTranslation.LanguageText1;
+			var languageText2 = selectedTranslation.LanguageText2;
+
+			yield return new ContextMenuItem
+			{
+				Header = $"Edit Text '{languageText1.TextWithNote}'",
+				Command = new AsyncRelayCommand(cancellationToken => EditLanguageTextInStudiedLanguage(languageText1.LanguageText, cancellationToken)),
+			};
+
+			yield return new ContextMenuItem
+			{
+				Header = $"Edit Text '{languageText2.TextWithNote}'",
+				Command = new AsyncRelayCommand(cancellationToken => EditLanguageTextInKnownLanguage(languageText2.LanguageText, cancellationToken)),
+			};
+
+			yield return new ContextMenuItem
+			{
+				Header = "Delete Translation",
+				Command = new AsyncRelayCommand(cancellationToken => DeleteTranslation(selectedTranslation.Translation, cancellationToken)),
+			};
+
+			yield return new ContextMenuItem
+			{
+				Header = $"Delete Text '{languageText1.TextWithNote}' and {GetNumberOfAffectedTranslations(languageText1.LanguageText)} translation(s)",
+				Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageText(languageText1.LanguageText, cancellationToken)),
+			};
+
+			yield return new ContextMenuItem
+			{
+				Header = $"Delete Text '{languageText2.TextWithNote}' and {GetNumberOfAffectedTranslations(languageText2.LanguageText)} translation(s)",
+				Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageText(languageText2.LanguageText, cancellationToken)),
+			};
+
+			yield return new ContextMenuItem
+			{
+				Header = $"Delete Both Texts and {GetNumberOfAffectedTranslations(languageText1.LanguageText, languageText2.LanguageText)} translation(s)",
+				Command = new AsyncRelayCommand(cancellationToken => DeleteLanguageTexts(languageText1.LanguageText, languageText2.LanguageText, cancellationToken)),
+			};
+		}
+
 		private async Task EditLanguageTextInStudiedLanguage(LanguageText languageText, CancellationToken cancellationToken)
 		{
 			await editExistingTextInStudiedLanguageViewModel.Load(languageText, requireSpellCheck: true, createPronunciationRecord: true, cancellationToken);
-
-			editExistingTextInKnownLanguageViewModel.ClearFilledData();
 			CurrentTextInStudiedLanguageViewModel = editExistingTextInStudiedLanguageViewModel;
 
 			createOrPickTextInKnownLanguageViewModel.ClearFilledData();

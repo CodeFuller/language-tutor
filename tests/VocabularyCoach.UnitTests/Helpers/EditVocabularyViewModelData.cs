@@ -1,30 +1,30 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using FluentAssertions.Equivalency;
 using VocabularyCoach.Models;
 using VocabularyCoach.ViewModels;
 using VocabularyCoach.ViewModels.ContextMenu;
 using VocabularyCoach.ViewModels.Interfaces;
 
-namespace VocabularyCoach.Views.DesignInstances
+namespace VocabularyCoach.UnitTests.Helpers
 {
-	internal sealed class EditVocabularyDesignData : IEditVocabularyViewModel
+	internal sealed class EditVocabularyViewModelData : IEditVocabularyViewModel
 	{
-		public IBasicEditTextViewModel CurrentTextInStudiedLanguageViewModel { get; } = new CreateOrPickTextInStudiedLanguageDesignData();
+		public IBasicEditTextViewModel CurrentTextInStudiedLanguageViewModel { get; set; }
 
-		public IBasicEditTextViewModel CurrentTextInKnownLanguageViewModel { get; } = new CreateOrPickTextInKnownLanguageDesignData();
+		public IBasicEditTextViewModel CurrentTextInKnownLanguageViewModel { get; set; }
 
-		public bool EditTextInStudiedLanguageIsEnabled => true;
+		public bool EditTextInStudiedLanguageIsEnabled { get; set; }
 
-		public bool EditTextInKnownLanguageIsEnabled => true;
+		public bool EditTextInKnownLanguageIsEnabled { get; set; }
 
 		public string TranslationFilter { get; set; }
 
-		public IReadOnlyCollection<TranslationViewModel> FilteredTranslations => DesignData.Translations.Select(x => new TranslationViewModel(x)).ToList();
+		public IReadOnlyCollection<TranslationViewModel> FilteredTranslations { get; set; }
 
 		public TranslationViewModel SelectedTranslation { get; set; }
 
@@ -33,6 +33,17 @@ namespace VocabularyCoach.Views.DesignInstances
 		public ICommand ClearChangesCommand => null;
 
 		public ICommand GoToStartPageCommand => null;
+
+		public static Func<EquivalencyAssertionOptions<EditVocabularyViewModelData>, EquivalencyAssertionOptions<EditVocabularyViewModelData>> ExcludingCommands
+		{
+			get
+			{
+				return x => x
+					.Excluding(y => y.SaveChangesCommand)
+					.Excluding(y => y.ClearChangesCommand)
+					.Excluding(y => y.GoToStartPageCommand);
+			}
+		}
 
 		public Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{

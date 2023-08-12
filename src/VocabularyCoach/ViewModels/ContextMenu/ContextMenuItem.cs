@@ -1,5 +1,5 @@
 using System.Windows.Controls;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 
 namespace VocabularyCoach.ViewModels.ContextMenu
 {
@@ -7,7 +7,7 @@ namespace VocabularyCoach.ViewModels.ContextMenu
 	{
 		public string Header { get; init; }
 
-		public ICommand Command { get; init; }
+		public IAsyncRelayCommand Command { get; init; }
 
 #pragma warning disable CA1024 // Use properties where appropriate
 		public MenuItem GetMenuItem()

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using VocabularyCoach.Models;
 using VocabularyCoach.ViewModels.ContextMenu;
 
@@ -23,14 +24,14 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		TranslationViewModel SelectedTranslation { get; set; }
 
-		public ICommand SaveChangesCommand { get; }
+		IAsyncRelayCommand SaveChangesCommand { get; }
 
-		public ICommand ClearChangesCommand { get; }
+		ICommand ClearChangesCommand { get; }
 
 		ICommand GoToStartPageCommand { get; }
 
-		IEnumerable<ContextMenuItem> ContextMenuItems { get; }
-
 		Task Load(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
+
+		IEnumerable<ContextMenuItem> GetContextMenuItemsForSelectedTranslation();
 	}
 }

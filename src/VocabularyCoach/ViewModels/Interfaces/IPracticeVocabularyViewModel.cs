@@ -31,7 +31,7 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		bool TextIsTypedIncorrectly { get; }
 
-		public bool CanSwitchToNextText { get; }
+		bool CanSwitchToNextText { get; }
 
 		ICommand CheckTypedTextCommand { get; }
 

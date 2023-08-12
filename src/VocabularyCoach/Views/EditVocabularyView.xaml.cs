@@ -20,7 +20,7 @@ namespace VocabularyCoach.Views
 
 		private void TranslationsListBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
 		{
-			TranslationsListBox.ContextMenu = ViewModel.ContextMenuItems.ToContextMenu();
+			TranslationsListBox.ContextMenu = ViewModel.GetContextMenuItemsForSelectedTranslation().ToContextMenu();
 		}
 	}
 }
