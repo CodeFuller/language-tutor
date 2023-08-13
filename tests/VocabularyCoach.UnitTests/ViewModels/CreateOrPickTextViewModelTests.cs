@@ -541,6 +541,53 @@ namespace VocabularyCoach.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task GetErrors_IfSameTextWasAlreadyAddedWithinCurrentLoad_ReturnsCorrectError()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			var editVocabularyServiceMock = mocker.GetMock<IEditVocabularyService>();
+
+			var newLanguageText = new LanguageText
+			{
+				Id = new("new text id"),
+				Text = "new text",
+			};
+
+			editVocabularyServiceMock.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(TestExistingLanguageTexts);
+			editVocabularyServiceMock.Setup(x => x.AddLanguageText(It.IsAny<LanguageTextData>(), It.IsAny<CancellationToken>())).ReturnsAsync(newLanguageText);
+
+			mocker.GetMock<ISpellCheckService>().Setup(x => x.PerformSpellCheck(It.IsAny<LanguageText>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+			var target = mocker.CreateInstance<CreateOrPickTextViewModel>();
+
+			await target.Load(TestLanguage, requireSpellCheck: false, createPronunciationRecord: false, CancellationToken.None);
+
+			target.Text = newLanguageText.Text;
+			target.Note = newLanguageText.Note;
+			target.ValidationIsEnabled = true;
+			await target.SaveChanges(CancellationToken.None);
+			target.ClearFilledData();
+
+			// Act
+
+			target.Text = newLanguageText.Text;
+			target.Note = newLanguageText.Note;
+			target.ValidationIsEnabled = true;
+			var errors = target.GetErrors(nameof(target.Text)).Cast<string>();
+
+			// Assert
+
+			var expectedErrors = new[]
+			{
+				"Same text in Test Language language already exists. Either use existing text or provide a note to distinguish the texts",
+			};
+
+			errors.Should().BeEquivalentTo(expectedErrors);
+		}
+
+		[TestMethod]
 		public async Task GetErrors_ForTextPropertyWhenExistingTextIsPicked_ReturnsNoError()
 		{
 			// Arrange

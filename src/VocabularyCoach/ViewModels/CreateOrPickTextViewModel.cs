@@ -1,10 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
-using VocabularyCoach.Extensions;
 using VocabularyCoach.Interfaces;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Data;
@@ -16,7 +14,7 @@ namespace VocabularyCoach.ViewModels
 {
 	public class CreateOrPickTextViewModel : BasicEditTextViewModel, ICreateOrPickTextViewModel
 	{
-		public ObservableCollection<LanguageTextViewModel> ExistingTexts { get; } = new();
+		public ObservableCollection<LanguageTextViewModel> ExistingTexts => ExistingLanguageTexts;
 
 		private LanguageTextViewModel selectedText;
 
@@ -52,10 +50,6 @@ namespace VocabularyCoach.ViewModels
 			await LoadData(language, requireSpellCheck, createPronunciationRecord, cancellationToken);
 
 			SelectedText = null;
-
-			ExistingTexts.Clear();
-			var existingTexts = await EditVocabularyService.GetLanguageTexts(language, cancellationToken);
-			ExistingTexts.AddRange(existingTexts.OrderBy(x => x.Text).Select(x => new LanguageTextViewModel(x)));
 		}
 
 		protected override Task<PronunciationRecord> GetPronunciationRecordForCurrentText(CancellationToken cancellationToken)
@@ -86,7 +80,7 @@ namespace VocabularyCoach.ViewModels
 			};
 
 			var newText = await EditVocabularyService.AddLanguageText(textData, cancellationToken);
-			ExistingTexts.AddToSortedCollection(new LanguageTextViewModel(newText));
+			ExistingLanguageTexts.AddToSortedCollection(new LanguageTextViewModel(newText));
 
 			return newText;
 		}

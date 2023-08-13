@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,6 +12,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Events;
+using VocabularyCoach.Extensions;
 using VocabularyCoach.Interfaces;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Interfaces;
@@ -32,7 +34,7 @@ namespace VocabularyCoach.ViewModels
 
 		protected IEditVocabularyService EditVocabularyService { get; }
 
-		protected IReadOnlyCollection<LanguageText> ExistingLanguageTexts { get; set; }
+		protected ObservableCollection<LanguageTextViewModel> ExistingLanguageTexts { get; } = new();
 
 		public Language Language { get; private set; }
 
@@ -158,7 +160,10 @@ namespace VocabularyCoach.ViewModels
 
 			ValidationIsEnabled = false;
 
-			ExistingLanguageTexts = await EditVocabularyService.GetLanguageTexts(language, cancellationToken);
+			var existingLanguageTexts = await EditVocabularyService.GetLanguageTexts(language, cancellationToken);
+
+			ExistingLanguageTexts.Clear();
+			ExistingLanguageTexts.AddRange(existingLanguageTexts.OrderBy(x => x.Text).Select(x => new LanguageTextViewModel(x)));
 		}
 
 		public Task<LanguageText> SaveChanges(CancellationToken cancellationToken)
