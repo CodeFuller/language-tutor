@@ -33,6 +33,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		IAsyncRelayCommand SpellCheckTextCommand { get; }
 
+		IAsyncRelayCommand ProcessPastedTextCommand { get; }
+
 		IAsyncRelayCommand PlayPronunciationRecordCommand { get; }
 
 		ICommand ProcessEnterKeyCommand { get; }

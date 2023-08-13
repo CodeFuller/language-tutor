@@ -125,6 +125,8 @@ namespace VocabularyCoach.ViewModels
 
 		public IAsyncRelayCommand SpellCheckTextCommand { get; }
 
+		public IAsyncRelayCommand ProcessPastedTextCommand { get; }
+
 		public IAsyncRelayCommand PlayPronunciationRecordCommand { get; }
 
 		public ICommand ProcessEnterKeyCommand { get; }
@@ -140,6 +142,7 @@ namespace VocabularyCoach.ViewModels
 			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			SpellCheckTextCommand = new AsyncRelayCommand(SpellCheckText);
+			ProcessPastedTextCommand = new AsyncRelayCommand(ProcessPastedText);
 			PlayPronunciationRecordCommand = new AsyncRelayCommand(LoadAndPlayPronunciationRecord);
 			ProcessEnterKeyCommand = new RelayCommand(() => messenger.Send(new EnterKeyPressedEventArgs()));
 		}
@@ -221,6 +224,16 @@ namespace VocabularyCoach.ViewModels
 			}
 
 			messenger.Send(new EditedTextSpellCheckedEventArgs());
+		}
+
+		private async Task ProcessPastedText(CancellationToken cancellationToken)
+		{
+			if (!RequireSpellCheck)
+			{
+				return;
+			}
+
+			await SpellCheckText(cancellationToken);
 		}
 
 		internal async Task LoadAndPlayPronunciationRecord(CancellationToken cancellationToken)

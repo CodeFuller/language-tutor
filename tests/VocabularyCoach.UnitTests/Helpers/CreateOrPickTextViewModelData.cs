@@ -47,6 +47,8 @@ namespace VocabularyCoach.UnitTests.Helpers
 
 		public IAsyncRelayCommand SpellCheckTextCommand => null;
 
+		public IAsyncRelayCommand ProcessPastedTextCommand => null;
+
 		public IAsyncRelayCommand PlayPronunciationRecordCommand => null;
 
 		public ICommand ProcessEnterKeyCommand => null;
@@ -57,6 +59,7 @@ namespace VocabularyCoach.UnitTests.Helpers
 			{
 				return x => x
 					.Excluding(y => y.SpellCheckTextCommand)
+					.Excluding(y => y.ProcessPastedTextCommand)
 					.Excluding(y => y.PlayPronunciationRecordCommand)
 					.Excluding(y => y.ProcessEnterKeyCommand);
 			}

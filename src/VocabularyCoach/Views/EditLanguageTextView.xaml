@@ -38,7 +38,7 @@
                             <ComboBox IsEditable="True" IsReadOnly="{Binding AllowTextEdit, Converter={StaticResource InverseBooleanValueConverter}}" IsTextSearchEnabled="False"
                                       ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
                                       SelectedItem="{Binding SelectedText}" helpers:FocusHelper.IsFocused="{Binding TextIsFocused}"
-                                      helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
+                                      helpers:ControlPasteBehavior.PasteCommand="{Binding ProcessPastedTextCommand}">
                                 <ComboBox.InputBindings>
                                     <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
                                 </ComboBox.InputBindings>
@@ -46,7 +46,7 @@
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type viewModels:EditExistingTextViewModel}">
                             <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     helpers:FocusHelper.IsFocused="{Binding TextIsFocused}" helpers:ControlPasteBehavior.PasteCommand="{Binding SpellCheckTextCommand}">
+                                     helpers:FocusHelper.IsFocused="{Binding TextIsFocused}" helpers:ControlPasteBehavior.PasteCommand="{Binding ProcessPastedTextCommand}">
                                 <TextBox.InputBindings>
                                     <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />
                                 </TextBox.InputBindings>

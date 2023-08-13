@@ -50,6 +50,8 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public IAsyncRelayCommand SpellCheckTextCommand => null;
 
+		public IAsyncRelayCommand ProcessPastedTextCommand => null;
+
 		public IAsyncRelayCommand PlayPronunciationRecordCommand => null;
 
 		public ICommand ProcessEnterKeyCommand => null;

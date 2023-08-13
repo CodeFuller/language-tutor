@@ -262,6 +262,128 @@ namespace VocabularyCoach.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task ProcessPastedTextCommand_IfRequireSpellCheckIsFalse_ReturnsWithoutSpellCheck()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			mocker.GetMock<IEditVocabularyService>()
+				.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(TestExistingLanguageTexts);
+
+			var target = mocker.CreateInstance<TestEditTextViewModel>();
+			await target.Load(TestLanguage, requireSpellCheck: false, createPronunciationRecord: true, CancellationToken.None);
+
+			// Act
+
+			target.Text = "new text";
+			await target.ProcessPastedTextCommand.ExecuteAsync(null);
+
+			// Assert
+
+			mocker.GetMock<ISpellCheckService>().Verify(x => x.PerformSpellCheck(It.IsAny<LanguageText>(), It.IsAny<CancellationToken>()), Times.Never);
+
+			mocker.GetMock<IMessenger>().Verify(x => x.Send(It.IsAny<EditedTextSpellCheckedEventArgs>(), It.IsAny<IsAnyToken>()), Times.Never);
+		}
+
+		[TestMethod]
+		public async Task ProcessPastedTextCommand_IfSpellCheckFails_ReturnsWithoutSpellCheckAndSynthesisOfPronunciationRecord()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			mocker.GetMock<IEditVocabularyService>()
+				.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(TestExistingLanguageTexts);
+
+			mocker.GetMock<ISpellCheckService>()
+				.Setup(x => x.PerformSpellCheck(It.IsAny<LanguageText>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+
+			var target = mocker.CreateInstance<TestEditTextViewModel>();
+			await target.Load(TestLanguage, requireSpellCheck: true, createPronunciationRecord: true, CancellationToken.None);
+
+			// Act
+
+			target.Text = "new text";
+			await target.ProcessPastedTextCommand.ExecuteAsync(null);
+
+			// Assert
+
+			target.TextWasSpellChecked.Should().BeFalse();
+
+			mocker.GetMock<IPronunciationRecordSynthesizer>().Verify(x => x.SynthesizePronunciationRecord(It.IsAny<Language>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+			mocker.GetMock<IPronunciationRecordPlayer>().Verify(x => x.PlayPronunciationRecord(It.IsAny<PronunciationRecord>(), It.IsAny<CancellationToken>()), Times.Never);
+
+			mocker.GetMock<IMessenger>().Verify(x => x.Send(It.IsAny<EditedTextSpellCheckedEventArgs>(), It.IsAny<IsAnyToken>()), Times.Never);
+		}
+
+		[TestMethod]
+		public async Task ProcessPastedTextCommand_IfCreatePronunciationRecordIsFalse_DoesNotSynthesizePronunciationRecord()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			mocker.GetMock<IEditVocabularyService>()
+				.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(TestExistingLanguageTexts);
+
+			mocker.GetMock<ISpellCheckService>()
+				.Setup(x => x.PerformSpellCheck(It.IsAny<LanguageText>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+			var target = mocker.CreateInstance<TestEditTextViewModel>();
+			await target.Load(TestLanguage, requireSpellCheck: true, createPronunciationRecord: false, CancellationToken.None);
+
+			// Act
+
+			target.Text = "new text";
+			await target.ProcessPastedTextCommand.ExecuteAsync(null);
+
+			// Assert
+
+			target.TextWasSpellChecked.Should().BeTrue();
+
+			mocker.GetMock<IPronunciationRecordSynthesizer>().Verify(x => x.SynthesizePronunciationRecord(It.IsAny<Language>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+			mocker.GetMock<IPronunciationRecordPlayer>().Verify(x => x.PlayPronunciationRecord(It.IsAny<PronunciationRecord>(), It.IsAny<CancellationToken>()), Times.Never);
+
+			mocker.GetMock<IMessenger>().Verify(x => x.Send(It.IsAny<EditedTextSpellCheckedEventArgs>(), It.IsAny<IsAnyToken>()), Times.Once);
+		}
+
+		[TestMethod]
+		public async Task ProcessPastedTextCommand_IfCreatePronunciationRecordIsTrue_SynthesizesAndPlaysPronunciationRecord()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			mocker.GetMock<IEditVocabularyService>()
+				.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(TestExistingLanguageTexts);
+
+			mocker.GetMock<ISpellCheckService>()
+				.Setup(x => x.PerformSpellCheck(It.IsAny<LanguageText>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+			var synthesizedPronunciationRecord = new PronunciationRecord();
+			var pronunciationRecordSynthesizerMock = mocker.GetMock<IPronunciationRecordSynthesizer>();
+			pronunciationRecordSynthesizerMock.Setup(x => x.SynthesizePronunciationRecord(TestLanguage, "new text", It.IsAny<CancellationToken>())).ReturnsAsync(synthesizedPronunciationRecord);
+
+			var target = mocker.CreateInstance<TestEditTextViewModel>();
+			await target.Load(TestLanguage, requireSpellCheck: true, createPronunciationRecord: true, CancellationToken.None);
+
+			// Act
+
+			target.Text = "new text";
+			await target.ProcessPastedTextCommand.ExecuteAsync(null);
+
+			// Assert
+
+			target.TextWasSpellChecked.Should().BeTrue();
+
+			pronunciationRecordSynthesizerMock.Verify(x => x.SynthesizePronunciationRecord(TestLanguage, "new text", It.IsAny<CancellationToken>()), Times.Once);
+			mocker.GetMock<IPronunciationRecordPlayer>().Verify(x => x.PlayPronunciationRecord(synthesizedPronunciationRecord, It.IsAny<CancellationToken>()), Times.Once);
+
+			mocker.GetMock<IMessenger>().Verify(x => x.Send(It.IsAny<EditedTextSpellCheckedEventArgs>(), It.IsAny<IsAnyToken>()), Times.Once);
+		}
+
+		[TestMethod]
 		public async Task PlayPronunciationRecordCommand_IfCreatePronunciationRecordIsFalse_ThrowsWithoutSynthesisAndPlayOfPronunciationRecord()
 		{
 			// Arrange
