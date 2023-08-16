@@ -6,7 +6,7 @@ using VocabularyCoach.Models;
 using VocabularyCoach.Services.Data;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.Services.Interfaces.Repositories;
-using VocabularyCoach.Services.LanguageTraits;
+using VocabularyCoach.Services.Internal;
 
 namespace VocabularyCoach.Services
 {
@@ -16,10 +16,13 @@ namespace VocabularyCoach.Services
 
 		private readonly IPronunciationRecordRepository pronunciationRecordRepository;
 
-		public EditVocabularyService(ILanguageTextRepository languageTextRepository, IPronunciationRecordRepository pronunciationRecordRepository, ISupportedLanguageTraits supportedLanguageTraits)
+		private readonly ISystemClock systemClock;
+
+		public EditVocabularyService(ILanguageTextRepository languageTextRepository, IPronunciationRecordRepository pronunciationRecordRepository, ISystemClock systemClock)
 		{
 			this.languageTextRepository = languageTextRepository ?? throw new ArgumentNullException(nameof(languageTextRepository));
 			this.pronunciationRecordRepository = pronunciationRecordRepository ?? throw new ArgumentNullException(nameof(pronunciationRecordRepository));
+			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
 		}
 
 		public Task<IReadOnlyCollection<LanguageText>> GetLanguageTexts(Language language, CancellationToken cancellationToken)
@@ -36,7 +39,7 @@ namespace VocabularyCoach.Services
 		{
 			var languageText = CreateLanguageText(null, languageTextData);
 
-			await languageTextRepository.AddLanguageText(languageText, cancellationToken);
+			await languageTextRepository.AddLanguageText(languageText, systemClock.Now, cancellationToken);
 
 			if (languageTextData.PronunciationRecord != null)
 			{

@@ -20,6 +20,7 @@ CREATE TABLE [Texts] (
   [UserId] int NULL,
   [Text] ntext NOT NULL,
   [Note] ntext NULL,
+  [CreationTimestamp] datetime NOT NULL,
 
   CONSTRAINT [sqlite_master_PK_Texts] PRIMARY KEY ([Id]),
   FOREIGN KEY ([LanguageId]) REFERENCES [Languages] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,

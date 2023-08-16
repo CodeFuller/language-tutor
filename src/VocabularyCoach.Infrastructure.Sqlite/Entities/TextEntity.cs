@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace VocabularyCoach.Infrastructure.Sqlite.Entities
@@ -13,6 +14,8 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 		public string Text { get; set; }
 
 		public string Note { get; set; }
+
+		public DateTimeOffset CreationTimestamp { get; set; }
 
 		public IReadOnlyCollection<CheckResultEntity> CheckResults { get; set; }
 	}

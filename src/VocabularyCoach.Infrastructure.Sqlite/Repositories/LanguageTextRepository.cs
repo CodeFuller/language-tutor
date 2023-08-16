@@ -71,9 +71,9 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 				.Where(x => x.Text2.LanguageId == language2Id.ToInt32());
 		}
 
-		public async Task AddLanguageText(LanguageText languageText, CancellationToken cancellationToken)
+		public async Task AddLanguageText(LanguageText languageText, DateTimeOffset creationTimestamp, CancellationToken cancellationToken)
 		{
-			var textEntity = languageText.ToEntity();
+			var textEntity = languageText.ToEntity(creationTimestamp);
 
 			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
