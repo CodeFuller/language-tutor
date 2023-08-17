@@ -55,8 +55,7 @@ namespace VocabularyCoach.ViewModels
 		{
 			PracticeResults = results;
 
-			var userStatistics = await vocabularyService.GetUserStatistics(user, studiedLanguage, knownLanguage, cancellationToken);
-			await vocabularyService.StoreUserStatistics(user, studiedLanguage, knownLanguage, userStatistics, cancellationToken);
+			await vocabularyService.UpdateTodayUserStatistics(user, studiedLanguage, knownLanguage, cancellationToken);
 		}
 
 		private static string GetStatistics(int statisticsCount, int totalCount)

@@ -61,6 +61,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -79,6 +80,9 @@
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Practiced today:" />
                     <Label Grid.Row="3" Grid.Column="1" Content="{Binding UserStatistics.NumberOfTextsPracticedToday}" HorizontalAlignment="Right" />
+
+                    <Label Grid.Row="4" Grid.Column="0" Content="Learned today:" />
+                    <Label Grid.Row="4" Grid.Column="1" Content="{Binding UserStatistics.NumberOfTextsLearnedToday}" HorizontalAlignment="Right" />
                 </Grid>
             </Grid>
         </Grid>

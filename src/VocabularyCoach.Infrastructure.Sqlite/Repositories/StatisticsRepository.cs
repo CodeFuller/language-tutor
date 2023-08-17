@@ -53,10 +53,11 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 
 		private static void CopyStatistics(UserStatisticsData source, UserStatisticsEntity target)
 		{
-			target.TotalTextsNumber = source.TotalNumberOfTexts;
-			target.TotalLearnedTextsNumber = source.TotalNumberOfLearnedTexts;
-			target.RestNumberOfTextsToPractice = source.RestNumberOfTextsToPracticeToday;
-			target.NumberOfPracticedTexts = source.NumberOfTextsPracticedToday;
+			target.TotalNumberOfTexts = source.TotalNumberOfTexts;
+			target.TotalNumberOfLearnedTexts = source.TotalNumberOfLearnedTexts;
+			target.RestNumberOfTextsToPracticeToday = source.RestNumberOfTextsToPracticeToday;
+			target.NumberOfTextsPracticedToday = source.NumberOfTextsPracticedToday;
+			target.NumberOfTextsLearnedToday = source.NumberOfTextsLearnedToday;
 		}
 	}
 }

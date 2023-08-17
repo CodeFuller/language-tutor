@@ -78,7 +78,7 @@ namespace VocabularyCoach.ViewModels
 			SelectedKnownLanguage = AvailableLanguages.Last();
 
 			// TODO: Handle change in language selection.
-			UserStatistics = await vocabularyService.GetUserStatistics(user, SelectedStudiedLanguage, SelectedKnownLanguage, cancellationToken);
+			UserStatistics = await vocabularyService.GetTodayUserStatistics(user, SelectedStudiedLanguage, SelectedKnownLanguage, cancellationToken);
 		}
 	}
 }

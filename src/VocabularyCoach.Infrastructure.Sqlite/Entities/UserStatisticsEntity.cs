@@ -12,12 +12,14 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 
 		public DateOnly Date { get; set; }
 
-		public int TotalTextsNumber { get; set; }
+		public int TotalNumberOfTexts { get; set; }
 
-		public int TotalLearnedTextsNumber { get; set; }
+		public int TotalNumberOfLearnedTexts { get; set; }
 
-		public int RestNumberOfTextsToPractice { get; set; }
+		public int RestNumberOfTextsToPracticeToday { get; set; }
 
-		public int NumberOfPracticedTexts { get; set; }
+		public int NumberOfTextsPracticedToday { get; set; }
+
+		public int NumberOfTextsLearnedToday { get; set; }
 	}
 }

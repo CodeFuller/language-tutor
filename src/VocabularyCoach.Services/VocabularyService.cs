@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Data;
+using VocabularyCoach.Services.Extensions;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.Services.Interfaces.Repositories;
 using VocabularyCoach.Services.Internal;
@@ -86,32 +87,46 @@ namespace VocabularyCoach.Services
 			return checkResult.CheckResultType;
 		}
 
-		public async Task<UserStatisticsData> GetUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		public Task<UserStatisticsData> GetTodayUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		{
+			return GetTodayUserStatistics(user, studiedLanguage, knownLanguage, Today, cancellationToken);
+		}
+
+		private async Task<UserStatisticsData> GetTodayUserStatistics(User user, Language studiedLanguage, Language knownLanguage, DateOnly today, CancellationToken cancellationToken)
 		{
 			var studiedTexts = (await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken)).ToList();
 
 			var textsForPractice = textsForPracticeSelector.SelectTextsForTodayPractice(studiedTexts);
 
+			var yesterday = today.AddDays(-1);
+			var totalNumberOfTextsLearnedForToday = studiedTexts.Count(x => TextIsLearned(x, today));
+			var totalNumberOfTextsLearnedForYesterday = studiedTexts.Count(x => TextIsLearned(x, yesterday));
+
 			return new UserStatisticsData
 			{
 				TotalNumberOfTexts = studiedTexts.Count,
-				TotalNumberOfLearnedTexts = studiedTexts.Count(TextIsLearned),
-				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => DateOnly.FromDateTime(checkResult.DateTime.Date) == Today)),
+				TotalNumberOfLearnedTexts = totalNumberOfTextsLearnedForToday,
 				RestNumberOfTextsToPracticeToday = textsForPractice.Count,
+				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.ToDateOnly() == today)),
+				NumberOfTextsLearnedToday = totalNumberOfTextsLearnedForToday - totalNumberOfTextsLearnedForYesterday,
 			};
 		}
 
-		public async Task StoreUserStatistics(User user, Language studiedLanguage, Language knownLanguage, UserStatisticsData statistics, CancellationToken cancellationToken)
+		public async Task UpdateTodayUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			await statisticsRepository.UpdateUserStatistics(user.Id, studiedLanguage.Id, knownLanguage.Id, Today, statistics, cancellationToken);
+			var today = Today;
+
+			var userStatistics = await GetTodayUserStatistics(user, studiedLanguage, knownLanguage, today, cancellationToken);
+			await statisticsRepository.UpdateUserStatistics(user.Id, studiedLanguage.Id, knownLanguage.Id, today, userStatistics, cancellationToken);
 		}
 
-		private static bool TextIsLearned(StudiedText studiedText)
+		private static bool TextIsLearned(StudiedText studiedText, DateOnly date)
 		{
 			// We consider text as learned, if 3 last checks are successful.
 			const int learnedTextChecksNumber = 3;
 
 			var lastChecks = studiedText.CheckResults
+				.Where(x => x.DateTime.ToDateOnly() <= date)
 				.Take(learnedTextChecksNumber)
 				.ToList();
 
