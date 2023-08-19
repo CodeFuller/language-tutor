@@ -63,6 +63,7 @@ CREATE TABLE [CheckResults] (
   [TextId] int NOT NULL,
   [DateTime] datetime NOT NULL,
   [ResultType] int NOT NULL,
+  [TypedText] ntext NULL,
 
   CONSTRAINT [sqlite_master_PK_CheckResults] PRIMARY KEY ([Id]),
   FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,

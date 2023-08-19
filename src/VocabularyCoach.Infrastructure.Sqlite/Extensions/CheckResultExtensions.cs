@@ -12,6 +12,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Extensions
 				Id = checkResultEntity.Id.ToItemId(),
 				DateTime = checkResultEntity.DateTime,
 				CheckResultType = checkResultEntity.ResultType,
+				TypedText = checkResultEntity.TypedText,
 			};
 		}
 
@@ -24,6 +25,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Extensions
 				TextId = textId.ToInt32(),
 				DateTime = checkResultModel.DateTime,
 				ResultType = checkResultModel.CheckResultType,
+				TypedText = checkResultModel.TypedText,
 			};
 		}
 	}

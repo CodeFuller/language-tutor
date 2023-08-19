@@ -74,10 +74,13 @@ namespace VocabularyCoach.Services
 
 		public async Task<CheckResultType> CheckTypedText(User user, StudiedText studiedText, string typedText, CancellationToken cancellationToken)
 		{
+			var checkResultType = GetCheckResultType(studiedText.TextInStudiedLanguage, typedText);
+
 			var checkResult = new CheckResult
 			{
 				DateTime = systemClock.Now,
-				CheckResultType = GetCheckResultType(studiedText.TextInStudiedLanguage, typedText),
+				CheckResultType = checkResultType,
+				TypedText = checkResultType == CheckResultType.Misspelled ? typedText : null,
 			};
 
 			await checkResultRepository.AddCheckResult(user.Id, studiedText.TextInStudiedLanguage.Id, checkResult, cancellationToken);

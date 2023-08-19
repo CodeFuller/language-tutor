@@ -16,5 +16,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 		public DateTimeOffset DateTime { get; set; }
 
 		public CheckResultType ResultType { get; set; }
+
+		public string TypedText { get; set; }
 	}
 }
