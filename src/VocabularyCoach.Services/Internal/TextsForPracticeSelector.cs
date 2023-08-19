@@ -59,7 +59,7 @@ namespace VocabularyCoach.Services.Internal
 				}
 
 				// If some check in the past is failed, we add interval for latest failed check.
-				if (checkResults[i].CheckResultType != CheckResultType.Ok)
+				if (checkResults[i].IsFailed)
 				{
 					return lastCheckDate.AddDays(CheckIntervals[i]);
 				}

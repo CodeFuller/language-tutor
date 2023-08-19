@@ -35,6 +35,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 					Date = x.Date,
 					TotalNumberOfTexts = x.TotalNumberOfTexts,
 					TotalNumberOfLearnedTexts = x.TotalNumberOfLearnedTexts,
+					NumberOfProblematicTexts = x.NumberOfProblematicTexts,
 					RestNumberOfTextsToPracticeToday = x.RestNumberOfTextsToPracticeToday,
 					NumberOfTextsPracticedToday = x.NumberOfTextsPracticedToday,
 					NumberOfTextsLearnedToday = x.NumberOfTextsLearnedToday,
@@ -77,6 +78,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 		{
 			target.TotalNumberOfTexts = source.TotalNumberOfTexts;
 			target.TotalNumberOfLearnedTexts = source.TotalNumberOfLearnedTexts;
+			target.NumberOfProblematicTexts = source.NumberOfProblematicTexts;
 			target.RestNumberOfTextsToPracticeToday = source.RestNumberOfTextsToPracticeToday;
 			target.NumberOfTextsPracticedToday = source.NumberOfTextsPracticedToday;
 			target.NumberOfTextsLearnedToday = source.NumberOfTextsLearnedToday;

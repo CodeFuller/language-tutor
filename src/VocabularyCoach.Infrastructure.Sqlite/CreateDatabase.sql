@@ -77,6 +77,7 @@ CREATE TABLE [UserStatistics] (
   [Date] datetime NOT NULL,
   [TotalNumberOfTexts] int NOT NULL,
   [TotalNumberOfLearnedTexts] int NOT NULL,
+  [NumberOfProblematicTexts] int NOT NULL,
   [RestNumberOfTextsToPracticeToday] int NOT NULL,
   [NumberOfTextsPracticedToday] int NOT NULL,
   [NumberOfTextsLearnedToday] int NOT NULL,

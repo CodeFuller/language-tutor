@@ -16,6 +16,8 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Entities
 
 		public int TotalNumberOfLearnedTexts { get; set; }
 
+		public int NumberOfProblematicTexts { get; set; }
+
 		public int RestNumberOfTextsToPracticeToday { get; set; }
 
 		public int NumberOfTextsPracticedToday { get; set; }

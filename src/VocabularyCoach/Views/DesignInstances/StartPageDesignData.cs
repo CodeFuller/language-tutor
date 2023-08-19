@@ -26,6 +26,7 @@ namespace VocabularyCoach.Views.DesignInstances
 			Date = new DateOnly(2023, 08, 19),
 			TotalNumberOfTexts = 1234,
 			TotalNumberOfLearnedTexts = 987,
+			NumberOfProblematicTexts = 5,
 			RestNumberOfTextsToPracticeToday = 135,
 			NumberOfTextsPracticedToday = 42,
 			NumberOfTextsLearnedToday = 28,

@@ -113,6 +113,7 @@ namespace VocabularyCoach.Services
 				Date = date,
 				TotalNumberOfTexts = studiedTexts.Count,
 				TotalNumberOfLearnedTexts = totalNumberOfTextsLearnedForToday,
+				NumberOfProblematicTexts = studiedTexts.Count(x => TextIsProblematic(x, date)),
 				RestNumberOfTextsToPracticeToday = textsForPractice.Count,
 				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.ToDateOnly() == date)),
 				NumberOfTextsLearnedToday = totalNumberOfTextsLearnedForToday - totalNumberOfTextsLearnedForYesterday,
@@ -161,12 +162,24 @@ namespace VocabularyCoach.Services
 			// We consider text as learned, if 3 last checks are successful.
 			const int learnedTextChecksNumber = 3;
 
-			var lastChecks = studiedText.CheckResults
-				.Where(x => x.DateTime.ToDateOnly() <= date)
-				.Take(learnedTextChecksNumber)
-				.ToList();
+			var lastChecks = GetLastChecks(studiedText, date, learnedTextChecksNumber).ToList();
 
-			return lastChecks.Count >= 3 && lastChecks.All(x => x.CheckResultType == CheckResultType.Ok);
+			return lastChecks.Count >= learnedTextChecksNumber && lastChecks.All(x => x.IsSuccessful);
+		}
+
+		private static bool TextIsProblematic(StudiedText studiedText, DateOnly date)
+		{
+			// We consider text as problematic, if 3 or more of the last 5 checks were failed.
+			var lastChecks = GetLastChecks(studiedText, date, 5);
+
+			return lastChecks.Count(x => x.IsFailed) >= 3;
+		}
+
+		private static IEnumerable<CheckResult> GetLastChecks(StudiedText studiedText, DateOnly date, int count)
+		{
+			return studiedText.CheckResults
+				.Where(x => x.DateTime.ToDateOnly() <= date)
+				.Take(count);
 		}
 
 		private static CheckResultType GetCheckResultType(LanguageText languageText, string typedText)

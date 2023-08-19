@@ -10,6 +10,8 @@ namespace VocabularyCoach.Services.Data
 
 		public int TotalNumberOfLearnedTexts { get; init; }
 
+		public int NumberOfProblematicTexts { get; init; }
+
 		public int RestNumberOfTextsToPracticeToday { get; init; }
 
 		public int NumberOfTextsPracticedToday { get; init; }
