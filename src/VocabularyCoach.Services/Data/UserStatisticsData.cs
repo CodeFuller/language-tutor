@@ -1,7 +1,11 @@
+using System;
+
 namespace VocabularyCoach.Services.Data
 {
 	public class UserStatisticsData
 	{
+		public DateOnly Date { get; init; }
+
 		public int TotalNumberOfTexts { get; init; }
 
 		public int TotalNumberOfLearnedTexts { get; init; }

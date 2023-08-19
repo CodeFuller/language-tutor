@@ -37,9 +37,15 @@ namespace VocabularyCoach.Services
 
 		public async Task<LanguageText> AddLanguageText(LanguageTextData languageTextData, CancellationToken cancellationToken)
 		{
-			var languageText = CreateLanguageText(null, languageTextData);
+			var languageText = new LanguageText
+			{
+				Language = languageTextData.Language,
+				Text = languageTextData.Text,
+				Note = NormalizeNote(languageTextData.Note),
+				CreationTimestamp = systemClock.Now,
+			};
 
-			await languageTextRepository.AddLanguageText(languageText, systemClock.Now, cancellationToken);
+			await languageTextRepository.AddLanguageText(languageText, cancellationToken);
 
 			if (languageTextData.PronunciationRecord != null)
 			{
@@ -47,17 +53,6 @@ namespace VocabularyCoach.Services
 			}
 
 			return languageText;
-		}
-
-		private static LanguageText CreateLanguageText(ItemId id, LanguageTextData languageTextData)
-		{
-			return new LanguageText
-			{
-				Id = id,
-				Language = languageTextData.Language,
-				Text = languageTextData.Text,
-				Note = String.IsNullOrWhiteSpace(languageTextData.Note) ? null : languageTextData.Note,
-			};
 		}
 
 		public async Task<Translation> AddTranslation(LanguageText languageText1, LanguageText languageText2, CancellationToken cancellationToken)
@@ -75,9 +70,16 @@ namespace VocabularyCoach.Services
 
 		public async Task<LanguageText> UpdateLanguageText(LanguageText languageText, LanguageTextData newLanguageTextData, CancellationToken cancellationToken)
 		{
-			var newLanguageText = CreateLanguageText(languageText.Id, newLanguageTextData);
+			var updatedLanguageText = new LanguageText
+			{
+				Id = languageText.Id,
+				Language = newLanguageTextData.Language,
+				Text = newLanguageTextData.Text,
+				Note = NormalizeNote(newLanguageTextData.Note),
+				CreationTimestamp = languageText.CreationTimestamp,
+			};
 
-			await languageTextRepository.UpdateLanguageText(newLanguageText, cancellationToken);
+			await languageTextRepository.UpdateLanguageText(updatedLanguageText, cancellationToken);
 
 			// Currently we support only update of pronunciation record.
 			// We do not support adding or deletion of pronunciation record.
@@ -86,7 +88,12 @@ namespace VocabularyCoach.Services
 				await pronunciationRecordRepository.UpdatePronunciationRecord(languageText.Id, newLanguageTextData.PronunciationRecord, cancellationToken);
 			}
 
-			return newLanguageText;
+			return updatedLanguageText;
+		}
+
+		private static string NormalizeNote(string note)
+		{
+			return String.IsNullOrWhiteSpace(note) ? null : note;
 		}
 
 		public Task DeleteLanguageText(LanguageText languageText, CancellationToken cancellationToken)

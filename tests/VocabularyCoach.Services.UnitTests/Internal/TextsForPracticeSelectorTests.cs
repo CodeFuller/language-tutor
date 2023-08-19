@@ -13,7 +13,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 	public class TextsForPracticeSelectorTests
 	{
 		[TestMethod]
-		public void SelectTextsForTodayPractice_ForMissingStudiedTexts_ReturnsEmptyCollection()
+		public void GetTextsForPractice_ForMissingStudiedTexts_ReturnsEmptyCollection()
 		{
 			// Arrange
 
@@ -24,7 +24,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 
 			// Act
 
-			var result = target.SelectTextsForTodayPractice(studiedTexts);
+			var result = target.GetTextsForPractice(new DateOnly(2023, 07, 11), studiedTexts);
 
 			// Assert
 
@@ -32,7 +32,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectTextsForTodayPractice_ForTextsWithNoChecks_ReturnsSuchTexts()
+		public void GetTextsForPractice_ForTextsWithNoChecks_ReturnsSuchTexts()
 		{
 			// Arrange
 
@@ -42,13 +42,11 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
-
 			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = target.SelectTextsForTodayPractice(studiedTexts);
+			var result = target.GetTextsForPractice(new DateOnly(2023, 07, 11), studiedTexts);
 
 			// Assert
 
@@ -56,7 +54,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectTextsForTodayPractice_ForTextsWithSmallNumberOfAllSuccessfulChecks_TreatsFirstMissingCheckAsFailed()
+		public void GetTextsForPractice_ForTextsWithSmallNumberOfAllSuccessfulChecks_TreatsFirstMissingCheckAsFailed()
 		{
 			// Arrange
 
@@ -124,13 +122,11 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			StubTodayDate(mocker, new DateOnly(2023, 07, 21));
-
 			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = target.SelectTextsForTodayPractice(studiedTexts);
+			var result = target.GetTextsForPractice(new DateOnly(2023, 07, 21), studiedTexts);
 
 			// Assert
 
@@ -146,7 +142,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectTextsForTodayPractice_ForTextsWithAllSuccessfulChecks_AppliesCorrectCheckInterval()
+		public void GetTextsForPractice_ForTextsWithAllSuccessfulChecks_AppliesCorrectCheckInterval()
 		{
 			// Arrange
 
@@ -196,13 +192,11 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
-
 			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = target.SelectTextsForTodayPractice(studiedTexts);
+			var result = target.GetTextsForPractice(new DateOnly(2023, 07, 11), studiedTexts);
 
 			// Assert
 
@@ -217,7 +211,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectTextsForTodayPractice_ForTextsWithFailedCheck_AppliesCorrectCheckInterval()
+		public void GetTextsForPractice_ForTextsWithFailedCheck_AppliesCorrectCheckInterval()
 		{
 			// Arrange
 
@@ -305,13 +299,11 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			StubTodayDate(mocker, new DateOnly(2023, 07, 21));
-
 			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = target.SelectTextsForTodayPractice(studiedTexts);
+			var result = target.GetTextsForPractice(new DateOnly(2023, 07, 21), studiedTexts);
 
 			// Assert
 
@@ -328,7 +320,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectTextsForTodayPractice_ForTextsWithDifferentNextCheckDate_OrdersChecksByNextCheckDate()
+		public void GetTextsForPractice_ForTextsWithDifferentNextCheckDate_OrdersChecksByNextCheckDate()
 		{
 			// Arrange
 
@@ -366,13 +358,11 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			StubTodayDate(mocker, new DateOnly(2023, 07, 11));
-
 			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var result = target.SelectTextsForTodayPractice(studiedTexts);
+			var result = target.GetTextsForPractice(new DateOnly(2023, 07, 11), studiedTexts);
 
 			// Assert
 
@@ -399,12 +389,6 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 				DateTime = dateTime,
 				CheckResultType = CheckResultType.Ok,
 			};
-		}
-
-		private static void StubTodayDate(AutoMocker mocker, DateOnly todayDate)
-		{
-			mocker.GetMock<ISystemClock>()
-				.Setup(x => x.Today).Returns(todayDate);
 		}
 	}
 }

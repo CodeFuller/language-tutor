@@ -23,6 +23,7 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public UserStatisticsData UserStatistics { get; } = new()
 		{
+			Date = new DateOnly(2023, 08, 19),
 			TotalNumberOfTexts = 1234,
 			TotalNumberOfLearnedTexts = 987,
 			RestNumberOfTextsToPracticeToday = 135,

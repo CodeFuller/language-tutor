@@ -57,7 +57,7 @@ namespace VocabularyCoach.Services
 		{
 			var studiedTexts = await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken);
 
-			return textsForPracticeSelector.SelectTextsForTodayPractice(studiedTexts);
+			return textsForPracticeSelector.GetTextsForPractice(Today, studiedTexts);
 		}
 
 		private async Task<IEnumerable<StudiedText>> GetStudiedTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
@@ -89,35 +89,68 @@ namespace VocabularyCoach.Services
 
 		public Task<UserStatisticsData> GetTodayUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			return GetTodayUserStatistics(user, studiedLanguage, knownLanguage, Today, cancellationToken);
+			return GetUserStatisticsForDate(user, studiedLanguage, knownLanguage, Today, cancellationToken);
 		}
 
-		private async Task<UserStatisticsData> GetTodayUserStatistics(User user, Language studiedLanguage, Language knownLanguage, DateOnly today, CancellationToken cancellationToken)
+		private async Task<UserStatisticsData> GetUserStatisticsForDate(User user, Language studiedLanguage, Language knownLanguage, DateOnly date, CancellationToken cancellationToken)
 		{
-			var studiedTexts = (await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken)).ToList();
+			var studiedTexts = (await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken))
+				.Where(x => x.TextInStudiedLanguage.CreationTimestamp.ToDateOnly() <= date)
+				.Select(x => GetStudiedTextToDate(x, date))
+				.ToList();
 
-			var textsForPractice = textsForPracticeSelector.SelectTextsForTodayPractice(studiedTexts);
+			var textsForPractice = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts);
 
-			var yesterday = today.AddDays(-1);
-			var totalNumberOfTextsLearnedForToday = studiedTexts.Count(x => TextIsLearned(x, today));
-			var totalNumberOfTextsLearnedForYesterday = studiedTexts.Count(x => TextIsLearned(x, yesterday));
+			var previousDate = date.AddDays(-1);
+			var totalNumberOfTextsLearnedForToday = studiedTexts.Count(x => TextIsLearned(x, date));
+			var totalNumberOfTextsLearnedForYesterday = studiedTexts.Count(x => TextIsLearned(x, previousDate));
 
 			return new UserStatisticsData
 			{
+				Date = date,
 				TotalNumberOfTexts = studiedTexts.Count,
 				TotalNumberOfLearnedTexts = totalNumberOfTextsLearnedForToday,
 				RestNumberOfTextsToPracticeToday = textsForPractice.Count,
-				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.ToDateOnly() == today)),
+				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.ToDateOnly() == date)),
 				NumberOfTextsLearnedToday = totalNumberOfTextsLearnedForToday - totalNumberOfTextsLearnedForYesterday,
+			};
+		}
+
+		private static StudiedText GetStudiedTextToDate(StudiedText studiedText, DateOnly date)
+		{
+			var checkResultsToDate = studiedText.CheckResults
+				.Where(x => x.DateTime.ToDateOnly() <= date)
+				.ToList();
+
+			if (studiedText.CheckResults.Count == checkResultsToDate.Count)
+			{
+				return studiedText;
+			}
+
+			return new StudiedText(checkResultsToDate)
+			{
+				TextInStudiedLanguage = studiedText.TextInStudiedLanguage,
+				OtherSynonymsInStudiedLanguage = studiedText.OtherSynonymsInStudiedLanguage,
+				SynonymsInKnownLanguage = studiedText.SynonymsInKnownLanguage,
 			};
 		}
 
 		public async Task UpdateTodayUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
+			// Filling also missing statistics for previous dates if any.
+			var existingUserStatistics = (await statisticsRepository.GetUserStatistics(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken))
+				.OrderBy(x => x.Date)
+				.ToList();
+
 			var today = Today;
 
-			var userStatistics = await GetTodayUserStatistics(user, studiedLanguage, knownLanguage, today, cancellationToken);
-			await statisticsRepository.UpdateUserStatistics(user.Id, studiedLanguage.Id, knownLanguage.Id, today, userStatistics, cancellationToken);
+			var firstDateForUpdate = existingUserStatistics.Any() && existingUserStatistics.Last().Date < today ? existingUserStatistics.Last().Date.AddDays(1) : today;
+
+			for (var date = firstDateForUpdate; date <= today; date = date.AddDays(1))
+			{
+				var userStatisticsForDate = await GetUserStatisticsForDate(user, studiedLanguage, knownLanguage, date, cancellationToken);
+				await statisticsRepository.UpdateUserStatistics(user.Id, studiedLanguage.Id, knownLanguage.Id, userStatisticsForDate, cancellationToken);
+			}
 		}
 
 		private static bool TextIsLearned(StudiedText studiedText, DateOnly date)

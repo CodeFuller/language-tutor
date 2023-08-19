@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace VocabularyCoach.Services.Interfaces.Repositories
 
 		Task<IReadOnlyCollection<StudiedTranslationData>> GetStudiedTranslations(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken);
 
-		Task AddLanguageText(LanguageText languageText, DateTimeOffset creationTimestamp, CancellationToken cancellationToken);
+		Task AddLanguageText(LanguageText languageText, CancellationToken cancellationToken);
 
 		Task AddTranslation(Translation translation, CancellationToken cancellationToken);
 

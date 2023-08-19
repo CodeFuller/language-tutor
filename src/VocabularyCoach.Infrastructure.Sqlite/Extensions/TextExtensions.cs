@@ -1,4 +1,3 @@
-using System;
 using VocabularyCoach.Infrastructure.Sqlite.Entities;
 using VocabularyCoach.Models;
 
@@ -14,10 +13,11 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Extensions
 				Language = textEntity.Language.ToModel(),
 				Text = textEntity.Text,
 				Note = textEntity.Note,
+				CreationTimestamp = textEntity.CreationTimestamp,
 			};
 		}
 
-		public static TextEntity ToEntity(this LanguageText model, DateTimeOffset creationTimestamp)
+		public static TextEntity ToEntity(this LanguageText model)
 		{
 			return new TextEntity
 			{
@@ -25,7 +25,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Extensions
 				LanguageId = model.Language.Id.ToInt32(),
 				Text = model.Text,
 				Note = model.Note,
-				CreationTimestamp = creationTimestamp,
+				CreationTimestamp = model.CreationTimestamp,
 			};
 		}
 	}

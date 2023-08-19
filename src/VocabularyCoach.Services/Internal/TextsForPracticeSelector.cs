@@ -25,14 +25,7 @@ namespace VocabularyCoach.Services.Internal
 			+30,
 		};
 
-		private readonly ISystemClock systemClock;
-
-		public TextsForPracticeSelector(ISystemClock systemClock)
-		{
-			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
-		}
-
-		public IReadOnlyCollection<StudiedText> SelectTextsForTodayPractice(IEnumerable<StudiedText> studiedTexts)
+		public IReadOnlyCollection<StudiedText> GetTextsForPractice(DateOnly date, IEnumerable<StudiedText> studiedTexts)
 		{
 			return studiedTexts
 				.Select(x => new
@@ -40,7 +33,7 @@ namespace VocabularyCoach.Services.Internal
 					StudiedText = x,
 					NextCheckDateTime = GetNextCheckDateTimeForStudiedText(x.CheckResults),
 				})
-				.Where(x => x.NextCheckDateTime <= systemClock.Today)
+				.Where(x => x.NextCheckDateTime <= date)
 				.GroupBy(x => x.NextCheckDateTime, x => x.StudiedText)
 				.OrderBy(x => x.Key)
 				.SelectMany(x => x.Randomize())

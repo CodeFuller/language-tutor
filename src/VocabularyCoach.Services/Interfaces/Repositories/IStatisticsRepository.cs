@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using VocabularyCoach.Models;
@@ -8,6 +8,8 @@ namespace VocabularyCoach.Services.Interfaces.Repositories
 {
 	public interface IStatisticsRepository
 	{
-		Task UpdateUserStatistics(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, DateOnly statisticsDate, UserStatisticsData statistics, CancellationToken cancellationToken);
+		Task<IReadOnlyCollection<UserStatisticsData>> GetUserStatistics(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken);
+
+		Task UpdateUserStatistics(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, UserStatisticsData statistics, CancellationToken cancellationToken);
 	}
 }

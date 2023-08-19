@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -20,14 +22,34 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
 		}
 
-		public async Task UpdateUserStatistics(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, DateOnly statisticsDate, UserStatisticsData statistics, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<UserStatisticsData>> GetUserStatistics(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken)
+		{
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
+
+			var userStatistics = await dbContext.UserStatistics
+				.Where(x => x.UserId == userId.ToInt32() && x.StudiedLanguageId == studiedLanguageId.ToInt32() && x.KnownLanguageId == knownLanguageId.ToInt32())
+				.ToListAsync(cancellationToken);
+
+			return userStatistics.Select(x => new UserStatisticsData
+				{
+					Date = x.Date,
+					TotalNumberOfTexts = x.TotalNumberOfTexts,
+					TotalNumberOfLearnedTexts = x.TotalNumberOfLearnedTexts,
+					RestNumberOfTextsToPracticeToday = x.RestNumberOfTextsToPracticeToday,
+					NumberOfTextsPracticedToday = x.NumberOfTextsPracticedToday,
+					NumberOfTextsLearnedToday = x.NumberOfTextsLearnedToday,
+				})
+				.ToList();
+		}
+
+		public async Task UpdateUserStatistics(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, UserStatisticsData statistics, CancellationToken cancellationToken)
 		{
 			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
 			var existingStatisticsEntity = await dbContext.UserStatistics
 				.SingleOrDefaultAsync(
 					x => x.UserId == userId.ToInt32() && x.StudiedLanguageId == studiedLanguageId.ToInt32() &&
-					     x.KnownLanguageId == knownLanguageId.ToInt32() && x.Date == statisticsDate, cancellationToken);
+					     x.KnownLanguageId == knownLanguageId.ToInt32() && x.Date == statistics.Date, cancellationToken);
 
 			if (existingStatisticsEntity == null)
 			{
@@ -36,7 +58,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 					UserId = userId.ToInt32(),
 					StudiedLanguageId = studiedLanguageId.ToInt32(),
 					KnownLanguageId = knownLanguageId.ToInt32(),
-					Date = statisticsDate,
+					Date = statistics.Date,
 				};
 
 				CopyStatistics(statistics, newStatisticsEntity);

@@ -1,3 +1,5 @@
+using System;
+
 namespace VocabularyCoach.Models
 {
 	public sealed class LanguageText
@@ -9,5 +11,7 @@ namespace VocabularyCoach.Models
 		public string Text { get; init; }
 
 		public string Note { get; init; }
+
+		public DateTimeOffset CreationTimestamp { get; init; }
 	}
 }
