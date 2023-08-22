@@ -9,7 +9,10 @@ namespace VocabularyCoach.Services.Extensions
 		public static IEnumerable<T> Randomize<T>(this IEnumerable<T> collection)
 		{
 			var rnd = new Random();
-			return collection.OrderBy(a => Guid.NewGuid()).ToList();
+
+#pragma warning disable CA5394 // Do not use insecure randomness
+			return collection.OrderBy(_ => rnd.Next()).ToList();
+#pragma warning restore CA5394 // Do not use insecure randomness
 		}
 	}
 }

@@ -34,9 +34,13 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public bool HasTextsForPractice => true;
 
+		public bool HasProblematicTexts => true;
+
 		public ICommand PracticeVocabularyCommand => null;
 
 		public ICommand EditVocabularyCommand => null;
+
+		public ICommand GoToProblematicTextsCommand => null;
 
 		public Task Load(User user, CancellationToken cancellationToken)
 		{

@@ -39,6 +39,9 @@
             <DataTemplate DataType="{x:Type viewModels:EditVocabularyViewModel}">
                 <views:EditVocabularyView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ProblematicTextsViewModel}">
+                <views:ProblematicTextsView />
+            </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>
 </Window>

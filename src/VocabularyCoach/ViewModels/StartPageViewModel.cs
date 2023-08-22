@@ -48,14 +48,19 @@ namespace VocabularyCoach.ViewModels
 				SetProperty(ref userStatistics, value);
 
 				OnPropertyChanged(nameof(HasTextsForPractice));
+				OnPropertyChanged(nameof(HasProblematicTexts));
 			}
 		}
 
 		public bool HasTextsForPractice => UserStatistics?.RestNumberOfTextsToPracticeToday > 0;
 
+		public bool HasProblematicTexts => UserStatistics?.NumberOfProblematicTexts > 0;
+
 		public ICommand PracticeVocabularyCommand { get; }
 
 		public ICommand EditVocabularyCommand { get; }
+
+		public ICommand GoToProblematicTextsCommand { get; }
 
 		public StartPageViewModel(IVocabularyService vocabularyService, IMessenger messenger)
 		{
@@ -64,6 +69,7 @@ namespace VocabularyCoach.ViewModels
 
 			PracticeVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToPracticeVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			EditVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToEditVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
+			GoToProblematicTextsCommand = new RelayCommand(() => messenger.Send(new SwitchToProblematicTextsPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 		}
 
 		public async Task Load(User user, CancellationToken cancellationToken)

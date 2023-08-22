@@ -34,6 +34,7 @@ namespace VocabularyCoach
 			services.AddSingleton<IPracticeVocabularyViewModel, PracticeVocabularyViewModel>();
 			services.AddSingleton<IPracticeResultsViewModel, PracticeResultsViewModel>();
 			services.AddSingleton<IEditVocabularyViewModel, EditVocabularyViewModel>();
+			services.AddSingleton<IProblematicTextsViewModel, ProblematicTextsViewModel>();
 
 			// We register ICreateOrPickTextViewModel as transient dependency, because two different instances must be injected into EditVocabularyViewModel.
 			services.AddTransient<ICreateOrPickTextViewModel, CreateOrPickTextViewModel>();

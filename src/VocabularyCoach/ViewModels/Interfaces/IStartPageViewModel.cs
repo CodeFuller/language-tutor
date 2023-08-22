@@ -19,9 +19,13 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		bool HasTextsForPractice { get; }
 
+		bool HasProblematicTexts { get; }
+
 		ICommand PracticeVocabularyCommand { get; }
 
 		ICommand EditVocabularyCommand { get; }
+
+		ICommand GoToProblematicTextsCommand { get; }
 
 		Task Load(User user, CancellationToken cancellationToken);
 	}

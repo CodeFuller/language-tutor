@@ -12,6 +12,8 @@ namespace VocabularyCoach.Services.Interfaces
 
 		Task<IReadOnlyCollection<StudiedText>> GetTextsForPractice(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
 
+		Task<IReadOnlyCollection<StudiedText>> GetProblematicTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken);
+
 		Task<PronunciationRecord> GetPronunciationRecord(ItemId textId, CancellationToken cancellationToken);
 
 		Task<CheckResultType> CheckTypedText(User user, StudiedText studiedText, string typedText, CancellationToken cancellationToken);

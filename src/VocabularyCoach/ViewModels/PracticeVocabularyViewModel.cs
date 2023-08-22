@@ -76,15 +76,7 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
-		public string DisplayedTextInKnownLanguage
-		{
-			get
-			{
-				var sortedSynonyms = CurrentTextForCheck.SynonymsInKnownLanguage.Order(new LanguageTextComparer());
-
-				return String.Join(", ", sortedSynonyms.Select(x => x.GetTextWithNote()));
-			}
-		}
+		public string DisplayedTextInKnownLanguage => CurrentTextForCheck.GetTranslationsInKnownLanguage();
 
 		public string HintForOtherSynonyms
 		{

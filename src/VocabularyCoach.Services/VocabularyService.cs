@@ -28,13 +28,16 @@ namespace VocabularyCoach.Services
 
 		private readonly ITextsForPracticeSelector textsForPracticeSelector;
 
+		private readonly IProblematicTextsSelector problematicTextsSelector;
+
 		private readonly ISystemClock systemClock;
 
 		private DateOnly Today => systemClock.Today;
 
 		public VocabularyService(ILanguageRepository languageRepository, ILanguageTextRepository languageTextRepository,
 			IPronunciationRecordRepository pronunciationRecordRepository, ICheckResultRepository checkResultRepository,
-			IStatisticsRepository statisticsRepository, ISynonymGrouper synonymGrouper, ITextsForPracticeSelector textsForPracticeSelector, ISystemClock systemClock)
+			IStatisticsRepository statisticsRepository, ISynonymGrouper synonymGrouper,
+			ITextsForPracticeSelector textsForPracticeSelector, IProblematicTextsSelector problematicTextsSelector, ISystemClock systemClock)
 		{
 			this.languageRepository = languageRepository ?? throw new ArgumentNullException(nameof(languageRepository));
 			this.languageTextRepository = languageTextRepository ?? throw new ArgumentNullException(nameof(languageTextRepository));
@@ -43,6 +46,7 @@ namespace VocabularyCoach.Services
 			this.statisticsRepository = statisticsRepository ?? throw new ArgumentNullException(nameof(statisticsRepository));
 			this.synonymGrouper = synonymGrouper ?? throw new ArgumentNullException(nameof(synonymGrouper));
 			this.textsForPracticeSelector = textsForPracticeSelector ?? throw new ArgumentNullException(nameof(textsForPracticeSelector));
+			this.problematicTextsSelector = problematicTextsSelector ?? throw new ArgumentNullException(nameof(problematicTextsSelector));
 			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
 		}
 
@@ -58,6 +62,13 @@ namespace VocabularyCoach.Services
 			var studiedTexts = await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken);
 
 			return textsForPracticeSelector.GetTextsForPractice(Today, studiedTexts);
+		}
+
+		public async Task<IReadOnlyCollection<StudiedText>> GetProblematicTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		{
+			var studiedTexts = await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken);
+
+			return problematicTextsSelector.GetProblematicTexts(studiedTexts);
 		}
 
 		private async Task<IEnumerable<StudiedText>> GetStudiedTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
@@ -99,10 +110,11 @@ namespace VocabularyCoach.Services
 		{
 			var studiedTexts = (await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken))
 				.Where(x => x.TextInStudiedLanguage.CreationTimestamp.ToDateOnly() <= date)
-				.Select(x => GetStudiedTextToDate(x, date))
+				.Select(x => x.WithLimitedCheckResults(date))
 				.ToList();
 
 			var textsForPractice = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts);
+			var problematicTexts = problematicTextsSelector.GetProblematicTexts(studiedTexts);
 
 			var previousDate = date.AddDays(-1);
 			var totalNumberOfTextsLearnedForToday = studiedTexts.Count(x => TextIsLearned(x, date));
@@ -113,29 +125,10 @@ namespace VocabularyCoach.Services
 				Date = date,
 				TotalNumberOfTexts = studiedTexts.Count,
 				TotalNumberOfLearnedTexts = totalNumberOfTextsLearnedForToday,
-				NumberOfProblematicTexts = studiedTexts.Count(x => TextIsProblematic(x, date)),
+				NumberOfProblematicTexts = problematicTexts.Count,
 				RestNumberOfTextsToPracticeToday = textsForPractice.Count,
 				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.ToDateOnly() == date)),
 				NumberOfTextsLearnedToday = totalNumberOfTextsLearnedForToday - totalNumberOfTextsLearnedForYesterday,
-			};
-		}
-
-		private static StudiedText GetStudiedTextToDate(StudiedText studiedText, DateOnly date)
-		{
-			var checkResultsToDate = studiedText.CheckResults
-				.Where(x => x.DateTime.ToDateOnly() <= date)
-				.ToList();
-
-			if (studiedText.CheckResults.Count == checkResultsToDate.Count)
-			{
-				return studiedText;
-			}
-
-			return new StudiedText(checkResultsToDate)
-			{
-				TextInStudiedLanguage = studiedText.TextInStudiedLanguage,
-				OtherSynonymsInStudiedLanguage = studiedText.OtherSynonymsInStudiedLanguage,
-				SynonymsInKnownLanguage = studiedText.SynonymsInKnownLanguage,
 			};
 		}
 
@@ -162,24 +155,9 @@ namespace VocabularyCoach.Services
 			// We consider text as learned, if 3 last checks are successful.
 			const int learnedTextChecksNumber = 3;
 
-			var lastChecks = GetLastChecks(studiedText, date, learnedTextChecksNumber).ToList();
+			var lastChecks = studiedText.WithLimitedCheckResults(date, learnedTextChecksNumber).CheckResults;
 
 			return lastChecks.Count >= learnedTextChecksNumber && lastChecks.All(x => x.IsSuccessful);
-		}
-
-		private static bool TextIsProblematic(StudiedText studiedText, DateOnly date)
-		{
-			// We consider text as problematic, if 3 or more of the last 5 checks were failed.
-			var lastChecks = GetLastChecks(studiedText, date, 5);
-
-			return lastChecks.Count(x => x.IsFailed) >= 3;
-		}
-
-		private static IEnumerable<CheckResult> GetLastChecks(StudiedText studiedText, DateOnly date, int count)
-		{
-			return studiedText.CheckResults
-				.Where(x => x.DateTime.ToDateOnly() <= date)
-				.Take(count);
 		}
 
 		private static CheckResultType GetCheckResultType(LanguageText languageText, string typedText)
