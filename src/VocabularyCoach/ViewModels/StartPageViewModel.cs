@@ -8,10 +8,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Events;
-using VocabularyCoach.Extensions;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Data;
 using VocabularyCoach.Services.Interfaces;
+using VocabularyCoach.ViewModels.Extensions;
 using VocabularyCoach.ViewModels.Interfaces;
 
 namespace VocabularyCoach.ViewModels
