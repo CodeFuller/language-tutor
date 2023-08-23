@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace VocabularyCoach.Models
 {
@@ -6,5 +7,7 @@ namespace VocabularyCoach.Models
 	{
 		// Ordinal string comparison could not be used due to local language characters (e.g. ł or ó).
 		public static StringComparison IgnoreCase => StringComparison.InvariantCultureIgnoreCase;
+
+		public static StringComparer IgnoreCaseEqualityComparer => StringComparer.InvariantCultureIgnoreCase;
 	}
 }
