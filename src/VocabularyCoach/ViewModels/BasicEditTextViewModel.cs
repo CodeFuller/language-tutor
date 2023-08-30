@@ -105,8 +105,6 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
-		public abstract bool AllowTextEdit { get; }
-
 		public abstract bool AllowNoteEdit { get; }
 
 		private bool validationIsEnabled;

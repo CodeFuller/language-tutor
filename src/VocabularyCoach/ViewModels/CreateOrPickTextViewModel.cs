@@ -25,17 +25,18 @@ namespace VocabularyCoach.ViewModels
 			{
 				SetProperty(ref selectedText, value);
 
-				Text = selectedText?.Text ?? String.Empty;
+				// We set only Note property here and do not touch Text property.
+				// Two cases are possible:
+				// 1. Current setter is called by ComboBox control. In this case ComboBox will call Text setter just after SelectedText setter.
+				//    The Text will be adjusted by OnTextPropertyChanged method (Note is removed).
+				// 2. Current setter is called by OnTextPropertyChanged method. In this case Text was already set to the correct value (i.e. edited by user) and we should not reset it.
 				Note = selectedText?.Note ?? String.Empty;
 
-				OnPropertyChanged(nameof(AllowTextEdit));
 				OnPropertyChanged(nameof(AllowNoteEdit));
 			}
 		}
 
 		private bool ExistingTextIsSelected => SelectedText != null;
-
-		public override bool AllowTextEdit => !ExistingTextIsSelected;
 
 		public override bool AllowNoteEdit => !ExistingTextIsSelected;
 
@@ -104,14 +105,23 @@ namespace VocabularyCoach.ViewModels
 
 		protected override void OnTextPropertyChanged()
 		{
-			TextWasSpellChecked = ExistingTextIsSelected;
-
-			// When existing text is selected, Text property is set to combo box string, i.e. "Text (Note)".
-			// We reset its value to Text only.
 			if (ExistingTextIsSelected && Text != SelectedText.Text)
 			{
-				Text = SelectedText.Text;
+				if (Text == SelectedText.TextWithNote)
+				{
+					// When existing text is selected, Text property is set to combo box string, i.e. "Text (Note)".
+					// We reset its value to Text only.
+					Text = SelectedText.Text;
+				}
+				else
+				{
+					// Existing text was selected and then edited.
+					// We treat this as new text.
+					SelectedText = null;
+				}
 			}
+
+			TextWasSpellChecked = ExistingTextIsSelected;
 		}
 	}
 }

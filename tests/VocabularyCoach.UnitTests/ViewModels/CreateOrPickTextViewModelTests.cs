@@ -49,6 +49,41 @@ namespace VocabularyCoach.UnitTests.ViewModels
 		private ObservableCollection<LanguageTextViewModel> TestExistingLanguageTextViewModels => new(TestExistingLanguageTexts.Select(x => new LanguageTextViewModel(x)));
 
 		[TestMethod]
+		public async Task TextSetter_IfExistingTextIsSelected_ClearsTextSelection()
+		{
+			// Arrange
+
+			var languageTextViewModel = new LanguageTextViewModel(new LanguageText
+			{
+				Id = new ItemId("test text id"),
+				Language = TestLanguage,
+				Text = "test text",
+			});
+
+			var mocker = new AutoMocker();
+
+			mocker.GetMock<IEditVocabularyService>()
+				.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(TestExistingLanguageTexts);
+
+			var target = mocker.CreateInstance<CreateOrPickTextViewModel>();
+			await target.Load(TestLanguage, requireSpellCheck: true, createPronunciationRecord: true, CancellationToken.None);
+
+			PickExistingText(target, languageTextViewModel);
+
+			// Act
+
+			target.Text = "new text";
+
+			// Assert
+
+			target.SelectedText.Should().BeNull();
+			target.Text.Should().Be("new text");
+			target.Note.Should().BeEmpty();
+			target.TextWasSpellChecked.Should().BeFalse();
+			target.AllowNoteEdit.Should().BeTrue();
+		}
+
+		[TestMethod]
 		public async Task SelectedTextSetter_ForLanguageTextWithNote_UpdatesPropertiesCorrectly()
 		{
 			// Arrange
@@ -79,7 +114,6 @@ namespace VocabularyCoach.UnitTests.ViewModels
 			target.Text.Should().Be("test text");
 			target.Note.Should().Be("test note");
 			target.TextWasSpellChecked.Should().BeTrue();
-			target.AllowTextEdit.Should().BeFalse();
 			target.AllowNoteEdit.Should().BeFalse();
 		}
 
@@ -114,44 +148,7 @@ namespace VocabularyCoach.UnitTests.ViewModels
 			target.Text.Should().Be("test text");
 			target.Note.Should().Be(String.Empty);
 			target.TextWasSpellChecked.Should().BeTrue();
-			target.AllowTextEdit.Should().BeFalse();
 			target.AllowNoteEdit.Should().BeFalse();
-		}
-
-		[TestMethod]
-		public async Task SelectedTextSetter_ForNullValue_UpdatesPropertiesCorrectly()
-		{
-			// Arrange
-
-			var languageTextViewModel = new LanguageTextViewModel(new LanguageText
-			{
-				Id = new ItemId("test text id"),
-				Language = TestLanguage,
-				Text = "test text",
-				Note = null,
-			});
-
-			var mocker = new AutoMocker();
-
-			mocker.GetMock<IEditVocabularyService>()
-				.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(TestExistingLanguageTexts);
-
-			var target = mocker.CreateInstance<CreateOrPickTextViewModel>();
-			await target.Load(TestLanguage, requireSpellCheck: true, createPronunciationRecord: true, CancellationToken.None);
-
-			// Act
-
-			PickExistingText(target, languageTextViewModel);
-			PickExistingText(target, null);
-
-			// Assert
-
-			target.SelectedText.Should().BeNull();
-			target.Text.Should().Be(String.Empty);
-			target.Note.Should().Be(String.Empty);
-			target.TextWasSpellChecked.Should().BeFalse();
-			target.AllowTextEdit.Should().BeTrue();
-			target.AllowNoteEdit.Should().BeTrue();
 		}
 
 		[TestMethod]
@@ -191,7 +188,6 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				nameof(CreateOrPickTextViewModel.TextWasSpellChecked),
 				nameof(CreateOrPickTextViewModel.TextIsFilled),
 				nameof(CreateOrPickTextViewModel.Note),
-				nameof(CreateOrPickTextViewModel.AllowTextEdit),
 				nameof(CreateOrPickTextViewModel.AllowNoteEdit),
 			};
 
@@ -226,7 +222,6 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				TextWasSpellChecked = false,
 				TextIsFilled = false,
 				Note = String.Empty,
-				AllowTextEdit = true,
 				AllowNoteEdit = true,
 				ValidationIsEnabled = false,
 				HasErrors = false,
@@ -271,7 +266,6 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				TextWasSpellChecked = false,
 				TextIsFilled = false,
 				Note = String.Empty,
-				AllowTextEdit = true,
 				AllowNoteEdit = true,
 				ValidationIsEnabled = false,
 				HasErrors = false,
@@ -530,7 +524,6 @@ namespace VocabularyCoach.UnitTests.ViewModels
 				TextWasSpellChecked = false,
 				TextIsFilled = false,
 				Note = String.Empty,
-				AllowTextEdit = true,
 				AllowNoteEdit = true,
 				ValidationIsEnabled = false,
 				HasErrors = false,

@@ -15,7 +15,6 @@
 
     <UserControl.Resources>
         <valueConverters:VisibilityHiddenValueConverter x:Key="VisibilityHiddenValueConverter" />
-        <valueConverters:InverseBooleanValueConverter x:Key="InverseBooleanValueConverter" />
     </UserControl.Resources>
 
     <GroupBox Header="{Binding Language.Name}" HeaderStringFormat="Text in {0} language" Margin="5" Padding="5">
@@ -35,9 +34,10 @@
                 <ContentPresenter Content="{Binding}">
                     <ContentPresenter.Resources>
                         <DataTemplate DataType="{x:Type viewModels:CreateOrPickTextViewModel}">
-                            <ComboBox IsEditable="True" IsReadOnly="{Binding AllowTextEdit, Converter={StaticResource InverseBooleanValueConverter}}" IsTextSearchEnabled="False"
-                                      ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
+                            <!-- We enable search only when drop-down is open. Otherwise there is no way to add new synonym, because existing text is always picked. -->
+                            <ComboBox IsEditable="True" ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
                                       SelectedItem="{Binding SelectedText}" helpers:FocusHelper.IsFocused="{Binding TextIsFocused}"
+                                      IsTextSearchEnabled="{Binding RelativeSource={RelativeSource Self}, Path=IsDropDownOpen}"
                                       helpers:ControlPasteBehavior.PasteCommand="{Binding ProcessPastedTextCommand}">
                                 <ComboBox.InputBindings>
                                     <KeyBinding Command="{Binding ProcessEnterKeyCommand}" Key="Enter" />

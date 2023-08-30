@@ -22,8 +22,6 @@ namespace VocabularyCoach.UnitTests.ViewModels
 	{
 		private sealed class TestEditTextViewModel : BasicEditTextViewModel
 		{
-			public override bool AllowTextEdit => true;
-
 			public override bool AllowNoteEdit => true;
 
 			public PronunciationRecord PronunciationRecordAccessor => PronunciationRecord;

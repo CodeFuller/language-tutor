@@ -31,8 +31,6 @@ namespace VocabularyCoach.UnitTests.Helpers
 
 		public string Note { get; set; }
 
-		public bool AllowTextEdit { get; set; }
-
 		public bool AllowNoteEdit { get; set; }
 
 		public bool ValidationIsEnabled { get; set; }

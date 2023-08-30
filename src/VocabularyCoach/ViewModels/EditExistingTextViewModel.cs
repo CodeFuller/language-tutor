@@ -16,8 +16,6 @@ namespace VocabularyCoach.ViewModels
 
 		private PronunciationRecord OriginalPronunciationRecord { get; set; }
 
-		public override bool AllowTextEdit => true;
-
 		public override bool AllowNoteEdit => true;
 
 		public EditExistingTextViewModel(IVocabularyService vocabularyService, IEditVocabularyService editVocabularyService, ISpellCheckService spellCheckService,

@@ -25,8 +25,6 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		string Note { get; set; }
 
-		bool AllowTextEdit { get; }
-
 		bool AllowNoteEdit { get; }
 
 		bool ValidationIsEnabled { get; set; }

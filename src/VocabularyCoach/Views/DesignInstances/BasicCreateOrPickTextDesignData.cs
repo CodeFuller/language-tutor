@@ -30,8 +30,6 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public abstract string Note { get; set; }
 
-		public bool AllowTextEdit => true;
-
 		public bool AllowNoteEdit => true;
 
 		public abstract ObservableCollection<LanguageTextViewModel> ExistingTexts { get; }
