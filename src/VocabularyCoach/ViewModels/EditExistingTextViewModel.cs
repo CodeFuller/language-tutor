@@ -66,5 +66,10 @@ namespace VocabularyCoach.ViewModels
 		protected override void OnTextPropertyChanged()
 		{
 		}
+
+		protected override bool IsEditedText(ItemId textId)
+		{
+			return textId == EditedLanguageText.Id;
+		}
 	}
 }

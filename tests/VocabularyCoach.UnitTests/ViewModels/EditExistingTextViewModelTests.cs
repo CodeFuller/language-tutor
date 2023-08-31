@@ -265,6 +265,82 @@ namespace VocabularyCoach.UnitTests.ViewModels
 		}
 
 		[TestMethod]
+		public async Task SaveChanges_WhenNoteForTextWithoutDuplicatesIsCleared_SavesChangesCorrectly()
+		{
+			// Arrange
+
+			var testEditedLanguageText = new LanguageText
+			{
+				Id = new ItemId("test text id"),
+				Language = TestLanguage,
+				Text = "test text",
+				Note = "test note",
+			};
+
+			var mocker = new AutoMocker();
+
+			var editVocabularyServiceMock = mocker.GetMock<IEditVocabularyService>();
+			editVocabularyServiceMock.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(new[] { testEditedLanguageText });
+
+			var target = mocker.CreateInstance<EditExistingTextViewModel>();
+			await target.Load(testEditedLanguageText, requireSpellCheck: false, createPronunciationRecord: false, CancellationToken.None);
+
+			// Act
+
+			target.Note = String.Empty;
+
+			target.ValidationIsEnabled = true;
+			await target.SaveChanges(CancellationToken.None);
+
+			// Assert
+
+			Func<LanguageTextData, bool> verifyLanguageTextData = languageTextData =>
+				languageTextData.Language == TestLanguage && languageTextData.Text == testEditedLanguageText.Text &&
+				languageTextData.Note.Length == 0 &&
+				languageTextData.PronunciationRecord == null;
+
+			editVocabularyServiceMock.Verify(x => x.UpdateLanguageText(testEditedLanguageText, It.Is<LanguageTextData>(data => verifyLanguageTextData(data)), It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[TestMethod]
+		public async Task SaveChanges_WhenLetterCaseForTextWithoutDuplicatesIsChanged_SavesChangesCorrectly()
+		{
+			// Arrange
+
+			var testEditedLanguageText = new LanguageText
+			{
+				Id = new ItemId("test text id"),
+				Language = TestLanguage,
+				Text = "test text",
+				Note = "test note",
+			};
+
+			var mocker = new AutoMocker();
+
+			var editVocabularyServiceMock = mocker.GetMock<IEditVocabularyService>();
+			editVocabularyServiceMock.Setup(x => x.GetLanguageTexts(TestLanguage, It.IsAny<CancellationToken>())).ReturnsAsync(new[] { testEditedLanguageText });
+
+			var target = mocker.CreateInstance<EditExistingTextViewModel>();
+			await target.Load(testEditedLanguageText, requireSpellCheck: false, createPronunciationRecord: false, CancellationToken.None);
+
+			// Act
+
+			target.Text = "Test Text";
+
+			target.ValidationIsEnabled = true;
+			await target.SaveChanges(CancellationToken.None);
+
+			// Assert
+
+			Func<LanguageTextData, bool> verifyLanguageTextData = languageTextData =>
+				languageTextData.Language == TestLanguage && languageTextData.Text == "Test Text" &&
+				languageTextData.Note == testEditedLanguageText.Note &&
+				languageTextData.PronunciationRecord == null;
+
+			editVocabularyServiceMock.Verify(x => x.UpdateLanguageText(testEditedLanguageText, It.Is<LanguageTextData>(data => verifyLanguageTextData(data)), It.IsAny<CancellationToken>()), Times.Once);
+		}
+
+		[TestMethod]
 		public async Task ClearFilledData_ClearsViewModelProperties()
 		{
 			// Arrange

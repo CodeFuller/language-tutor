@@ -195,6 +195,11 @@ namespace VocabularyCoach.ViewModels
 
 		protected abstract void OnTextPropertyChanged();
 
+		protected virtual bool IsEditedText(ItemId textId)
+		{
+			return false;
+		}
+
 		private async Task SpellCheckText(CancellationToken cancellationToken)
 		{
 			if (!RequireSpellCheck)
@@ -319,15 +324,17 @@ namespace VocabularyCoach.ViewModels
 
 			if (String.IsNullOrEmpty(Note))
 			{
-				if (ExistingLanguageTexts.Any(x => String.Equals(Text, x.Text, LanguageTextComparison.IgnoreCase)))
+				if (ExistingLanguageTexts.Any(x => !IsEditedText(x.LanguageText.Id) && String.Equals(Text, x.Text, LanguageTextComparison.IgnoreCase)))
 				{
 					return $"Same text in {Language.Name} language already exists. Either use existing text or provide a note to distinguish the texts";
 				}
 			}
 			else
 			{
-				if (ExistingLanguageTexts.Any(x => String.Equals(Text, x.Text, LanguageTextComparison.IgnoreCase) &&
-				                                   String.Equals(Note, x.Note, LanguageTextComparison.IgnoreCase)))
+				if (ExistingLanguageTexts.Any(x =>
+					    !IsEditedText(x.LanguageText.Id) &&
+					    String.Equals(Text, x.Text, LanguageTextComparison.IgnoreCase) &&
+					    String.Equals(Note, x.Note, LanguageTextComparison.IgnoreCase)))
 				{
 					return $"Same text with the same note in {Language.Name} language already exists. Either use existing text or adjust a note to distinguish the texts";
 				}
