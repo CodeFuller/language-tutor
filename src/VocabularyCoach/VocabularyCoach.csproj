@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>2.4.1</Version>
+    <Version>2.4.2</Version>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>VocabularyCoach.ico</ApplicationIcon>
