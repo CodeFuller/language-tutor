@@ -31,6 +31,8 @@ namespace VocabularyCoach.ViewModels
 
 		public IProblematicTextsViewModel ProblematicTextsViewModel { get; }
 
+		public IStatisticsChartViewModel StatisticsChartViewModel { get; }
+
 		private IPageViewModel currentPage;
 
 		public IPageViewModel CurrentPage
@@ -41,14 +43,15 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand LoadCommand { get; }
 
-		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPracticeVocabularyViewModel practiceVocabularyViewModel,
-			IPracticeResultsViewModel practiceResultsViewModel, IEditVocabularyViewModel editVocabularyViewModel, IProblematicTextsViewModel problematicTextsViewModel, IMessenger messenger)
+		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPracticeVocabularyViewModel practiceVocabularyViewModel, IPracticeResultsViewModel practiceResultsViewModel,
+			IEditVocabularyViewModel editVocabularyViewModel, IProblematicTextsViewModel problematicTextsViewModel, IStatisticsChartViewModel statisticsChartViewModel, IMessenger messenger)
 		{
 			StartPageViewModel = startPageViewModel ?? throw new ArgumentNullException(nameof(startPageViewModel));
 			PracticeVocabularyViewModel = practiceVocabularyViewModel ?? throw new ArgumentNullException(nameof(practiceVocabularyViewModel));
 			PracticeResultsViewModel = practiceResultsViewModel ?? throw new ArgumentNullException(nameof(practiceResultsViewModel));
 			EditVocabularyViewModel = editVocabularyViewModel ?? throw new ArgumentNullException(nameof(editVocabularyViewModel));
 			ProblematicTextsViewModel = problematicTextsViewModel ?? throw new ArgumentNullException(nameof(problematicTextsViewModel));
+			StatisticsChartViewModel = statisticsChartViewModel ?? throw new ArgumentNullException(nameof(statisticsChartViewModel));
 
 			LoadCommand = new AsyncRelayCommand(Load);
 
@@ -58,6 +61,7 @@ namespace VocabularyCoach.ViewModels
 			messenger.Register<SwitchToPracticeResultsPageEventArgs>(this, (_, e) => SwitchToPracticeResultsPage(e.StudiedLanguage, e.KnownLanguage, e.PracticeResults, CancellationToken.None));
 			messenger.Register<SwitchToEditVocabularyPageEventArgs>(this, (_, e) => SwitchToEditVocabularyPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 			messenger.Register<SwitchToProblematicTextsPageEventArgs>(this, (_, e) => SwitchToProblematicTextsPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
+			messenger.Register<SwitchToStatisticsChartPageEventArgs>(this, (_, e) => SwitchToStatisticsChartPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 		}
 
 		private async Task Load(CancellationToken cancellationToken)
@@ -103,6 +107,13 @@ namespace VocabularyCoach.ViewModels
 			await ProblematicTextsViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
 
 			CurrentPage = ProblematicTextsViewModel;
+		}
+
+		private async void SwitchToStatisticsChartPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		{
+			await StatisticsChartViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
+
+			CurrentPage = StatisticsChartViewModel;
 		}
 	}
 }

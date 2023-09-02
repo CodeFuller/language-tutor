@@ -42,6 +42,8 @@ namespace VocabularyCoach.Views.DesignInstances
 
 		public ICommand GoToProblematicTextsCommand => null;
 
+		public ICommand ShowStatisticsChartCommand => null;
+
 		public Task Load(User user, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();

@@ -27,6 +27,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		ICommand GoToProblematicTextsCommand { get; }
 
+		ICommand ShowStatisticsChartCommand { get; }
+
 		Task Load(User user, CancellationToken cancellationToken);
 	}
 }

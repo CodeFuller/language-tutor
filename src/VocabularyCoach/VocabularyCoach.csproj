@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>2.4.2</Version>
+    <Version>2.5.0</Version>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>VocabularyCoach.ico</ApplicationIcon>
@@ -15,6 +15,7 @@
     <PackageReference Include="CodeFuller.Library.Logging" Version="8.2.0" />
     <PackageReference Include="CodeFuller.Library.Wpf" Version="8.2.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.950" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />

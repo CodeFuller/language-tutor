@@ -1,0 +1,23 @@
+<UserControl x:Class="VocabularyCoach.Views.StatisticsChartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:designInstances="clr-namespace:VocabularyCoach.Views.DesignInstances"
+             mc:Ignorable="d" 
+             d:DesignWidth="785" d:DesignHeight="460"
+             d:DataContext="{d:DesignInstance designInstances:StatisticsChartDesignData, IsDesignTimeCreatable=True}"
+             d:DesignStyle="{StaticResource ApplicationWindowStyle}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <lvc:CartesianChart Grid.Row="0" LegendPosition="Top" Series="{Binding Series}" XAxes="{Binding XAxes}" YAxes="{Binding YAxes}" />
+        <Button Grid.Row="1" Margin="0,10,0,20"  HorizontalAlignment="Center" Content="Go to Start" Command="{Binding GoToStartPageCommand}" />
+    </Grid>
+
+</UserControl>

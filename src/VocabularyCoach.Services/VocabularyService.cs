@@ -150,6 +150,13 @@ namespace VocabularyCoach.Services
 			}
 		}
 
+		public async Task<IReadOnlyCollection<UserStatisticsData>> GetUserStatisticsHistory(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		{
+			var statistics = await statisticsRepository.GetUserStatistics(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+
+			return statistics.OrderBy(x => x.Date).ToList();
+		}
+
 		private static bool TextIsLearned(StudiedText studiedText, DateOnly date)
 		{
 			// We consider text as learned, if 3 last checks are successful.

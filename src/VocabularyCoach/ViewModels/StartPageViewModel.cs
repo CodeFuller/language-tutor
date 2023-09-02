@@ -62,6 +62,8 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand GoToProblematicTextsCommand { get; }
 
+		public ICommand ShowStatisticsChartCommand { get; }
+
 		public StartPageViewModel(IVocabularyService vocabularyService, IMessenger messenger)
 		{
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
@@ -70,6 +72,7 @@ namespace VocabularyCoach.ViewModels
 			PracticeVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToPracticeVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			EditVocabularyCommand = new RelayCommand(() => messenger.Send(new SwitchToEditVocabularyPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			GoToProblematicTextsCommand = new RelayCommand(() => messenger.Send(new SwitchToProblematicTextsPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
+			ShowStatisticsChartCommand = new RelayCommand(() => messenger.Send(new SwitchToStatisticsChartPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 		}
 
 		public async Task Load(User user, CancellationToken cancellationToken)
