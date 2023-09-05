@@ -50,9 +50,15 @@ namespace VocabularyCoach.Services.Internal
 
 			var lastCheckDate = DateOnly.FromDateTime(checkResults[0].DateTime.Date);
 
-			for (var i = 0; i < Math.Max(checkResults.Count, CheckIntervals.Count); ++i)
+			for (var i = 0; i <= Math.Max(checkResults.Count, CheckIntervals.Count); ++i)
 			{
-				// If all text checks are successful, however they are not enough - we add interval for first missing check.
+				// If all checks up to last interval are successful, we add the last interval.
+				if (i >= CheckIntervals.Count)
+				{
+					return lastCheckDate.AddDays(CheckIntervals[^1]);
+				}
+
+				// If all checks are successful, however they are not enough - we add interval for first missing check.
 				if (i >= checkResults.Count)
 				{
 					return lastCheckDate.AddDays(CheckIntervals[i]);
@@ -65,8 +71,8 @@ namespace VocabularyCoach.Services.Internal
 				}
 			}
 
-			// If all checks are successful, we add the last interval.
-			return lastCheckDate.AddDays(CheckIntervals[^1]);
+			// We should not get here, because we return via condition (i >= CheckIntervals.Count) or (i >= checkResults.Count).
+			throw new InvalidOperationException("Unexpected loop finish");
 		}
 	}
 }

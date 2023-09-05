@@ -189,6 +189,19 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 					GetSuccessfulCheck(new DateTime(2023, 06, 10)),
 					GetSuccessfulCheck(new DateTime(2023, 06, 11)),
 				}.ToStudiedText("Text with 5 successful checks and old failed check - returned"),
+
+				// This case was added to verify a fix for ArgumentOutOfRangeException when there are 7 or more check results for a text.
+				new[]
+				{
+					// Next check: +30 days - 2023.07.11
+					GetFailedCheck(new DateTime(2023, 06, 05)),
+					GetSuccessfulCheck(new DateTime(2023, 06, 06)),
+					GetSuccessfulCheck(new DateTime(2023, 06, 07)),
+					GetSuccessfulCheck(new DateTime(2023, 06, 08)),
+					GetSuccessfulCheck(new DateTime(2023, 06, 09)),
+					GetSuccessfulCheck(new DateTime(2023, 06, 10)),
+					GetSuccessfulCheck(new DateTime(2023, 06, 11)),
+				}.ToStudiedText("Text with 7 successful checks - returned"),
 			};
 
 			var mocker = new AutoMocker();
@@ -205,6 +218,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 				studiedTexts[0],
 				studiedTexts[2],
 				studiedTexts[3],
+				studiedTexts[4],
 			};
 
 			result.Should().BeEquivalentTo(expectedTextsForCheck, x => x.WithoutStrictOrdering());
