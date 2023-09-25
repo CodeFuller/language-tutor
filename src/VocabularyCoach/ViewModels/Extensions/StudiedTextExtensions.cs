@@ -41,5 +41,46 @@ namespace VocabularyCoach.ViewModels.Extensions
 
 			return String.Join(", ", sortedTranslations.Select(GetTextWithNote));
 		}
+
+		public static string GetHintForOtherSynonyms(this StudiedText studiedText)
+		{
+			if (!studiedText.OtherSynonymsInStudiedLanguage.Any())
+			{
+				return String.Empty;
+			}
+
+			var sortedSynonyms = studiedText.OtherSynonymsInStudiedLanguage.Order(new LanguageTextComparer());
+			return $"synonyms: {String.Join(", ", sortedSynonyms.Select(x => MaskSynonym(studiedText.TextInStudiedLanguage.Text, x.Text)))}";
+		}
+
+		private static string MaskSynonym(string studiedText, string synonym)
+		{
+			var studiedTextWords = studiedText.Split(' ');
+			var synonymWords = synonym.Split(' ');
+
+			if (studiedTextWords.Length != synonymWords.Length || studiedTextWords.Length == 1)
+			{
+				return synonym;
+			}
+
+			int? nonMatchingWordIndex = null;
+			for (var i = 0; i < studiedTextWords.Length; i++)
+			{
+				if (studiedTextWords[i] == synonymWords[i])
+				{
+					continue;
+				}
+
+				if (nonMatchingWordIndex != null)
+				{
+					// There are several non-matching words, skipping masking.
+					return synonym;
+				}
+
+				nonMatchingWordIndex = i;
+			}
+
+			return nonMatchingWordIndex != null ? $"*** {synonymWords[nonMatchingWordIndex.Value]} ***" : synonym;
+		}
 	}
 }

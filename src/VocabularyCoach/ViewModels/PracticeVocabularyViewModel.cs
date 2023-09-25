@@ -78,19 +78,7 @@ namespace VocabularyCoach.ViewModels
 
 		public string DisplayedTextInKnownLanguage => CurrentTextForCheck.GetTranslationsInKnownLanguage();
 
-		public string HintForOtherSynonyms
-		{
-			get
-			{
-				if (!CurrentTextForCheck.OtherSynonymsInStudiedLanguage.Any())
-				{
-					return String.Empty;
-				}
-
-				var sortedSynonyms = CurrentTextForCheck.OtherSynonymsInStudiedLanguage.Order(new LanguageTextComparer());
-				return $"synonyms: {String.Join(", ", sortedSynonyms.Select(x => x.Text))}";
-			}
-		}
+		public string HintForOtherSynonyms => CurrentTextForCheck.GetHintForOtherSynonyms();
 
 		private PronunciationRecord currentPronunciationRecord;
 

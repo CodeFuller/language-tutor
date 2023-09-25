@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -167,6 +168,76 @@ namespace VocabularyCoach.UnitTests.ViewModels.Extensions
 			// Assert
 
 			result.Should().Be("some text 1, some text 2, some text 3 (some note)");
+		}
+
+		[TestMethod]
+		public void GetHintForOtherSynonyms_ForStudiedTextWithoutSynonyms_ReturnsEmptyString()
+		{
+			// Arrange
+
+			var target = new StudiedText(Enumerable.Empty<CheckResult>())
+			{
+				OtherSynonymsInStudiedLanguage = Array.Empty<LanguageText>(),
+			};
+
+			// Act
+
+			var result = target.GetHintForOtherSynonyms();
+
+			// Assert
+
+			result.Should().BeEmpty();
+		}
+
+		[TestMethod]
+		public void GetHintForOtherSynonyms_ForStudiedTextWithSynonymsWithoutMatchingWords_ReturnsCommaSeparatedListOfSynonyms()
+		{
+			// Arrange
+
+			var target = new StudiedText(Enumerable.Empty<CheckResult>())
+			{
+				TextInStudiedLanguage = new LanguageText { Text = "lemon" },
+
+				OtherSynonymsInStudiedLanguage = new[]
+				{
+					new LanguageText { Text = "kiwi" },
+					new LanguageText { Text = "apple" },
+					new LanguageText { Text = "orange" },
+				},
+			};
+
+			// Act
+
+			var result = target.GetHintForOtherSynonyms();
+
+			// Assert
+
+			result.Should().Be("synonyms: apple, kiwi, orange");
+		}
+
+		[TestMethod]
+		public void GetHintForOtherSynonyms_ForStudiedTextWithSynonymsWithMatchingWords_MasksMatchingWords()
+		{
+			// Arrange
+
+			var target = new StudiedText(Enumerable.Empty<CheckResult>())
+			{
+				TextInStudiedLanguage = new LanguageText { Text = "very beautiful woman" },
+
+				OtherSynonymsInStudiedLanguage = new[]
+				{
+					new LanguageText { Text = "very gorgeous woman" },
+					new LanguageText { Text = "hot girl" },
+				},
+			};
+
+			// Act
+
+			var result = target.GetHintForOtherSynonyms();
+
+			// Assert
+
+			result.Should().Be("synonyms: hot girl, *** gorgeous ***");
 		}
 	}
 }
