@@ -85,13 +85,13 @@ namespace VocabularyCoach.ViewModels
 			};
 		}
 
-		internal static IReadOnlyCollection<Axis> GetXAxes(IEnumerable<UserStatisticsData> dates)
+		internal static IReadOnlyCollection<Axis> GetXAxes(IEnumerable<UserStatisticsData> statistics)
 		{
 			return new[]
 			{
 				new Axis
 				{
-					Labels = dates.Select(x => x.Date.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture)).ToList(),
+					Labels = statistics.Select(x => x.Date.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture)).ToList(),
 
 					TextSize = 12,
 					LabelsPaint = new SolidColorPaint(SKColors.Black),
@@ -109,6 +109,7 @@ namespace VocabularyCoach.ViewModels
 					TextSize = 16,
 					LabelsPaint = new SolidColorPaint(SKColors.Black),
 					SeparatorsPaint = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5f },
+					Labeler = x => x.ToString("N0", CultureInfo.InvariantCulture),
 				},
 			};
 		}
