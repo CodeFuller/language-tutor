@@ -13,6 +13,7 @@ namespace VocabularyCoach.Services
 		{
 			services.Configure(setupSettings);
 
+			services.AddSingleton<IUserService, UserService>();
 			services.AddSingleton<IVocabularyService, VocabularyService>();
 			services.AddSingleton<IEditVocabularyService, EditVocabularyService>();
 

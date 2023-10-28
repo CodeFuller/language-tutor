@@ -55,7 +55,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Grid.Column="1" VerticalAlignment="Center">
+            <Grid Grid.Column="1" VerticalAlignment="Center" IsEnabled="{Binding LanguagesAreSelected}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="3*"/>
@@ -105,8 +105,8 @@
 
         <UniformGrid Grid.Row="2" Margin="20" Rows="1" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Button Margin="0,0,20,0" Width="160" Content="Practice Vocabulary" IsEnabled="{Binding HasTextsForPractice}" Command="{Binding PracticeVocabularyCommand}" />
-            <Button Margin="20,0,20,0" Width="160" Content="Edit Vocabulary" Command="{Binding EditVocabularyCommand}" />
-            <Button Margin="20,0,0,0" Width="160" Content="Statistics Chart" Command="{Binding ShowStatisticsChartCommand}" />
+            <Button Margin="20,0,20,0" Width="160" Content="Edit Vocabulary" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding EditVocabularyCommand}" />
+            <Button Margin="20,0,0,0" Width="160" Content="Statistics Chart" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding ShowStatisticsChartCommand}" />
         </UniformGrid>
     </Grid>
 </UserControl>

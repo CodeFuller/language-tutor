@@ -32,6 +32,8 @@ namespace VocabularyCoach.Views.DesignInstances
 			NumberOfTextsLearnedToday = 28,
 		};
 
+		public bool LanguagesAreSelected => true;
+
 		public bool HasTextsForPractice => true;
 
 		public bool HasProblematicTexts => true;

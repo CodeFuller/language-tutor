@@ -15,6 +15,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite
 
 			services.AddVocabularyCoachDbContext(setupSettings);
 
+			services.AddSingleton<IUserRepository, UserRepository>();
 			services.AddSingleton<ILanguageRepository, LanguageRepository>();
 			services.AddSingleton<ILanguageTextRepository, LanguageTextRepository>();
 			services.AddSingleton<IPronunciationRecordRepository, PronunciationRecordRepository>();

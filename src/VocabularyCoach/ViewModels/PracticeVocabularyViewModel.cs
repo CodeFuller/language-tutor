@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using VocabularyCoach.Events;
 using VocabularyCoach.Interfaces;
-using VocabularyCoach.Internal;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.ViewModels.Data;

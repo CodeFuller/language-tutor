@@ -14,6 +14,17 @@ CREATE TABLE [Languages] (
   CONSTRAINT [sqlite_master_UC_Languages] UNIQUE ([Name])
 );
 
+CREATE TABLE [UserSettings] (
+  [UserId] int NOT NULL,
+  [LastStudiedLanguageId] int NULL,
+  [LastKnownLanguageId] int NULL,
+
+  CONSTRAINT [sqlite_master_PK_UserSettings] PRIMARY KEY ([UserId]),
+  FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ([LastStudiedLanguageId]) REFERENCES [Languages] ([Id]) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY ([LastKnownLanguageId]) REFERENCES [Languages] ([Id]) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
 CREATE TABLE [Texts] (
   [Id] INTEGER NOT NULL,
   [LanguageId] int NOT NULL,

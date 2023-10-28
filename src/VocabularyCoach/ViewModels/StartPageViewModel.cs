@@ -18,7 +18,13 @@ namespace VocabularyCoach.ViewModels
 {
 	public class StartPageViewModel : ObservableObject, IStartPageViewModel
 	{
+		private readonly IUserService userService;
+
 		private readonly IVocabularyService vocabularyService;
+
+		private User CurrentUser { get; set; }
+
+		private UserSettingsData CurrentUserSettings { get; set; }
 
 		public ObservableCollection<Language> AvailableLanguages { get; } = new();
 
@@ -27,7 +33,21 @@ namespace VocabularyCoach.ViewModels
 		public Language SelectedStudiedLanguage
 		{
 			get => selectedStudiedLanguage;
-			set => SetProperty(ref selectedStudiedLanguage, value);
+			set
+			{
+				if (value?.Id == SelectedKnownLanguage?.Id)
+				{
+					// We do not call setter of SelectedKnownLanguage, to avoid statistics re-loading while selectedStudiedLanguage is not yet updated.
+					selectedKnownLanguage = null;
+					OnPropertyChanged(nameof(SelectedKnownLanguage));
+				}
+
+				SetProperty(ref selectedStudiedLanguage, value);
+
+				OnLanguagesUpdated(CancellationToken.None).GetAwaiter().GetResult();
+
+				OnPropertyChanged(nameof(LanguagesAreSelected));
+			}
 		}
 
 		private Language selectedKnownLanguage;
@@ -35,7 +55,21 @@ namespace VocabularyCoach.ViewModels
 		public Language SelectedKnownLanguage
 		{
 			get => selectedKnownLanguage;
-			set => SetProperty(ref selectedKnownLanguage, value);
+			set
+			{
+				if (value?.Id == SelectedStudiedLanguage?.Id)
+				{
+					// We do not call setter of SelectedStudiedLanguage, to avoid statistics re-loading while selectedKnownLanguage is not yet updated.
+					selectedStudiedLanguage = null;
+					OnPropertyChanged(nameof(SelectedStudiedLanguage));
+				}
+
+				SetProperty(ref selectedKnownLanguage, value);
+
+				OnLanguagesUpdated(CancellationToken.None).GetAwaiter().GetResult();
+
+				OnPropertyChanged(nameof(LanguagesAreSelected));
+			}
 		}
 
 		private UserStatisticsData userStatistics;
@@ -52,6 +86,8 @@ namespace VocabularyCoach.ViewModels
 			}
 		}
 
+		public bool LanguagesAreSelected => SelectedStudiedLanguage != null && SelectedKnownLanguage != null;
+
 		public bool HasTextsForPractice => UserStatistics?.RestNumberOfTextsToPracticeToday > 0;
 
 		public bool HasProblematicTexts => UserStatistics?.NumberOfProblematicTexts > 0;
@@ -64,8 +100,9 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand ShowStatisticsChartCommand { get; }
 
-		public StartPageViewModel(IVocabularyService vocabularyService, IMessenger messenger)
+		public StartPageViewModel(IUserService userService, IVocabularyService vocabularyService, IMessenger messenger)
 		{
+			this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
 			this.vocabularyService = vocabularyService ?? throw new ArgumentNullException(nameof(vocabularyService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
@@ -77,17 +114,57 @@ namespace VocabularyCoach.ViewModels
 
 		public async Task Load(User user, CancellationToken cancellationToken)
 		{
+			CurrentUser = user;
+			CurrentUserSettings = await userService.GetUserSettings(user, cancellationToken);
+
 			var languages = await vocabularyService.GetLanguages(cancellationToken);
 
 			AvailableLanguages.Clear();
 			AvailableLanguages.AddRange(languages);
 
-			// TODO: Load last languages from application settings.
-			SelectedStudiedLanguage = AvailableLanguages.First();
-			SelectedKnownLanguage = AvailableLanguages.Last();
+			SelectedStudiedLanguage = AvailableLanguages.FirstOrDefault(x => x.Id == CurrentUserSettings.LastStudiedLanguage?.Id);
+			SelectedKnownLanguage = AvailableLanguages.FirstOrDefault(x => x.Id == CurrentUserSettings.LastKnownLanguage?.Id);
+		}
 
-			// TODO: Handle change in language selection.
-			UserStatistics = await vocabularyService.GetTodayUserStatistics(user, SelectedStudiedLanguage, SelectedKnownLanguage, cancellationToken);
+		private async Task OnLanguagesUpdated(CancellationToken cancellationToken)
+		{
+			await LoadUserStatistics(cancellationToken);
+
+			await SaveUserSettingsIfNecessary(cancellationToken);
+		}
+
+		private async Task LoadUserStatistics(CancellationToken cancellationToken)
+		{
+			if (LanguagesAreSelected)
+			{
+				UserStatistics = await vocabularyService.GetTodayUserStatistics(CurrentUser, SelectedStudiedLanguage, SelectedKnownLanguage, cancellationToken);
+			}
+			else
+			{
+				UserStatistics = null;
+			}
+		}
+
+		private async Task SaveUserSettingsIfNecessary(CancellationToken cancellationToken)
+		{
+			if (SelectedStudiedLanguage == null || SelectedKnownLanguage == null)
+			{
+				return;
+			}
+
+			if (SelectedStudiedLanguage.Id == CurrentUserSettings.LastStudiedLanguage?.Id &&
+			    SelectedKnownLanguage.Id == CurrentUserSettings.LastKnownLanguage?.Id)
+			{
+				return;
+			}
+
+			var userSettings = new UserSettingsData
+			{
+				LastStudiedLanguage = SelectedStudiedLanguage,
+				LastKnownLanguage = SelectedKnownLanguage,
+			};
+
+			await userService.UpdateUserSettings(CurrentUser, userSettings, cancellationToken);
 		}
 	}
 }

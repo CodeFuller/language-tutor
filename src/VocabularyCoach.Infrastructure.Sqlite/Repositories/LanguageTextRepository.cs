@@ -38,37 +38,47 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 		{
 			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			var translations = await GetTranslationsQueryable(dbContext, language1Id, language2Id).ToListAsync(cancellationToken);
+			var language1DbId = language1Id.ToInt32();
+			var language2DbId = language2Id.ToInt32();
 
-			return translations.Select(x => x.ToModel()).ToList();
+			var translations = await GetTranslationsQueryable(dbContext, language1DbId, language2DbId)
+				.Concat(GetTranslationsQueryable(dbContext, language2DbId, language1DbId))
+				.ToListAsync(cancellationToken);
+
+			return translations
+				.Select(x => x.ToModel(language1DbId, language2DbId))
+				.ToList();
 		}
 
 		public async Task<IReadOnlyCollection<StudiedTranslationData>> GetStudiedTranslations(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken)
 		{
 			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
 
-			var translations = await GetTranslationsQueryable(dbContext, studiedLanguageId, knownLanguageId)
-				.Include(x => x.Text1).ThenInclude(x => x.CheckResults.Where(y => y.UserId == userId.ToInt32()))
+			var studiedLanguageDbId = studiedLanguageId.ToInt32();
+			var knownLanguageDbId = knownLanguageId.ToInt32();
+
+			var translations1 = await GetTranslationsQueryable(dbContext, studiedLanguageDbId, knownLanguageDbId)
+				.Include(x => x.Text1)
+				.ThenInclude(x => x.CheckResults.Where(y => y.UserId == userId.ToInt32()))
 				.ToListAsync(cancellationToken);
 
-			return translations
-				.Select(x => new StudiedTranslationData
-				{
-					TextInStudiedLanguage = x.Text1.ToModel(),
-					TextInKnownLanguage = x.Text2.ToModel(),
-					CheckResults = x.Text1.CheckResults.Select(y => y.ToModel()).ToList(),
-				})
+			var translations2 = await GetTranslationsQueryable(dbContext, knownLanguageDbId, studiedLanguageDbId)
+				.Include(x => x.Text2)
+				.ThenInclude(x => x.CheckResults.Where(y => y.UserId == userId.ToInt32()))
+				.ToListAsync(cancellationToken);
+
+			return translations1.Concat(translations2)
+				.Select(x => x.ToStudiedTranslationData(studiedLanguageDbId, knownLanguageDbId))
 				.ToList();
 		}
 
-		private static IQueryable<TranslationEntity> GetTranslationsQueryable(VocabularyCoachDbContext dbContext, ItemId language1Id, ItemId language2Id)
+		private static IQueryable<TranslationEntity> GetTranslationsQueryable(VocabularyCoachDbContext dbContext, int language1Id, int language2Id)
 		{
-			// TODO: Cover also translations from language2 to language1?
 			return dbContext.Translations
 				.Include(x => x.Text1).ThenInclude(x => x.Language)
 				.Include(x => x.Text2).ThenInclude(x => x.Language)
-				.Where(x => x.Text1.LanguageId == language1Id.ToInt32())
-				.Where(x => x.Text2.LanguageId == language2Id.ToInt32());
+				.Where(x => x.Text1.LanguageId == language1Id)
+				.Where(x => x.Text2.LanguageId == language2Id);
 		}
 
 		public async Task AddLanguageText(LanguageText languageText, CancellationToken cancellationToken)

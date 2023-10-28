@@ -17,6 +17,8 @@ namespace VocabularyCoach.ViewModels.Interfaces
 
 		UserStatisticsData UserStatistics { get; }
 
+		bool LanguagesAreSelected { get; }
+
 		bool HasTextsForPractice { get; }
 
 		bool HasProblematicTexts { get; }
