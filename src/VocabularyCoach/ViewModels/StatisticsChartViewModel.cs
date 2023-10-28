@@ -55,7 +55,7 @@ namespace VocabularyCoach.ViewModels
 			return new[]
 			{
 				GetNumberOfTextsSeries(statistics.Select(x => x.TotalNumberOfTexts).ToList()),
-				GetNumberOfLearnedTextsSeriesTemplate(statistics.Select(x => x.TotalNumberOfLearnedTexts).ToList()),
+				GetNumberOfLearnedTextsSeries(statistics.Select(x => x.TotalNumberOfLearnedTexts).ToList()),
 			};
 		}
 
@@ -64,7 +64,7 @@ namespace VocabularyCoach.ViewModels
 			return GetSeries("Number of texts", values, SKColors.Blue);
 		}
 
-		private static ISeries GetNumberOfLearnedTextsSeriesTemplate(IEnumerable<int> values)
+		private static ISeries GetNumberOfLearnedTextsSeries(IEnumerable<int> values)
 		{
 			return GetSeries("Number of learned texts", values, SKColors.Green);
 		}
