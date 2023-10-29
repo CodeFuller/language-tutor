@@ -114,6 +114,12 @@ namespace VocabularyCoach.ViewModels
 
 		public async Task Load(User user, CancellationToken cancellationToken)
 		{
+			// We clear selected languages to prevent duplicated load of user statistics from OnLanguagesUpdated method.
+			// This will happen if SelectedStudiedLanguage and SelectedKnownLanguage are set from the previous Load.
+			// Now the user statistics will be loaded once after both SelectedStudiedLanguage and SelectedKnownLanguage are set by current method.
+			SelectedStudiedLanguage = null;
+			SelectedKnownLanguage = null;
+
 			CurrentUser = user;
 			CurrentUserSettings = await userService.GetUserSettings(user, cancellationToken);
 
