@@ -9,11 +9,13 @@
   },
 
   "logging": {
-    "defaultLogLevel": "Debug",
+    // Do not enable Debug log level for release version.
+    // This will degrade performance due to excessive logging by EF Core.
+    "defaultLogLevel": "Information",
     "targets": [
       {
         "type": "RollingFile",
-        "logLevel": "Debug",
+        "logLevel": "Information",
         "settings": {
           "logPath": "logs",
           "firstFileNamePattern": "VocabularyCoach - {YYYY}_{MM}_{DD} - {HH}_{mm}_{SS} - {PID} - START",
