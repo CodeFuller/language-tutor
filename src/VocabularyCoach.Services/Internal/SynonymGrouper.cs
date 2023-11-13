@@ -17,15 +17,16 @@ namespace VocabularyCoach.Services.Internal
 				var textInStudiedLanguage = studiedTranslation.TextInStudiedLanguage;
 
 				var synonymsInKnownLanguage = translationsFromStudiedLanguage[textInStudiedLanguage.Id].ToList();
+				var synonymIdsInKnownLanguage = synonymsInKnownLanguage.Select(x => x.Id).ToList();
 
-				// For synonyms in studied language, we pick all texts in studied language with exactly the same set of translations to known language.
+				// For synonyms in studied language, we pick all texts, which translations are a superset of translations for current text.
 				// To achieve this we do the following:
 				//   1. Take current text in known language.
 				//   2. Get all translations to studied language for this text.
-				//   3. Select those texts which have same set of translations to known language.
+				//   3. Select those texts, which translations are a superset of translations for current text.
 				var otherSynonymsInStudiedLanguage = translationsFromKnownLanguage[studiedTranslation.TextInKnownLanguage.Id]
 					.Where(x => x.Id != textInStudiedLanguage.Id)
-					.Where(x => TextCollectionsAreEqual(translationsFromStudiedLanguage[x.Id], synonymsInKnownLanguage))
+					.Where(x => !synonymIdsInKnownLanguage.Except(translationsFromStudiedLanguage[x.Id].Select(y => y.Id)).Any())
 					.ToList();
 
 				yield return new StudiedText(studiedTranslation.CheckResults)
@@ -35,14 +36,6 @@ namespace VocabularyCoach.Services.Internal
 					SynonymsInKnownLanguage = synonymsInKnownLanguage.ToList(),
 				};
 			}
-		}
-
-		private static bool TextCollectionsAreEqual(IEnumerable<LanguageText> texts1, IEnumerable<LanguageText> texts2)
-		{
-			var ids1 = texts1.Select(x => x.Id).ToList();
-			var ids2 = texts2.Select(x => x.Id).ToList();
-
-			return !ids1.Except(ids2).Any() && !ids2.Except(ids1).Any();
 		}
 	}
 }

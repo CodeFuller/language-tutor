@@ -221,7 +221,7 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void GroupStudiedTranslationsBySynonyms_ForSynonymsIsStudiedLanguageWithPartialTranslationsMatching_DoesNotGroupSychSynonyms()
+		public void GroupStudiedTranslationsBySynonyms_ForSynonymsIsStudiedLanguageWithPartialTranslationsMatching_GroupsSynonymsCorrectly()
 		{
 			// Arrange
 
@@ -274,7 +274,10 @@ namespace VocabularyCoach.Services.UnitTests.Internal
 				new(Enumerable.Empty<CheckResult>())
 				{
 					TextInStudiedLanguage = "Text in studied language #2".ToLanguageText(),
-					OtherSynonymsInStudiedLanguage = Array.Empty<LanguageText>(),
+					OtherSynonymsInStudiedLanguage = new[]
+					{
+						"Text in studied language #1".ToLanguageText(),
+					},
 					SynonymsInKnownLanguage = new[]
 					{
 						"Text in known language #1".ToLanguageText(),
