@@ -50,16 +50,22 @@
                 <RowDefinition Height="5*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Content="{Binding SelectedText.TextInStudiedLanguage.Text}" />
-            <Label Grid.Row="1" HorizontalAlignment="Center" FontSize="24" Content="{Binding SelectedText.TranslationsInKnownLanguage}" />
+            <Viewbox Grid.Row="0" StretchDirection="DownOnly" Stretch="Uniform">
+                <Label HorizontalAlignment="Center" FontSize="32" Content="{Binding SelectedText.TextInStudiedLanguage.Text}" />
+            </Viewbox>
+            <Viewbox Grid.Row="1" StretchDirection="DownOnly" Stretch="Uniform">
+                <Label HorizontalAlignment="Center" FontSize="24" Content="{Binding SelectedText.TranslationsInKnownLanguage}" />
+            </Viewbox>
             <ListBox Grid.Row="2" HorizontalContentAlignment="Stretch" ItemsSource="{Binding SelectedText.CheckResults}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="0,0,10,0" Text="{Binding DateTime}" VerticalAlignment="Center" />
-                            <materialDesign:PackIcon Margin="0,0,10,0" Width="24" Height="24" Kind="{Binding IconKind}" Foreground="{Binding IconColor}" />
-                            <TextBlock Text="{Binding TypedText}" VerticalAlignment="Center" />
-                        </StackPanel>
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Left" Margin="0,0,10,0" Text="{Binding DateTime}" VerticalAlignment="Center" />
+                            <materialDesign:PackIcon DockPanel.Dock="Left" Margin="0,0,10,0" Width="24" Height="24" Kind="{Binding IconKind}" Foreground="{Binding IconColor}" />
+                            <Viewbox StretchDirection="DownOnly" Stretch="Uniform" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding TypedText}" />
+                            </Viewbox>
+                        </DockPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

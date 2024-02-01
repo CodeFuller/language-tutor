@@ -29,7 +29,9 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Content="{Binding DisplayedTextInKnownLanguage}" />
+            <Viewbox Grid.Row="0" StretchDirection="DownOnly" Stretch="Uniform">
+                <Label HorizontalAlignment="Center" FontSize="32" Content="{Binding DisplayedTextInKnownLanguage}" />
+            </Viewbox>
             <Label Grid.Row="1" HorizontalAlignment="Center" FontSize="16" Content="{Binding HintForOtherSynonyms}" />
         </Grid>
 
@@ -58,10 +60,10 @@
             </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Viewbox Grid.Row="2" StretchDirection="DownOnly" Stretch="Uniform">
             <Label FontSize="32" VerticalContentAlignment="Center" Content="{Binding CurrentTextForCheck.TextInStudiedLanguage.Text}"
                    Visibility="{Binding TextIsTypedIncorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        </StackPanel>
+        </Viewbox>
 
         <Grid Grid.Row="3" Margin="20,0">
             <ProgressBar Height="30" Maximum="{Binding NumberOfTextsForCheck}" Value="{Binding CurrentTextForCheckNumber, Mode=OneWay}" />
