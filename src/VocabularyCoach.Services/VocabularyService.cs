@@ -174,7 +174,7 @@ namespace VocabularyCoach.Services
 				return CheckResultType.Skipped;
 			}
 
-			return String.Equals(languageText.Text, typedText, StringComparison.OrdinalIgnoreCase)
+			return String.Equals(languageText.Text, typedText, StringComparison.Ordinal)
 				? CheckResultType.Ok
 				: CheckResultType.Misspelled;
 		}
