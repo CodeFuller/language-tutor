@@ -68,7 +68,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Repositories
 			// We used to load CheckResults as JOIN with Texts, i.e. dbContext.Translations.Include(x => x.Text1).ThenInclude(x => x.CheckResults.Where(y => y.UserId == userId.ToInt32())).
 			// However this approach works very slow.
 			// That is why we replaced it with a trick: CheckResults are loaded with a separate query.
-			// This load will populate CheckResults property in TextEntity.
+			// This load will populate CheckResults property in TextEntity unless it has no check results yet.
 			await dbContext.CheckResults.Where(x => x.UserId == userId.ToInt32()).ToListAsync(cancellationToken);
 
 			return translations1.Concat(translations2)

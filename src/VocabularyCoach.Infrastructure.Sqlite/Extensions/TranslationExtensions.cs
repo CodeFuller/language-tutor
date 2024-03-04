@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using VocabularyCoach.Infrastructure.Sqlite.Entities;
 using VocabularyCoach.Models;
@@ -25,7 +26,7 @@ namespace VocabularyCoach.Infrastructure.Sqlite.Extensions
 			{
 				TextInStudiedLanguage = textInStudiedLanguage.ToModel(),
 				TextInKnownLanguage = GetTextInLanguage(translationEntity, knownLanguageId).ToModel(),
-				CheckResults = textInStudiedLanguage.CheckResults.Select(y => y.ToModel()).ToList(),
+				CheckResults = textInStudiedLanguage.CheckResults?.Select(y => y.ToModel()).ToList() ?? new List<CheckResult>(),
 			};
 		}
 
