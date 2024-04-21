@@ -4,6 +4,8 @@
     "pronunciationRecordsPath": "c:\\VocabularyCoachDB\\PronunciationRecords"
   },
 
+  "userId": null,
+
   "googleTextToSpeechApi": {
     "apiKey": null
   },

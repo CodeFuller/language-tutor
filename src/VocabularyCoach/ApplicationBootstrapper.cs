@@ -8,6 +8,7 @@ using VocabularyCoach.Infrastructure.Sqlite;
 using VocabularyCoach.Interfaces;
 using VocabularyCoach.Internal;
 using VocabularyCoach.Services;
+using VocabularyCoach.Settings;
 using VocabularyCoach.ViewModels;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -17,17 +18,19 @@ namespace VocabularyCoach
 	{
 		protected override void RegisterServices(IServiceCollection services, IConfiguration configuration)
 		{
-			RegisterViewModels(services);
+			RegisterViewModels(services, configuration);
 
-			services.AddVocabularyCoachServices(settings => configuration.Bind("googleTextToSpeechApi", settings));
+			services.AddVocabularyCoachServices(configuration.Bind);
 			services.AddVocabularyCoachSqliteDal(settings => configuration.Bind("database", settings));
 
 			services.AddSingleton<IPronunciationRecordPlayer, PronunciationRecordPlayer>();
 			services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 		}
 
-		private static void RegisterViewModels(IServiceCollection services)
+		private static void RegisterViewModels(IServiceCollection services, IConfiguration configuration)
 		{
+			services.Configure<ApplicationSettings>(configuration.Bind);
+
 			services.AddSingleton<ApplicationViewModel>();
 
 			services.AddSingleton<IStartPageViewModel, StartPageViewModel>();

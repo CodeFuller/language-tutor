@@ -5,8 +5,10 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Options;
 using VocabularyCoach.Events;
 using VocabularyCoach.Models;
+using VocabularyCoach.Settings;
 using VocabularyCoach.ViewModels.Data;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -14,12 +16,7 @@ namespace VocabularyCoach.ViewModels
 {
 	public class ApplicationViewModel : ObservableObject
 	{
-		// Currently we do not support multi-user mode on application level (although it is supported on service level).
-		private User CurrentUser { get; } = new()
-		{
-			Id = new ItemId("1"),
-			Name = "Default User",
-		};
+		private User CurrentUser { get; }
 
 		public IStartPageViewModel StartPageViewModel { get; }
 
@@ -43,8 +40,9 @@ namespace VocabularyCoach.ViewModels
 
 		public ICommand LoadCommand { get; }
 
-		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPracticeVocabularyViewModel practiceVocabularyViewModel, IPracticeResultsViewModel practiceResultsViewModel,
-			IEditVocabularyViewModel editVocabularyViewModel, IProblematicTextsViewModel problematicTextsViewModel, IStatisticsChartViewModel statisticsChartViewModel, IMessenger messenger)
+		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPracticeVocabularyViewModel practiceVocabularyViewModel,
+			IPracticeResultsViewModel practiceResultsViewModel, IEditVocabularyViewModel editVocabularyViewModel, IProblematicTextsViewModel problematicTextsViewModel,
+			IStatisticsChartViewModel statisticsChartViewModel, IMessenger messenger, IOptions<ApplicationSettings> options)
 		{
 			StartPageViewModel = startPageViewModel ?? throw new ArgumentNullException(nameof(startPageViewModel));
 			PracticeVocabularyViewModel = practiceVocabularyViewModel ?? throw new ArgumentNullException(nameof(practiceVocabularyViewModel));
@@ -52,6 +50,17 @@ namespace VocabularyCoach.ViewModels
 			EditVocabularyViewModel = editVocabularyViewModel ?? throw new ArgumentNullException(nameof(editVocabularyViewModel));
 			ProblematicTextsViewModel = problematicTextsViewModel ?? throw new ArgumentNullException(nameof(problematicTextsViewModel));
 			StatisticsChartViewModel = statisticsChartViewModel ?? throw new ArgumentNullException(nameof(statisticsChartViewModel));
+
+			var settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
+			if (String.IsNullOrEmpty(settings.UserId))
+			{
+				throw new InvalidOperationException("User id is not configured");
+			}
+
+			CurrentUser = new User
+			{
+				Id = new ItemId(settings.UserId),
+			};
 
 			LoadCommand = new AsyncRelayCommand(Load);
 
