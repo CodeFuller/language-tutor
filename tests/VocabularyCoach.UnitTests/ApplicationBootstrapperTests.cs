@@ -1,4 +1,3 @@
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VocabularyCoach.ViewModels.Interfaces;
 
@@ -24,7 +23,7 @@ namespace VocabularyCoach.UnitTests
 
 			// Act
 
-			target.Bootstrap(Array.Empty<string>());
+			target.Bootstrap(new[] { "userId=test" });
 
 			// Assert
 
