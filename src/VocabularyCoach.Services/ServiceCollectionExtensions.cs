@@ -4,14 +4,16 @@ using VocabularyCoach.Services.GoogleTextToSpeech;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.Services.Internal;
 using VocabularyCoach.Services.LanguageTraits;
+using VocabularyCoach.Services.Settings;
 
 namespace VocabularyCoach.Services
 {
 	public static class ServiceCollectionExtensions
 	{
-		public static IServiceCollection AddVocabularyCoachServices(this IServiceCollection services, Action<GoogleTextToSpeechApiSettings> setupSettings)
+		public static IServiceCollection AddVocabularyCoachServices(this IServiceCollection services, Action<VocabularyCoachSettings> setupSettings)
 		{
-			services.Configure(setupSettings);
+			services.Configure(AdaptSettings<VocabularyCoachSettings, PracticeSettings>(setupSettings, (vocabularyCoachSettings, practiceSettings) => vocabularyCoachSettings.Practice = practiceSettings));
+			services.Configure(AdaptSettings<VocabularyCoachSettings, GoogleTextToSpeechApiSettings>(setupSettings, (vocabularyCoachSettings, googleTextToSpeechApiSettings) => vocabularyCoachSettings.GoogleTextToSpeechApi = googleTextToSpeechApiSettings));
 
 			services.AddSingleton<IUserService, UserService>();
 			services.AddSingleton<IVocabularyService, VocabularyService>();
@@ -32,6 +34,19 @@ namespace VocabularyCoach.Services
 			services.AddSingleton<IWebBrowser, DefaultSystemWebBrowser>();
 
 			return services;
+		}
+
+		private static Action<TChildSettings> AdaptSettings<TParentSettings, TChildSettings>(Action<TParentSettings> setupParentSettings, Action<TParentSettings, TChildSettings> injectChildSettings)
+			where TParentSettings : new()
+		{
+			return childSettings =>
+			{
+				var parentSettings = new TParentSettings();
+
+				injectChildSettings(parentSettings, childSettings);
+
+				setupParentSettings(parentSettings);
+			};
 		}
 	}
 }

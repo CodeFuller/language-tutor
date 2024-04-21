@@ -8,6 +8,10 @@
     "apiKey": null
   },
 
+  "practice": {
+    "dailyLimit": 200
+  },
+
   "logging": {
     // Do not enable Debug log level for release version.
     // This will degrade performance due to excessive logging by EF Core.

@@ -25,18 +25,41 @@ namespace VocabularyCoach.Services.Internal
 			+30,
 		};
 
-		public IReadOnlyCollection<StudiedText> GetTextsForPractice(DateOnly date, IEnumerable<StudiedText> studiedTexts)
+		public IReadOnlyCollection<StudiedText> GetTextsForPractice(DateOnly date, IEnumerable<StudiedText> studiedTexts, int dailyLimit)
 		{
-			return studiedTexts
-				.Select(x => new
-				{
-					StudiedText = x,
-					NextCheckDateTime = GetNextCheckDateTimeForStudiedText(x.CheckResults),
-				})
-				.Where(x => x.NextCheckDateTime <= date)
-				.GroupBy(x => x.NextCheckDateTime, x => x.StudiedText)
-				.OrderBy(x => x.Key)
-				.SelectMany(x => x.Randomize())
+			var studiedTextsList = studiedTexts.ToList();
+
+			var numberOfAlreadyPracticedTextsForDate = studiedTextsList.Count(x => x.CheckResults.Any(y => y.DateTime.ToDateOnly() == date));
+			var numberOfRestTextsForPractice = dailyLimit - numberOfAlreadyPracticedTextsForDate;
+
+			if (numberOfRestTextsForPractice < 0)
+			{
+				return Array.Empty<StudiedText>();
+			}
+
+			var selectedTexts = new List<StudiedText>();
+
+			// Taking all texts that were practiced before.
+			var selectedPreviouslyPracticedTexts = studiedTextsList
+				.Where(x => x.CheckResults.Any())
+				.Where(x => GetNextCheckDateTimeForStudiedText(x.CheckResults) <= date);
+
+			selectedTexts.AddRange(selectedPreviouslyPracticedTexts);
+
+			if (selectedTexts.Count < numberOfRestTextsForPractice)
+			{
+				// Taking first texts that were not practiced before.
+				var selectedPreviouslyUnpracticedTexts = studiedTextsList
+					.Where(x => !x.CheckResults.Any())
+					.OrderBy(x => x.TextInStudiedLanguage.CreationTimestamp)
+					.Take(numberOfRestTextsForPractice - selectedTexts.Count);
+
+				selectedTexts.AddRange(selectedPreviouslyUnpracticedTexts);
+			}
+
+			return selectedTexts
+				.Randomize()
+				.Take(numberOfRestTextsForPractice)
 				.ToList();
 		}
 
@@ -48,7 +71,7 @@ namespace VocabularyCoach.Services.Internal
 				return DateOnly.MinValue;
 			}
 
-			var lastCheckDate = DateOnly.FromDateTime(checkResults[0].DateTime.Date);
+			var lastCheckDate = checkResults[0].DateTime.ToDateOnly();
 
 			for (var i = 0; i <= Math.Max(checkResults.Count, CheckIntervals.Count); ++i)
 			{

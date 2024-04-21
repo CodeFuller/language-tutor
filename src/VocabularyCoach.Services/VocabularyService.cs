@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using VocabularyCoach.Models;
 using VocabularyCoach.Services.Data;
 using VocabularyCoach.Services.Extensions;
 using VocabularyCoach.Services.Interfaces;
 using VocabularyCoach.Services.Interfaces.Repositories;
 using VocabularyCoach.Services.Internal;
+using VocabularyCoach.Services.Settings;
 
 namespace VocabularyCoach.Services
 {
@@ -32,12 +34,14 @@ namespace VocabularyCoach.Services
 
 		private readonly ISystemClock systemClock;
 
+		private readonly PracticeSettings settings;
+
 		private DateOnly Today => systemClock.Today;
 
 		public VocabularyService(ILanguageRepository languageRepository, ILanguageTextRepository languageTextRepository,
 			IPronunciationRecordRepository pronunciationRecordRepository, ICheckResultRepository checkResultRepository,
-			IStatisticsRepository statisticsRepository, ISynonymGrouper synonymGrouper,
-			ITextsForPracticeSelector textsForPracticeSelector, IProblematicTextsSelector problematicTextsSelector, ISystemClock systemClock)
+			IStatisticsRepository statisticsRepository, ISynonymGrouper synonymGrouper, ITextsForPracticeSelector textsForPracticeSelector,
+			IProblematicTextsSelector problematicTextsSelector, ISystemClock systemClock, IOptions<PracticeSettings> options)
 		{
 			this.languageRepository = languageRepository ?? throw new ArgumentNullException(nameof(languageRepository));
 			this.languageTextRepository = languageTextRepository ?? throw new ArgumentNullException(nameof(languageTextRepository));
@@ -48,6 +52,7 @@ namespace VocabularyCoach.Services
 			this.textsForPracticeSelector = textsForPracticeSelector ?? throw new ArgumentNullException(nameof(textsForPracticeSelector));
 			this.problematicTextsSelector = problematicTextsSelector ?? throw new ArgumentNullException(nameof(problematicTextsSelector));
 			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
+			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		public async Task<IReadOnlyCollection<Language>> GetLanguages(CancellationToken cancellationToken)
@@ -61,7 +66,7 @@ namespace VocabularyCoach.Services
 		{
 			var studiedTexts = await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken);
 
-			return textsForPracticeSelector.GetTextsForPractice(Today, studiedTexts);
+			return textsForPracticeSelector.GetTextsForPractice(Today, studiedTexts, settings.DailyLimit);
 		}
 
 		public async Task<IReadOnlyCollection<StudiedText>> GetProblematicTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
@@ -113,7 +118,7 @@ namespace VocabularyCoach.Services
 				.Select(x => x.WithLimitedCheckResults(date))
 				.ToList();
 
-			var textsForPractice = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts);
+			var textsForPractice = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts, settings.DailyLimit);
 			var problematicTexts = problematicTextsSelector.GetProblematicTexts(studiedTexts);
 
 			var previousDate = date.AddDays(-1);

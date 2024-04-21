@@ -1,20 +1,25 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq.AutoMock;
 using VocabularyCoach.Models;
+using VocabularyCoach.Services.Settings;
 
 namespace VocabularyCoach.Services.UnitTests
 {
 	[TestClass]
 	public class VocabularyServiceTests
 	{
-		private User TestUser { get; } = new User();
+		private User TestUser { get; } = new();
+
+		private PracticeSettings TestSettings { get; } = new()
+		{
+			DailyLimit = 100,
+		};
 
 		[TestMethod]
 		public async Task CheckTypedText_ForCorrectlyTypedText_AddsOkCheckResultType()
@@ -22,6 +27,7 @@ namespace VocabularyCoach.Services.UnitTests
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Options.Create(TestSettings));
 			var target = mocker.CreateInstance<VocabularyService>();
 
 			var studiedText = new StudiedText(Enumerable.Empty<CheckResult>())
@@ -52,6 +58,7 @@ namespace VocabularyCoach.Services.UnitTests
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Options.Create(TestSettings));
 			var target = mocker.CreateInstance<VocabularyService>();
 
 			var studiedText = new StudiedText(Enumerable.Empty<CheckResult>())
@@ -83,6 +90,7 @@ namespace VocabularyCoach.Services.UnitTests
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Options.Create(TestSettings));
 			var target = mocker.CreateInstance<VocabularyService>();
 
 			var studiedText = new StudiedText(Enumerable.Empty<CheckResult>())
@@ -114,6 +122,7 @@ namespace VocabularyCoach.Services.UnitTests
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Options.Create(TestSettings));
 			var target = mocker.CreateInstance<VocabularyService>();
 
 			var studiedText = new StudiedText(Enumerable.Empty<CheckResult>())
@@ -145,6 +154,7 @@ namespace VocabularyCoach.Services.UnitTests
 			// Arrange
 
 			var mocker = new AutoMocker();
+			mocker.Use(Options.Create(TestSettings));
 			var target = mocker.CreateInstance<VocabularyService>();
 
 			var studiedText = new StudiedText(Enumerable.Empty<CheckResult>())
