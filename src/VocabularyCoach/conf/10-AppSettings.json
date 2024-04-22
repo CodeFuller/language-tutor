@@ -6,12 +6,12 @@
 
   "userId": null,
 
-  "googleTextToSpeechApi": {
-    "apiKey": null
-  },
-
   "practice": {
     "dailyLimit": 200
+  },
+
+  "googleTextToSpeechApi": {
+    "apiKey": null
   },
 
   "logging": {
