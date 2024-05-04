@@ -14,6 +14,8 @@ namespace VocabularyCoach.Services.Data
 
 		public int RestNumberOfTextsToPracticeToday { get; init; }
 
+		public int RestNumberOfTextsToPracticeTodayIfNoLimit { get; init; }
+
 		public int NumberOfTextsPracticedToday { get; init; }
 
 		public int NumberOfTextsLearnedToday { get; init; }

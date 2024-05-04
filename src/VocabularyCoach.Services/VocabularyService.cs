@@ -119,6 +119,7 @@ namespace VocabularyCoach.Services
 				.ToList();
 
 			var textsForPractice = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts, settings.DailyLimit);
+			var textsForPracticeIfNoLimit = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts, Int32.MaxValue);
 			var problematicTexts = problematicTextsSelector.GetProblematicTexts(studiedTexts);
 
 			var previousDate = date.AddDays(-1);
@@ -132,6 +133,7 @@ namespace VocabularyCoach.Services
 				TotalNumberOfLearnedTexts = totalNumberOfTextsLearnedForToday,
 				NumberOfProblematicTexts = problematicTexts.Count,
 				RestNumberOfTextsToPracticeToday = textsForPractice.Count,
+				RestNumberOfTextsToPracticeTodayIfNoLimit = textsForPracticeIfNoLimit.Count,
 				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.ToDateOnly() == date)),
 				NumberOfTextsLearnedToday = totalNumberOfTextsLearnedForToday - totalNumberOfTextsLearnedForYesterday,
 			};

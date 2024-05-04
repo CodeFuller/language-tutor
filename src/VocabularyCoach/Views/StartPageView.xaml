@@ -92,7 +92,7 @@
                     <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding UserStatistics.NumberOfProblematicTexts}" Visibility="{Binding HasProblematicTexts, Converter={StaticResource InvertedVisibilityCollapsedValueConverter}}" />
 
                     <Label Grid.Row="3" Grid.Column="0" Content="To practice today:" />
-                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding UserStatistics.RestNumberOfTextsToPracticeToday}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding RestNumberOfTextsToPracticeToday}" HorizontalAlignment="Right" />
 
                     <Label Grid.Row="4" Grid.Column="0" Content="Practiced today:" />
                     <Label Grid.Row="4" Grid.Column="1" Content="{Binding UserStatistics.NumberOfTextsPracticedToday}" HorizontalAlignment="Right" />

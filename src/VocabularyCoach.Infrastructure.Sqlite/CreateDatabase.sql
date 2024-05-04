@@ -90,6 +90,7 @@ CREATE TABLE [UserStatistics] (
   [TotalNumberOfLearnedTexts] int NOT NULL,
   [NumberOfProblematicTexts] int NOT NULL,
   [RestNumberOfTextsToPracticeToday] int NOT NULL,
+  [RestNumberOfTextsToPracticeTodayIfNoLimit] int NOT NULL,
   [NumberOfTextsPracticedToday] int NOT NULL,
   [NumberOfTextsLearnedToday] int NOT NULL,
 

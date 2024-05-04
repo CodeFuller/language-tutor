@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,6 +86,11 @@ namespace VocabularyCoach.ViewModels
 				OnPropertyChanged(nameof(HasProblematicTexts));
 			}
 		}
+
+		public string RestNumberOfTextsToPracticeToday =>
+			UserStatistics.RestNumberOfTextsToPracticeTodayIfNoLimit == UserStatistics.RestNumberOfTextsToPracticeToday
+				? UserStatistics.RestNumberOfTextsToPracticeToday.ToString(CultureInfo.InvariantCulture)
+				: $"{UserStatistics.RestNumberOfTextsToPracticeToday} ({UserStatistics.RestNumberOfTextsToPracticeTodayIfNoLimit})";
 
 		public bool LanguagesAreSelected => SelectedStudiedLanguage != null && SelectedKnownLanguage != null;
 

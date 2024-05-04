@@ -28,9 +28,12 @@ namespace VocabularyCoach.Views.DesignInstances
 			TotalNumberOfLearnedTexts = 987,
 			NumberOfProblematicTexts = 5,
 			RestNumberOfTextsToPracticeToday = 135,
+			RestNumberOfTextsToPracticeTodayIfNoLimit = 155,
 			NumberOfTextsPracticedToday = 42,
 			NumberOfTextsLearnedToday = 28,
 		};
+
+		public string RestNumberOfTextsToPracticeToday => "135 (155)";
 
 		public bool LanguagesAreSelected => true;
 
