@@ -1,7 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <ImportGroup Label="Properties">
-    <Import Project="..\..\VocabularyCoach.src.props" />
-  </ImportGroup>
-
-</Project>

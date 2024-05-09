@@ -77,7 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integrated Google Cloud Text-to-Speech API for pronunciation records.
 - Made adding new texts faster and more convenient.
 - Added display of progress for the current practice session.
-- Extended start page with vocabulary statistics.
+- Extended start page with dictionary statistics.
 - Added support of synonyms.
 - Added ability to remove texts and translations.
 - Added ability to edit texts.

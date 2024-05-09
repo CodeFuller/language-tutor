@@ -1,0 +1,35 @@
+{
+  "database": {
+    "connectionString": "Data Source=c:\\LanguageTutorDB\\LanguageTutor.db;Foreign Keys=True;",
+    "pronunciationRecordsPath": "c:\\LanguageTutorDB\\PronunciationRecords"
+  },
+
+  "userId": null,
+
+  "practice": {
+    "dailyLimit": 200
+  },
+
+  "googleTextToSpeechApi": {
+    "apiKey": null
+  },
+
+  "logging": {
+    // Do not enable Debug log level for release version.
+    // This will degrade performance due to excessive logging by EF Core.
+    "defaultLogLevel": "Information",
+    "targets": [
+      {
+        "type": "RollingFile",
+        "logLevel": "Information",
+        "settings": {
+          "logPath": "logs",
+          "firstFileNamePattern": "LanguageTutor - {YYYY}_{MM}_{DD} - {HH}_{mm}_{SS} - {PID} - START",
+          "fileNamePattern": "LanguageTutor - {YYYY}_{MM}_{DD} - {HH}_{mm}_{SS} - {PID}",
+          "rollSize": 4194304,
+          "messageFormat": "{Timestamp:yyyy.MM.dd HH:mm:ss.fff} [{Level:u3}] [TID: {PrettyThreadId}] {Message}{NewLine}{Exception}"
+        }
+      }
+    ]
+  }
+}

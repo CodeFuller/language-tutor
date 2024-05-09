@@ -1,0 +1,83 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1EF69776-D3FD-4A58-AE1B-949A404E1EEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTutor", "src\LanguageTutor\LanguageTutor.csproj", "{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4971490B-6E6E-45FB-8833-0ADBA303DBB6}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		LanguageTutor.props = LanguageTutor.props
+		LanguageTutor.src.props = LanguageTutor.src.props
+		LanguageTutor.src.ruleset = LanguageTutor.src.ruleset
+		LanguageTutor.tests.props = LanguageTutor.tests.props
+		LanguageTutor.tests.ruleset = LanguageTutor.tests.ruleset
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTutor.Infrastructure.Sqlite", "src\LanguageTutor.Infrastructure.Sqlite\LanguageTutor.Infrastructure.Sqlite.csproj", "{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTutor.Services", "src\LanguageTutor.Services\LanguageTutor.Services.csproj", "{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTutor.Models", "src\LanguageTutor.Models\LanguageTutor.Models.csproj", "{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4DE29239-7950-4E3E-BDEE-6A7D9474442D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTutor.Services.UnitTests", "tests\LanguageTutor.Services.UnitTests\LanguageTutor.Services.UnitTests.csproj", "{D43515CA-7218-4A77-B831-D12B78042DCE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTutor.Models.UnitTests", "tests\LanguageTutor.Models.UnitTests\LanguageTutor.Models.UnitTests.csproj", "{2546B9DC-EB69-4D62-BFEC-F2C05831020A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTutor.UnitTests", "tests\LanguageTutor.UnitTests\LanguageTutor.UnitTests.csproj", "{4B21D597-727D-4BFC-BA3B-B2EA854412EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D43515CA-7218-4A77-B831-D12B78042DCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B21D597-727D-4BFC-BA3B-B2EA854412EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B21D597-727D-4BFC-BA3B-B2EA854412EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B21D597-727D-4BFC-BA3B-B2EA854412EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B21D597-727D-4BFC-BA3B-B2EA854412EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2FE85B98-9F0C-470F-8634-D0AE9D15F78F} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{B74F4E64-FFCA-4AA3-A588-FE05D114AB52} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{D6BE2CEC-464A-4C4E-9643-CB566FB0CBE9} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{6E2428AD-2E92-414C-9A23-31F04AC4D4F4} = {1EF69776-D3FD-4A58-AE1B-949A404E1EEF}
+		{D43515CA-7218-4A77-B831-D12B78042DCE} = {4DE29239-7950-4E3E-BDEE-6A7D9474442D}
+		{2546B9DC-EB69-4D62-BFEC-F2C05831020A} = {4DE29239-7950-4E3E-BDEE-6A7D9474442D}
+		{4B21D597-727D-4BFC-BA3B-B2EA854412EA} = {4DE29239-7950-4E3E-BDEE-6A7D9474442D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1E5A42E-55DC-45BE-BA73-507E66AA59AA}
+	EndGlobalSection
+EndGlobal

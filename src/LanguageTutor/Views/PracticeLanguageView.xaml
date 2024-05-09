@@ -1,0 +1,81 @@
+<UserControl x:Class="LanguageTutor.Views.PracticeLanguageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helpers="clr-namespace:LanguageTutor.Views.Helpers"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
+             xmlns:designInstances="clr-namespace:LanguageTutor.Views.DesignInstances"
+             mc:Ignorable="d"
+             d:DesignWidth="785" d:DesignHeight="460"
+             d:DataContext="{d:DesignInstance designInstances:PracticeLanguageDesignData, IsDesignTimeCreatable=True}"
+             d:DesignStyle="{StaticResource ApplicationWindowStyle}">
+    <UserControl.Resources>
+        <valueConverters:VisibilityCollapsedValueConverter x:Key="InvertedVisibilityCollapsedValueConverter" InvertedVisibility="True" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Viewbox Grid.Row="0" StretchDirection="DownOnly" Stretch="Uniform">
+                <Label HorizontalAlignment="Center" FontSize="32" Content="{Binding DisplayedTextInKnownLanguage}" />
+            </Viewbox>
+            <Label Grid.Row="1" HorizontalAlignment="Center" FontSize="16" Content="{Binding HintForOtherSynonyms}" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="8*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Height="48" Padding="0" Style="{DynamicResource MaterialDesignToolButton}" 
+                    IsEnabled="{Binding PronunciationRecordExists}" ToolTip="Listen" Command="{Binding PlayPronunciationRecordCommand}">
+                <materialDesign:PackIcon Width="48" Height="48" Kind="VolumeHigh" />
+            </Button>
+            <TextBox Grid.Column="1" FontSize="32" HorizontalContentAlignment="Center" VerticalAlignment="Center"
+                     Text="{Binding TypedText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding CheckResultIsShown}" IsReadOnlyCaretVisible="True"
+                     helpers:FocusHelper.IsFocused="{Binding TypedTextIsFocused}">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding CheckOrSwitchToNextTextCommand}" Key="Enter" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:PackIcon Width="48" Height="48" Kind="CheckCircle" Foreground="Green" 
+                                         Visibility="{Binding TextIsTypedCorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <materialDesign:PackIcon Width="48" Height="48" Kind="CancelCircle" Foreground="Red" 
+                                         Visibility="{Binding TextIsTypedIncorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </StackPanel>
+        </Grid>
+
+        <Viewbox Grid.Row="2" StretchDirection="DownOnly" Stretch="Uniform">
+            <Label FontSize="32" VerticalContentAlignment="Center" Content="{Binding CurrentTextForCheck.TextInStudiedLanguage.Text}"
+                   Visibility="{Binding TextIsTypedIncorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        </Viewbox>
+
+        <Grid Grid.Row="3" Margin="20,0">
+            <ProgressBar Height="30" Maximum="{Binding NumberOfTextsForCheck}" Value="{Binding CurrentTextForCheckNumber, Mode=OneWay}" />
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressInfo}" />
+        </Grid>
+
+        <UniformGrid Grid.Row="4" Margin="20" Rows="1" Columns="2" HorizontalAlignment="Center">
+            <Button Margin="0,0,20,0" Width="80" Content="Check" Command="{Binding CheckTypedTextCommand}"
+                    Visibility="{Binding CheckResultIsShown, Converter={StaticResource InvertedVisibilityCollapsedValueConverter}}" />
+            <Button Margin="0,0,20,0" Width="80" Content="Next" Command="{Binding SwitchToNextTextCommand}" IsEnabled="{Binding CanSwitchToNextText}"
+                    Visibility="{Binding CheckResultIsShown, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Margin="20,0,0,0" Width="80" Content="Finish" Command="{Binding FinishPracticeCommand}" />
+        </UniformGrid>
+    </Grid>
+</UserControl>

@@ -27,7 +27,7 @@ stages:
       disable.coverage.autogenerate: true
     steps:
     - powershell: |
-        $appVersion = ([xml](Get-Content 'src/VocabularyCoach/VocabularyCoach.csproj')).Project.PropertyGroup.Version
+        $appVersion = ([xml](Get-Content 'src/LanguageTutor/LanguageTutor.csproj')).Project.PropertyGroup.Version
         if ($appVersion -eq $null) {
             throw 'The application version is missing in cpsroj file'
         }
@@ -46,7 +46,7 @@ stages:
       displayName: Restore NuGet Packages
       inputs:
         command: restore
-        projects: VocabularyCoach.sln
+        projects: LanguageTutor.sln
         feedsToUse: select
         verbosityRestore: Minimal
 
@@ -54,14 +54,14 @@ stages:
       displayName: Build Solution
       inputs:
         command: build
-        projects: VocabularyCoach.sln
+        projects: LanguageTutor.sln
         arguments: --no-restore --configuration Release
 
     - task: DotNetCoreCLI@2
       displayName: Run Tests
       inputs:
         command: test
-        projects: VocabularyCoach.sln
+        projects: LanguageTutor.sln
         arguments: --no-build --configuration Release --collect:"XPlat Code Coverage"
 
     - task: reportgenerator@5
@@ -82,26 +82,26 @@ stages:
         failIfCoverageEmpty: true
 
     - task: DotNetCoreCLI@2
-      displayName: Publish VocabularyCoach
+      displayName: Publish LanguageTutor
       inputs:
         command: publish
-        projects: src/VocabularyCoach/VocabularyCoach.csproj
+        projects: src/LanguageTutor/LanguageTutor.csproj
         arguments: --no-build --configuration Release --self-contained
         publishWebProjects: false
         zipAfterPublish: false
         modifyOutputPath: false
 
     - task: ArchiveFiles@2
-      displayName: Archive VocabularyCoach
+      displayName: Archive LanguageTutor
       inputs:
-        rootFolderOrFile: src/VocabularyCoach/bin/Release/$(TargetFramework)/$(PublishRuntimeIdentifier)/publish
+        rootFolderOrFile: src/LanguageTutor/bin/Release/$(TargetFramework)/$(PublishRuntimeIdentifier)/publish
         includeRootFolder: false
         archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/VocabularyCoach.zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/LanguageTutor.zip
         replaceExistingArchive: true
 
     - task: PublishPipelineArtifact@1
-      displayName: Publish VocabularyCoach Artifacts
+      displayName: Publish LanguageTutor Artifacts
       inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)/VocabularyCoach.zip
-        artifact: VocabularyCoach
+        targetPath: $(Build.ArtifactStagingDirectory)/LanguageTutor.zip
+        artifact: LanguageTutor
