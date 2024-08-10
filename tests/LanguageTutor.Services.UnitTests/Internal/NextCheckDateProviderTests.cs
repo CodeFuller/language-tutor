@@ -392,7 +392,125 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			// Assert
 
-			result.Should().Be(new DateOnly(2024, 05, 09));
+			result.Should().Be(new DateOnly(2024, 07, 08));
+		}
+
+		[TestMethod]
+		public void GetNextCheckDate_ForTextWithSevenSuccessfulChecksAfterFailedCheck_ReturnsCorrectDate()
+		{
+			// Arrange
+
+			var checkResults = new[]
+			{
+				new DateTime(2024, 04, 03).ToFailedCheckResult(),
+				new DateTime(2024, 04, 04).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 05).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 06).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 07).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 08).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 09).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 10).ToSuccessfulCheckResult(),
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<NextCheckDateProvider>();
+
+			// Act
+
+			var result = target.GetNextCheckDate(checkResults.ToStudiedText());
+
+			// Assert
+
+			result.Should().Be(new DateOnly(2024, 07, 09));
+		}
+
+		[TestMethod]
+		public void GetNextCheckDate_ForTextWithEightSuccessfulChecksOnly_ReturnsCorrectDate()
+		{
+			// Arrange
+
+			var checkResults = new[]
+			{
+				new DateTime(2024, 04, 03).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 04).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 05).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 06).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 07).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 08).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 09).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 10).ToSuccessfulCheckResult(),
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<NextCheckDateProvider>();
+
+			// Act
+
+			var result = target.GetNextCheckDate(checkResults.ToStudiedText());
+
+			// Assert
+
+			result.Should().Be(new DateOnly(2024, 10, 07));
+		}
+
+		[TestMethod]
+		public void GetNextCheckDate_ForTextWithEightSuccessfulChecksAfterFailedCheck_ReturnsCorrectDate()
+		{
+			// Arrange
+
+			var checkResults = new[]
+			{
+				new DateTime(2024, 04, 03).ToFailedCheckResult(),
+				new DateTime(2024, 04, 04).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 05).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 06).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 07).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 08).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 09).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 10).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 11).ToSuccessfulCheckResult(),
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<NextCheckDateProvider>();
+
+			// Act
+
+			var result = target.GetNextCheckDate(checkResults.ToStudiedText());
+
+			// Assert
+
+			result.Should().Be(new DateOnly(2024, 10, 08));
+		}
+
+		[TestMethod]
+		public void GetNextCheckDate_ForTextWithNineSuccessfulChecksOnly_ReturnsCorrectDate()
+		{
+			// Arrange
+
+			var checkResults = new[]
+			{
+				new DateTime(2024, 04, 03).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 04).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 05).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 06).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 07).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 08).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 09).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 10).ToSuccessfulCheckResult(),
+				new DateTime(2024, 04, 11).ToSuccessfulCheckResult(),
+			};
+
+			var mocker = new AutoMocker();
+			var target = mocker.CreateInstance<NextCheckDateProvider>();
+
+			// Act
+
+			var result = target.GetNextCheckDate(checkResults.ToStudiedText());
+
+			// Assert
+
+			result.Should().Be(new DateOnly(2025, 04, 11));
 		}
 	}
 }

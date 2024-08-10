@@ -21,9 +21,12 @@ namespace LanguageTutor.Services.Internal
 			+7,
 			+14,
 			+21,
+			+30,
+			+90,
+			+180,
 
 			// The last interval is added for texts with all successful checks.
-			+30,
+			+365,
 		};
 
 		public DateOnly GetNextCheckDate(StudiedText studiedText)
