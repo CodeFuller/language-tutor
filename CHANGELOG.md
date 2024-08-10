@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.10.0 - 2024.08.10
+- Renamed application to Language Tutor.
+- Added check intervals of 90, 180 and 365 days.
+- Enhanced selection of texts for practice for newly added texts.
+
 ## 2.9.0 - 2024.05.04
 - Added display of count of texts to practice if no limit used.
 

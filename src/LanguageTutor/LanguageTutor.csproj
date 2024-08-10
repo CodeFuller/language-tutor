@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ImportGroup Label="Properties">
     <Import Project="..\..\LanguageTutor.src.props" />
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>2.9.0</Version>
+    <Version>2.10.0</Version>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>LanguageTutor.ico</ApplicationIcon>
