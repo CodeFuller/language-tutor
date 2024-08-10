@@ -207,42 +207,118 @@ namespace LanguageTutor.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void GetTextsForPractice_IfNumberOfSuitablePreviouslyPracticedTextsDoesNotExceedDailyLimit_ReturnsFirstUnpracticedTexts()
+		public void GetTextsForPractice_IfNumberOfPreviouslyUnpracticedTextsExceedsDailyLimitAndSuitablePreviouslyPracticedTextsIsEnough_ReturnsOnlyPreviouslyPracticedTexts()
 		{
 			// Arrange
 
 			var mocker = new AutoMocker();
 
-			var studiedTexts = new[]
+			var practicedTexts = new[]
 			{
-				CreateStudiedText("Text 1", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
-				CreateStudiedText("Text 2", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 1", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 2", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 3", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+			};
 
-				CreateStudiedTextWithNoChecks("Text 3", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateStudiedTextWithNoChecks("Text 4", mocker, createDate: new DateTime(2023, 07, 05)),
-				CreateStudiedTextWithNoChecks("Text 5", mocker, createDate: new DateTime(2023, 07, 02)),
-				CreateStudiedTextWithNoChecks("Text 6", mocker, createDate: new DateTime(2023, 07, 01)),
-				CreateStudiedTextWithNoChecks("Text 7", mocker, createDate: new DateTime(2023, 07, 04)),
+			var unpracticedTexts = Enumerable.Range(1, 100)
+				.Select(n => CreateStudiedTextWithNoChecks($"Unpracticed Text {n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
+				.ToList();
+
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
+
+			// Act
+
+			var textsForPractice = target.GetTextsForPractice(new DateOnly(2024, 07, 11), practicedTexts.Concat(unpracticedTexts), 3);
+
+			// Assert
+
+			textsForPractice.Should().BeEquivalentTo(practicedTexts, x => x.WithoutStrictOrdering());
+		}
+
+		[TestMethod]
+		public void GetTextsForPractice_IfNumberOfPreviouslyUnpracticedTextsExceedsDailyLimitAndSuitablePreviouslyPracticedTextsIsNotEnough_ReturnsAllPreviouslyPracticedTextsAndFirstUnpracticedTexts()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			var practicedTexts = new[]
+			{
+				CreateStudiedText("Practiced Text 1", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 2", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 3", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+			};
+
+			var unpracticedTexts = Enumerable.Range(1, 100)
+				.Select(n => CreateStudiedTextWithNoChecks($"Unpracticed Text {n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
+				.ToList();
+
+			var target = mocker.CreateInstance<TextsForPracticeSelector>();
+
+			// Act
+
+			var textsForPractice = target.GetTextsForPractice(new DateOnly(2024, 07, 11), practicedTexts.Concat(unpracticedTexts), 5);
+
+			// Assert
+
+			var expectedTextsForCheck = new[]
+			{
+				practicedTexts.Get("Practiced Text 1"),
+				practicedTexts.Get("Practiced Text 2"),
+				practicedTexts.Get("Practiced Text 3"),
+				unpracticedTexts.Get("Unpracticed Text 1"),
+				unpracticedTexts.Get("Unpracticed Text 2"),
+			};
+
+			textsForPractice.Should().BeEquivalentTo(expectedTextsForCheck, x => x.WithoutStrictOrdering());
+		}
+
+		[TestMethod]
+		public void GetTextsForPractice_IfNumberOfPreviouslyUnpracticedTextsDoesNotExceedDailyLimit_ReturnsAllSuchTexts()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			var practicedTexts = new[]
+			{
+				CreateStudiedText("Practiced Text 1", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 2", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 3", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 4", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 5", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 6", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 7", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 8", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 9", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+				CreateStudiedText("Practiced Text 10", mocker, lastCheckDate: new DateTime(2023, 07, 10), nextCheckDate: new DateOnly(2023, 07, 11)),
+			};
+
+			var unpracticedTexts = new[]
+			{
+				CreateStudiedTextWithNoChecks("Unpracticed Text 1", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 2", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 3", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 4", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 5", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 6", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 7", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 8", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 9", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateStudiedTextWithNoChecks("Unpracticed Text 10", mocker, createDate: new DateTime(2023, 07, 03)),
 			};
 
 			var target = mocker.CreateInstance<TextsForPracticeSelector>();
 
 			// Act
 
-			var textsForPractice = target.GetTextsForPractice(new DateOnly(2023, 08, 11), studiedTexts, 5);
+			var textsForPractice = target.GetTextsForPractice(new DateOnly(2024, 07, 11), practicedTexts.Concat(unpracticedTexts), 15);
 
 			// Assert
 
-			var expectedTextsForCheck = new[]
-			{
-				studiedTexts.Get("Text 1"),
-				studiedTexts.Get("Text 2"),
-				studiedTexts.Get("Text 3"),
-				studiedTexts.Get("Text 5"),
-				studiedTexts.Get("Text 6"),
-			};
+			textsForPractice.Count.Should().Be(15);
 
-			textsForPractice.Should().BeEquivalentTo(expectedTextsForCheck, x => x.WithoutStrictOrdering());
+			textsForPractice.Should().Contain(unpracticedTexts);
 		}
 
 		[TestMethod]

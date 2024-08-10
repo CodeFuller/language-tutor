@@ -27,6 +27,11 @@ namespace LanguageTutor.Services.Internal
 				return Array.Empty<StudiedText>();
 			}
 
+			var previouslyUnpracticedTexts = studiedTextsList
+				.Where(x => !x.CheckResults.Any())
+				.OrderBy(x => x.TextInStudiedLanguage.CreationTimestamp)
+				.ToList();
+
 			var selectedTexts = new List<StudiedText>();
 
 			// Taking all texts that were practiced before.
@@ -42,17 +47,30 @@ namespace LanguageTutor.Services.Internal
 				.OrderBy(x => x.Key)
 				.SelectMany(x => x.Randomize());
 
-			selectedTexts.AddRange(selectedPreviouslyPracticedTexts);
-
-			if (selectedTexts.Count < numberOfRestTextsForPractice)
+			// The logic is the following:
+			//
+			//   If there are a lot of texts unpracticed before (i.e. this is a new user, who has a lot of texts to learn),
+			//   then we add new texts gradually, only if she has learned previous texts already.
+			//
+			//   If there are not too much texts unpracticed before (i.e. this is an old user and just new texts were added to the dictionary),
+			//   then we mix new texts with the practiced before.
+			if (previouslyUnpracticedTexts.Count > dailyLimit)
 			{
-				// Taking first texts that were not practiced before.
-				var selectedPreviouslyUnpracticedTexts = studiedTextsList
-					.Where(x => !x.CheckResults.Any())
-					.OrderBy(x => x.TextInStudiedLanguage.CreationTimestamp)
-					.Take(numberOfRestTextsForPractice - selectedTexts.Count);
+				selectedTexts.AddRange(selectedPreviouslyPracticedTexts);
 
-				selectedTexts.AddRange(selectedPreviouslyUnpracticedTexts);
+				if (selectedTexts.Count < numberOfRestTextsForPractice)
+				{
+					// Taking first texts that were not practiced before.
+					var selectedPreviouslyUnpracticedTexts = previouslyUnpracticedTexts
+						.Take(numberOfRestTextsForPractice - selectedTexts.Count);
+
+					selectedTexts.AddRange(selectedPreviouslyUnpracticedTexts);
+				}
+			}
+			else
+			{
+				selectedTexts.AddRange(previouslyUnpracticedTexts);
+				selectedTexts.AddRange(selectedPreviouslyPracticedTexts);
 			}
 
 			return selectedTexts
