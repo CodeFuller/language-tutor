@@ -58,7 +58,7 @@
             <Grid Grid.Column="1" VerticalAlignment="Center" IsEnabled="{Binding LanguagesAreSelected}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
@@ -77,34 +77,34 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Number of texts:" />
-                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding UserStatistics.TotalNumberOfTexts}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="0" Grid.Column="0" Content="Number of exercises:" />
+                    <Label Grid.Row="0" Grid.Column="1" Content="{Binding UserStatistics.TotalNumberOfExercises}" HorizontalAlignment="Right" />
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Number of learned texts:" />
-                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding UserStatistics.TotalNumberOfLearnedTexts}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="1" Grid.Column="0" Content="Number of learned exercises:" />
+                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding UserStatistics.TotalNumberOfLearnedExercises}" HorizontalAlignment="Right" />
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="Problematic texts:" />
-                    <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Visibility="{Binding HasProblematicTexts, Converter={StaticResource VisibilityCollapsedValueConverter}}">
-                        <Hyperlink Command="{Binding GoToProblematicTextsCommand}">
-                            <TextBlock Text="{Binding UserStatistics.NumberOfProblematicTexts}" />
+                    <Label Grid.Row="2" Grid.Column="0" Content="Problematic exercises:" />
+                    <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Visibility="{Binding HasProblematicExercises, Converter={StaticResource VisibilityCollapsedValueConverter}}">
+                        <Hyperlink Command="{Binding GoToProblematicExercisesCommand}">
+                            <TextBlock Text="{Binding UserStatistics.NumberOfProblematicExercises}" />
                         </Hyperlink>
                     </Label>
-                    <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding UserStatistics.NumberOfProblematicTexts}" Visibility="{Binding HasProblematicTexts, Converter={StaticResource InvertedVisibilityCollapsedValueConverter}}" />
+                    <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding UserStatistics.NumberOfProblematicExercises}" Visibility="{Binding HasProblematicExercises, Converter={StaticResource InvertedVisibilityCollapsedValueConverter}}" />
 
-                    <Label Grid.Row="3" Grid.Column="0" Content="To practice today:" />
-                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding RestNumberOfTextsToPracticeToday}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="3" Grid.Column="0" Content="To exercise today:" />
+                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding RestNumberOfExercisesToPerformToday}" HorizontalAlignment="Right" />
 
-                    <Label Grid.Row="4" Grid.Column="0" Content="Practiced today:" />
-                    <Label Grid.Row="4" Grid.Column="1" Content="{Binding UserStatistics.NumberOfTextsPracticedToday}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="4" Grid.Column="0" Content="Exercised today:" />
+                    <Label Grid.Row="4" Grid.Column="1" Content="{Binding UserStatistics.NumberOfExercisesPerformedToday}" HorizontalAlignment="Right" />
 
                     <Label Grid.Row="5" Grid.Column="0" Content="Learned today:" />
-                    <Label Grid.Row="5" Grid.Column="1" Content="{Binding UserStatistics.NumberOfTextsLearnedToday}" HorizontalAlignment="Right" />
+                    <Label Grid.Row="5" Grid.Column="1" Content="{Binding UserStatistics.NumberOfExercisesLearnedToday}" HorizontalAlignment="Right" />
                 </Grid>
             </Grid>
         </Grid>
 
         <UniformGrid Grid.Row="2" Margin="20" Rows="1" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Button Margin="0,0,20,0" Width="160" Content="Practice Language" IsEnabled="{Binding HasTextsForPractice}" Command="{Binding PracticeLanguageCommand}" />
+            <Button Margin="0,0,20,0" Width="160" Content="Perform Exercises" IsEnabled="{Binding HasExercisesToPerform}" Command="{Binding PerformExercisesCommand}" />
             <Button Margin="20,0,20,0" Width="160" Content="Edit Dictionary" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding EditDictionaryCommand}" />
             <Button Margin="20,0,0,0" Width="160" Content="Statistics Chart" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding ShowStatisticsChartCommand}" />
         </UniformGrid>

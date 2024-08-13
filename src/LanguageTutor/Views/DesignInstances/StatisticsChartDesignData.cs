@@ -16,16 +16,16 @@ namespace LanguageTutor.Views.DesignInstances
 	{
 		private static readonly IReadOnlyCollection<UserStatisticsData> Statistics = new UserStatisticsData[]
 		{
-			new() { Date = new DateOnly(2023, 07, 10), TotalNumberOfTexts = 40, TotalNumberOfLearnedTexts = 0 },
-			new() { Date = new DateOnly(2023, 07, 11), TotalNumberOfTexts = 100, TotalNumberOfLearnedTexts = 0 },
-			new() { Date = new DateOnly(2023, 07, 12), TotalNumberOfTexts = 132, TotalNumberOfLearnedTexts = 0 },
-			new() { Date = new DateOnly(2023, 07, 13), TotalNumberOfTexts = 150, TotalNumberOfLearnedTexts = 0 },
-			new() { Date = new DateOnly(2023, 07, 14), TotalNumberOfTexts = 152, TotalNumberOfLearnedTexts = 0 },
-			new() { Date = new DateOnly(2023, 07, 15), TotalNumberOfTexts = 201, TotalNumberOfLearnedTexts = 32 },
-			new() { Date = new DateOnly(2023, 07, 16), TotalNumberOfTexts = 251, TotalNumberOfLearnedTexts = 81 },
-			new() { Date = new DateOnly(2023, 07, 17), TotalNumberOfTexts = 251, TotalNumberOfLearnedTexts = 106 },
-			new() { Date = new DateOnly(2023, 07, 18), TotalNumberOfTexts = 251, TotalNumberOfLearnedTexts = 128 },
-			new() { Date = new DateOnly(2023, 07, 19), TotalNumberOfTexts = 251, TotalNumberOfLearnedTexts = 134 },
+			new() { Date = new DateOnly(2023, 07, 10), TotalNumberOfExercises = 40, TotalNumberOfLearnedExercises = 0 },
+			new() { Date = new DateOnly(2023, 07, 11), TotalNumberOfExercises = 100, TotalNumberOfLearnedExercises = 0 },
+			new() { Date = new DateOnly(2023, 07, 12), TotalNumberOfExercises = 132, TotalNumberOfLearnedExercises = 0 },
+			new() { Date = new DateOnly(2023, 07, 13), TotalNumberOfExercises = 150, TotalNumberOfLearnedExercises = 0 },
+			new() { Date = new DateOnly(2023, 07, 14), TotalNumberOfExercises = 152, TotalNumberOfLearnedExercises = 0 },
+			new() { Date = new DateOnly(2023, 07, 15), TotalNumberOfExercises = 201, TotalNumberOfLearnedExercises = 32 },
+			new() { Date = new DateOnly(2023, 07, 16), TotalNumberOfExercises = 251, TotalNumberOfLearnedExercises = 81 },
+			new() { Date = new DateOnly(2023, 07, 17), TotalNumberOfExercises = 251, TotalNumberOfLearnedExercises = 106 },
+			new() { Date = new DateOnly(2023, 07, 18), TotalNumberOfExercises = 251, TotalNumberOfLearnedExercises = 128 },
+			new() { Date = new DateOnly(2023, 07, 19), TotalNumberOfExercises = 251, TotalNumberOfLearnedExercises = 134 },
 		};
 
 		public IReadOnlyCollection<ISeries> Series { get; } = StatisticsChartViewModel.GetSeries(Statistics);

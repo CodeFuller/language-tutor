@@ -17,19 +17,19 @@ namespace LanguageTutor.ViewModels.Interfaces
 
 		UserStatisticsData UserStatistics { get; }
 
-		string RestNumberOfTextsToPracticeToday { get; }
+		string RestNumberOfExercisesToPerformToday { get; }
 
 		bool LanguagesAreSelected { get; }
 
-		bool HasTextsForPractice { get; }
+		bool HasExercisesToPerform { get; }
 
-		bool HasProblematicTexts { get; }
+		bool HasProblematicExercises { get; }
 
-		ICommand PracticeLanguageCommand { get; }
+		ICommand PerformExercisesCommand { get; }
 
 		ICommand EditDictionaryCommand { get; }
 
-		ICommand GoToProblematicTextsCommand { get; }
+		ICommand GoToProblematicExercisesCommand { get; }
 
 		ICommand ShowStatisticsChartCommand { get; }
 

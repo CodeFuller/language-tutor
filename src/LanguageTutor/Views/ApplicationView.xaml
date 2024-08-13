@@ -30,17 +30,17 @@
             <DataTemplate DataType="{x:Type designInstances:StartPageDesignData}">
                 <views:StartPageView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:PracticeLanguageViewModel}">
-                <views:PracticeLanguageView />
+            <DataTemplate DataType="{x:Type viewModels:PerformExercisesViewModel}">
+                <views:PerformExercisesView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:PracticeResultsViewModel}">
-                <views:PracticeResultsView />
+            <DataTemplate DataType="{x:Type viewModels:ExerciseResultsViewModel}">
+                <views:ExerciseResultsView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:EditDictionaryViewModel}">
                 <views:EditDictionaryView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ProblematicTextsViewModel}">
-                <views:ProblematicTextsView />
+            <DataTemplate DataType="{x:Type viewModels:ProblematicExercisesViewModel}">
+                <views:ProblematicExercisesView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:StatisticsChartViewModel}">
                 <views:StatisticsChartView />

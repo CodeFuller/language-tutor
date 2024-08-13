@@ -24,28 +24,28 @@ namespace LanguageTutor.Views.DesignInstances
 		public UserStatisticsData UserStatistics { get; } = new()
 		{
 			Date = new DateOnly(2023, 08, 19),
-			TotalNumberOfTexts = 1234,
-			TotalNumberOfLearnedTexts = 987,
-			NumberOfProblematicTexts = 5,
-			RestNumberOfTextsToPracticeToday = 135,
-			RestNumberOfTextsToPracticeTodayIfNoLimit = 155,
-			NumberOfTextsPracticedToday = 42,
-			NumberOfTextsLearnedToday = 28,
+			TotalNumberOfExercises = 1234,
+			TotalNumberOfLearnedExercises = 987,
+			NumberOfProblematicExercises = 5,
+			RestNumberOfExercisesToPerformToday = 135,
+			RestNumberOfExercisesToPerformTodayIfNoLimit = 155,
+			NumberOfExercisesPerformedToday = 42,
+			NumberOfExercisesLearnedToday = 28,
 		};
 
-		public string RestNumberOfTextsToPracticeToday => "135 (155)";
+		public string RestNumberOfExercisesToPerformToday => "135 (155)";
 
 		public bool LanguagesAreSelected => true;
 
-		public bool HasTextsForPractice => true;
+		public bool HasExercisesToPerform => true;
 
-		public bool HasProblematicTexts => true;
+		public bool HasProblematicExercises => true;
 
-		public ICommand PracticeLanguageCommand => null;
+		public ICommand PerformExercisesCommand => null;
 
 		public ICommand EditDictionaryCommand => null;
 
-		public ICommand GoToProblematicTextsCommand => null;
+		public ICommand GoToProblematicExercisesCommand => null;
 
 		public ICommand ShowStatisticsChartCommand => null;
 

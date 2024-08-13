@@ -12,18 +12,18 @@ namespace LanguageTutor.Infrastructure.Sqlite.Entities
 
 		public DateOnly Date { get; set; }
 
-		public int TotalNumberOfTexts { get; set; }
+		public int TotalNumberOfExercises { get; set; }
 
-		public int TotalNumberOfLearnedTexts { get; set; }
+		public int TotalNumberOfLearnedExercises { get; set; }
 
-		public int NumberOfProblematicTexts { get; set; }
+		public int NumberOfProblematicExercises { get; set; }
 
-		public int RestNumberOfTextsToPracticeToday { get; set; }
+		public int RestNumberOfExercisesToPerformToday { get; set; }
 
-		public int RestNumberOfTextsToPracticeTodayIfNoLimit { get; set; }
+		public int RestNumberOfExercisesToPerformTodayIfNoLimit { get; set; }
 
-		public int NumberOfTextsPracticedToday { get; set; }
+		public int NumberOfExercisesPerformedToday { get; set; }
 
-		public int NumberOfTextsLearnedToday { get; set; }
+		public int NumberOfExercisesLearnedToday { get; set; }
 	}
 }

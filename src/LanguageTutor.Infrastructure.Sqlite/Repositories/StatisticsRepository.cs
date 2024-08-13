@@ -33,13 +33,13 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 			return userStatistics.Select(x => new UserStatisticsData
 				{
 					Date = x.Date,
-					TotalNumberOfTexts = x.TotalNumberOfTexts,
-					TotalNumberOfLearnedTexts = x.TotalNumberOfLearnedTexts,
-					NumberOfProblematicTexts = x.NumberOfProblematicTexts,
-					RestNumberOfTextsToPracticeToday = x.RestNumberOfTextsToPracticeToday,
-					RestNumberOfTextsToPracticeTodayIfNoLimit = x.RestNumberOfTextsToPracticeTodayIfNoLimit,
-					NumberOfTextsPracticedToday = x.NumberOfTextsPracticedToday,
-					NumberOfTextsLearnedToday = x.NumberOfTextsLearnedToday,
+					TotalNumberOfExercises = x.TotalNumberOfExercises,
+					TotalNumberOfLearnedExercises = x.TotalNumberOfLearnedExercises,
+					NumberOfProblematicExercises = x.NumberOfProblematicExercises,
+					RestNumberOfExercisesToPerformToday = x.RestNumberOfExercisesToPerformToday,
+					RestNumberOfExercisesToPerformTodayIfNoLimit = x.RestNumberOfExercisesToPerformTodayIfNoLimit,
+					NumberOfExercisesPerformedToday = x.NumberOfExercisesPerformedToday,
+					NumberOfExercisesLearnedToday = x.NumberOfExercisesLearnedToday,
 				})
 				.ToList();
 		}
@@ -77,13 +77,13 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 
 		private static void CopyStatistics(UserStatisticsData source, UserStatisticsEntity target)
 		{
-			target.TotalNumberOfTexts = source.TotalNumberOfTexts;
-			target.TotalNumberOfLearnedTexts = source.TotalNumberOfLearnedTexts;
-			target.NumberOfProblematicTexts = source.NumberOfProblematicTexts;
-			target.RestNumberOfTextsToPracticeToday = source.RestNumberOfTextsToPracticeToday;
-			target.RestNumberOfTextsToPracticeTodayIfNoLimit = source.RestNumberOfTextsToPracticeTodayIfNoLimit;
-			target.NumberOfTextsPracticedToday = source.NumberOfTextsPracticedToday;
-			target.NumberOfTextsLearnedToday = source.NumberOfTextsLearnedToday;
+			target.TotalNumberOfExercises = source.TotalNumberOfExercises;
+			target.TotalNumberOfLearnedExercises = source.TotalNumberOfLearnedExercises;
+			target.NumberOfProblematicExercises = source.NumberOfProblematicExercises;
+			target.RestNumberOfExercisesToPerformToday = source.RestNumberOfExercisesToPerformToday;
+			target.RestNumberOfExercisesToPerformTodayIfNoLimit = source.RestNumberOfExercisesToPerformTodayIfNoLimit;
+			target.NumberOfExercisesPerformedToday = source.NumberOfExercisesPerformedToday;
+			target.NumberOfExercisesLearnedToday = source.NumberOfExercisesLearnedToday;
 		}
 	}
 }

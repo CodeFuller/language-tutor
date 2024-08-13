@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LanguageTutor.Models;
+using LanguageTutor.Models.Exercises;
+using LanguageTutor.Models.Extensions;
 using LanguageTutor.Services.Data;
-using LanguageTutor.Services.Extensions;
 using LanguageTutor.Services.Interfaces;
 using LanguageTutor.Services.Interfaces.Repositories;
 using LanguageTutor.Services.Internal;
@@ -18,39 +19,35 @@ namespace LanguageTutor.Services
 	{
 		private readonly ILanguageRepository languageRepository;
 
-		private readonly ILanguageTextRepository languageTextRepository;
-
 		private readonly IPronunciationRecordRepository pronunciationRecordRepository;
 
-		private readonly ICheckResultRepository checkResultRepository;
+		private readonly IExerciseRepository exerciseRepository;
 
 		private readonly IStatisticsRepository statisticsRepository;
 
-		private readonly ISynonymGrouper synonymGrouper;
+		private readonly ITranslateTextExerciseFactory translateTextExerciseFactory;
 
-		private readonly ITextsForPracticeSelector textsForPracticeSelector;
+		private readonly IExercisesSelector exercisesSelector;
 
-		private readonly IProblematicTextsSelector problematicTextsSelector;
+		private readonly IProblematicExercisesProvider problematicExercisesProvider;
 
 		private readonly ISystemClock systemClock;
 
-		private readonly PracticeSettings settings;
+		private readonly ExercisesSettings settings;
 
 		private DateOnly Today => systemClock.Today;
 
-		public TutorService(ILanguageRepository languageRepository, ILanguageTextRepository languageTextRepository,
-			IPronunciationRecordRepository pronunciationRecordRepository, ICheckResultRepository checkResultRepository,
-			IStatisticsRepository statisticsRepository, ISynonymGrouper synonymGrouper, ITextsForPracticeSelector textsForPracticeSelector,
-			IProblematicTextsSelector problematicTextsSelector, ISystemClock systemClock, IOptions<PracticeSettings> options)
+		public TutorService(ILanguageRepository languageRepository, IPronunciationRecordRepository pronunciationRecordRepository, IExerciseRepository exerciseRepository,
+			IStatisticsRepository statisticsRepository, ITranslateTextExerciseFactory translateTextExerciseFactory, IExercisesSelector exercisesSelector,
+			IProblematicExercisesProvider problematicExercisesProvider, ISystemClock systemClock, IOptions<ExercisesSettings> options)
 		{
 			this.languageRepository = languageRepository ?? throw new ArgumentNullException(nameof(languageRepository));
-			this.languageTextRepository = languageTextRepository ?? throw new ArgumentNullException(nameof(languageTextRepository));
 			this.pronunciationRecordRepository = pronunciationRecordRepository ?? throw new ArgumentNullException(nameof(pronunciationRecordRepository));
-			this.checkResultRepository = checkResultRepository ?? throw new ArgumentNullException(nameof(checkResultRepository));
+			this.exerciseRepository = exerciseRepository ?? throw new ArgumentNullException(nameof(exerciseRepository));
 			this.statisticsRepository = statisticsRepository ?? throw new ArgumentNullException(nameof(statisticsRepository));
-			this.synonymGrouper = synonymGrouper ?? throw new ArgumentNullException(nameof(synonymGrouper));
-			this.textsForPracticeSelector = textsForPracticeSelector ?? throw new ArgumentNullException(nameof(textsForPracticeSelector));
-			this.problematicTextsSelector = problematicTextsSelector ?? throw new ArgumentNullException(nameof(problematicTextsSelector));
+			this.translateTextExerciseFactory = translateTextExerciseFactory ?? throw new ArgumentNullException(nameof(translateTextExerciseFactory));
+			this.exercisesSelector = exercisesSelector ?? throw new ArgumentNullException(nameof(exercisesSelector));
+			this.problematicExercisesProvider = problematicExercisesProvider ?? throw new ArgumentNullException(nameof(problematicExercisesProvider));
 			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
 			this.settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
 		}
@@ -62,48 +59,35 @@ namespace LanguageTutor.Services
 			return languages.OrderBy(x => x.Name).ToList();
 		}
 
-		public async Task<IReadOnlyCollection<StudiedText>> GetTextsForPractice(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<BasicExercise>> GetExercisesToPerform(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var studiedTexts = await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken);
+			var exercises = await GetExercises(user, studiedLanguage, knownLanguage, cancellationToken);
 
-			return textsForPracticeSelector.GetTextsForPractice(Today, studiedTexts, settings.DailyLimit);
+			return exercisesSelector.SelectExercisesToPerform(Today, exercises, settings.DailyLimit);
 		}
 
-		public async Task<IReadOnlyCollection<StudiedText>> GetProblematicTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		public async Task<IReadOnlyCollection<BasicExercise>> GetProblematicExercises(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var studiedTexts = await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken);
+			var exercises = await GetExercises(user, studiedLanguage, knownLanguage, cancellationToken);
 
-			return problematicTextsSelector.GetProblematicTexts(studiedTexts);
+			return problematicExercisesProvider.GetProblematicExercises(exercises);
 		}
 
-		private async Task<IEnumerable<StudiedText>> GetStudiedTexts(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		private async Task<IEnumerable<BasicExercise>> GetExercises(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			var studiedTranslations = await languageTextRepository.GetStudiedTranslations(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+			return await GetTranslateTextExercises(user, studiedLanguage, knownLanguage, cancellationToken);
+		}
 
-			return synonymGrouper.GroupStudiedTranslationsBySynonyms(studiedTranslations);
+		private async Task<IEnumerable<TranslateTextExercise>> GetTranslateTextExercises(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		{
+			var exercisesData = await exerciseRepository.GetTranslateTextExercises(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+
+			return translateTextExerciseFactory.CreateTranslateTextExercises(exercisesData);
 		}
 
 		public Task<PronunciationRecord> GetPronunciationRecord(ItemId textId, CancellationToken cancellationToken)
 		{
 			return pronunciationRecordRepository.GetPronunciationRecord(textId, cancellationToken);
-		}
-
-		public async Task<CheckResultType> CheckTypedText(User user, StudiedText studiedText, string typedText, CancellationToken cancellationToken)
-		{
-			var checkResultType = GetCheckResultType(studiedText.TextInStudiedLanguage, typedText);
-
-			var checkResult = new CheckResult
-			{
-				DateTime = systemClock.Now,
-				CheckResultType = checkResultType,
-				TypedText = checkResultType == CheckResultType.Misspelled ? typedText : null,
-			};
-
-			await checkResultRepository.AddCheckResult(user.Id, studiedText.TextInStudiedLanguage.Id, checkResult, cancellationToken);
-
-			studiedText.AddCheckResult(checkResult);
-
-			return checkResult.CheckResultType;
 		}
 
 		public Task<UserStatisticsData> GetTodayUserStatistics(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
@@ -113,29 +97,29 @@ namespace LanguageTutor.Services
 
 		private async Task<UserStatisticsData> GetUserStatisticsForDate(User user, Language studiedLanguage, Language knownLanguage, DateOnly date, CancellationToken cancellationToken)
 		{
-			var studiedTexts = (await GetStudiedTexts(user, studiedLanguage, knownLanguage, cancellationToken))
-				.Where(x => x.TextInStudiedLanguage.CreationTimestamp.ToDateOnly() <= date)
-				.Select(x => x.WithLimitedCheckResults(date))
+			var exercises = (await GetExercises(user, studiedLanguage, knownLanguage, cancellationToken))
+				.Where(x => x.CreationTimestamp.ToDateOnly() <= date)
+				.Select(x => x.WithLimitedResults(date))
 				.ToList();
 
-			var textsForPractice = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts, settings.DailyLimit);
-			var textsForPracticeIfNoLimit = textsForPracticeSelector.GetTextsForPractice(date, studiedTexts, Int32.MaxValue);
-			var problematicTexts = problematicTextsSelector.GetProblematicTexts(studiedTexts);
+			var exercisesToPerform = exercisesSelector.SelectExercisesToPerform(date, exercises, settings.DailyLimit);
+			var exercisesToPerformIfNoLimit = exercisesSelector.SelectExercisesToPerform(date, exercises, Int32.MaxValue);
+			var problematicExercises = problematicExercisesProvider.GetProblematicExercises(exercises);
 
 			var previousDate = date.AddDays(-1);
-			var totalNumberOfTextsLearnedForToday = studiedTexts.Count(x => TextIsLearned(x, date));
-			var totalNumberOfTextsLearnedForYesterday = studiedTexts.Count(x => TextIsLearned(x, previousDate));
+			var totalNumberOfExercisesLearnedForDate = exercises.Count(x => ExerciseIsLearned(x, date));
+			var totalNumberOfExercisesLearnedForPreviousDate = exercises.Count(x => ExerciseIsLearned(x, previousDate));
 
 			return new UserStatisticsData
 			{
 				Date = date,
-				TotalNumberOfTexts = studiedTexts.Count,
-				TotalNumberOfLearnedTexts = totalNumberOfTextsLearnedForToday,
-				NumberOfProblematicTexts = problematicTexts.Count,
-				RestNumberOfTextsToPracticeToday = textsForPractice.Count,
-				RestNumberOfTextsToPracticeTodayIfNoLimit = textsForPracticeIfNoLimit.Count,
-				NumberOfTextsPracticedToday = studiedTexts.Count(text => text.CheckResults.Any(checkResult => checkResult.DateTime.ToDateOnly() == date)),
-				NumberOfTextsLearnedToday = totalNumberOfTextsLearnedForToday - totalNumberOfTextsLearnedForYesterday,
+				TotalNumberOfExercises = exercises.Count,
+				TotalNumberOfLearnedExercises = totalNumberOfExercisesLearnedForDate,
+				NumberOfProblematicExercises = problematicExercises.Count,
+				RestNumberOfExercisesToPerformToday = exercisesToPerform.Count,
+				RestNumberOfExercisesToPerformTodayIfNoLimit = exercisesToPerformIfNoLimit.Count,
+				NumberOfExercisesPerformedToday = exercises.Count(x => x.SortedResults.Any(y => y.DateTime.ToDateOnly() == date)),
+				NumberOfExercisesLearnedToday = totalNumberOfExercisesLearnedForDate - totalNumberOfExercisesLearnedForPreviousDate,
 			};
 		}
 
@@ -164,26 +148,14 @@ namespace LanguageTutor.Services
 			return statistics.OrderBy(x => x.Date).ToList();
 		}
 
-		private static bool TextIsLearned(StudiedText studiedText, DateOnly date)
+		private static bool ExerciseIsLearned(BasicExercise exercise, DateOnly date)
 		{
-			// We consider text as learned, if 3 last checks are successful.
-			const int learnedTextChecksNumber = 3;
+			// We consider exercise as learned, if 3 last results are successful.
+			const int learnedExerciseResultsNumber = 3;
 
-			var lastChecks = studiedText.WithLimitedCheckResults(date, learnedTextChecksNumber).CheckResults;
+			var lastResults = exercise.WithLimitedResults(date, learnedExerciseResultsNumber).SortedResults;
 
-			return lastChecks.Count >= learnedTextChecksNumber && lastChecks.All(x => x.IsSuccessful);
-		}
-
-		private static CheckResultType GetCheckResultType(LanguageText languageText, string typedText)
-		{
-			if (String.IsNullOrEmpty(typedText))
-			{
-				return CheckResultType.Skipped;
-			}
-
-			return String.Equals(languageText.Text, typedText, StringComparison.Ordinal)
-				? CheckResultType.Ok
-				: CheckResultType.Misspelled;
+			return lastResults.Count >= learnedExerciseResultsNumber && lastResults.All(x => x.IsSuccessful);
 		}
 	}
 }

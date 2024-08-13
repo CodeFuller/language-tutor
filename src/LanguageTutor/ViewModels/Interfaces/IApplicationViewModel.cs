@@ -6,9 +6,9 @@ namespace LanguageTutor.ViewModels.Interfaces
 	{
 		IStartPageViewModel StartPageViewModel { get; }
 
-		IPracticeLanguageViewModel PracticeLanguageViewModel { get; }
+		IPerformExercisesViewModel PerformExercisesViewModel { get; }
 
-		IPracticeResultsViewModel PracticeResultsViewModel { get; }
+		IExerciseResultsViewModel ExerciseResultsViewModel { get; }
 
 		IEditDictionaryViewModel EditDictionaryViewModel { get; }
 

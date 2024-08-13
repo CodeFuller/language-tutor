@@ -7,6 +7,7 @@ using LanguageTutor.Internal;
 using LanguageTutor.Services;
 using LanguageTutor.Settings;
 using LanguageTutor.ViewModels;
+using LanguageTutor.ViewModels.Exercises;
 using LanguageTutor.ViewModels.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,11 +35,13 @@ namespace LanguageTutor
 			services.AddSingleton<ApplicationViewModel>();
 
 			services.AddSingleton<IStartPageViewModel, StartPageViewModel>();
-			services.AddSingleton<IPracticeLanguageViewModel, PracticeLanguageViewModel>();
-			services.AddSingleton<IPracticeResultsViewModel, PracticeResultsViewModel>();
+			services.AddSingleton<IPerformExercisesViewModel, PerformExercisesViewModel>();
+			services.AddSingleton<IExerciseResultsViewModel, ExerciseResultsViewModel>();
 			services.AddSingleton<IEditDictionaryViewModel, EditDictionaryViewModel>();
-			services.AddSingleton<IProblematicTextsViewModel, ProblematicTextsViewModel>();
+			services.AddSingleton<IProblematicExercisesViewModel, ProblematicExercisesViewModel>();
 			services.AddSingleton<IStatisticsChartViewModel, StatisticsChartViewModel>();
+
+			services.AddSingleton<IExerciseViewModel, TranslateTextExerciseViewModel>();
 
 			// We register ICreateOrPickTextViewModel as transient dependency, because two different instances must be injected into EditDictionaryViewModel.
 			services.AddTransient<ICreateOrPickTextViewModel, CreateOrPickTextViewModel>();

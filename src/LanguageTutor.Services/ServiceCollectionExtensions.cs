@@ -12,11 +12,12 @@ namespace LanguageTutor.Services
 	{
 		public static IServiceCollection AddLanguageTutorServices(this IServiceCollection services, Action<LanguageTutorSettings> setupSettings)
 		{
-			services.Configure(AdaptSettings<LanguageTutorSettings, PracticeSettings>(setupSettings, (languageTutorSettings, practiceSettings) => languageTutorSettings.Practice = practiceSettings));
+			services.Configure(AdaptSettings<LanguageTutorSettings, ExercisesSettings>(setupSettings, (languageTutorSettings, exercisesSettings) => languageTutorSettings.Exercises = exercisesSettings));
 			services.Configure(AdaptSettings<LanguageTutorSettings, GoogleTextToSpeechApiSettings>(setupSettings, (languageTutorSettings, googleTextToSpeechApiSettings) => languageTutorSettings.GoogleTextToSpeechApi = googleTextToSpeechApiSettings));
 
 			services.AddSingleton<IUserService, UserService>();
 			services.AddSingleton<ITutorService, TutorService>();
+			services.AddSingleton<IExerciseResultService, ExerciseResultService>();
 			services.AddSingleton<IDictionaryService, DictionaryService>();
 
 			services.AddSingleton<ILanguageTraits, PolishLanguageTraits>();
@@ -24,12 +25,12 @@ namespace LanguageTutor.Services
 
 			services.AddHttpClient<IPronunciationRecordSynthesizer, GoogleTextToSpeechSynthesizer>();
 
-			services.AddSingleton<ITextsForPracticeSelector, TextsForPracticeSelector>();
-			services.AddSingleton<INextCheckDateProvider, NextCheckDateProvider>();
+			services.AddSingleton<IExercisesSelector, ExercisesSelector>();
+			services.AddSingleton<INextExerciseDateProvider, NextExerciseDateProvider>();
 
-			services.AddSingleton<IProblematicTextsSelector, ProblematicTextsSelector>();
+			services.AddSingleton<IProblematicExercisesProvider, ProblematicExercisesProvider>();
 
-			services.AddSingleton<ISynonymGrouper, SynonymGrouper>();
+			services.AddSingleton<ITranslateTextExerciseFactory, TranslateTextExerciseFactory>();
 			services.AddSingleton<ISystemClock, SystemClock>();
 
 			services.AddSingleton<ISpellCheckService, SpellCheckService>();

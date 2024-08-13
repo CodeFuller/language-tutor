@@ -17,6 +17,6 @@ namespace LanguageTutor.Infrastructure.Sqlite.Entities
 
 		public DateTimeOffset CreationTimestamp { get; set; }
 
-		public IReadOnlyCollection<CheckResultEntity> CheckResults { get; set; }
+		public IReadOnlyCollection<TranslateTextExerciseResultEntity> TranslateTextExerciseResults { get; set; }
 	}
 }

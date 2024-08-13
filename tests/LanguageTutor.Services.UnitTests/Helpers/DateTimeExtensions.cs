@@ -1,25 +1,26 @@
 using System;
 using LanguageTutor.Models;
+using LanguageTutor.Models.Exercises;
 
 namespace LanguageTutor.Services.UnitTests.Helpers
 {
 	internal static class DateTimeExtensions
 	{
-		public static CheckResult ToSuccessfulCheckResult(this DateTime dateTime)
+		public static TranslateTextExerciseResult ToSuccessfulExerciseResult(this DateTime dateTime)
 		{
-			return new CheckResult
+			return new TranslateTextExerciseResult
 			{
 				DateTime = dateTime,
-				CheckResultType = CheckResultType.Ok,
+				ResultType = ExerciseResultType.Successful,
 			};
 		}
 
-		public static CheckResult ToFailedCheckResult(this DateTime dateTime)
+		public static TranslateTextExerciseResult ToFailedExerciseResult(this DateTime dateTime)
 		{
-			return new CheckResult
+			return new TranslateTextExerciseResult
 			{
 				DateTime = dateTime,
-				CheckResultType = CheckResultType.Misspelled,
+				ResultType = ExerciseResultType.Failed,
 			};
 		}
 	}

@@ -7,9 +7,9 @@ namespace LanguageTutor.Views.DesignInstances
 	{
 		public IStartPageViewModel StartPageViewModel { get; } = new StartPageDesignData();
 
-		public IPracticeLanguageViewModel PracticeLanguageViewModel { get; } = new PracticeLanguageDesignData();
+		public IPerformExercisesViewModel PerformExercisesViewModel { get; } = new PerformExercisesDesignData();
 
-		public IPracticeResultsViewModel PracticeResultsViewModel { get; } = new PracticeResultsDesignData();
+		public IExerciseResultsViewModel ExerciseResultsViewModel { get; } = new ExerciseResultsDesignData();
 
 		public IEditDictionaryViewModel EditDictionaryViewModel { get; } = new EditDictionaryDesignData();
 

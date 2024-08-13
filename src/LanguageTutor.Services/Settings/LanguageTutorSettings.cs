@@ -6,6 +6,6 @@ namespace LanguageTutor.Services.Settings
 	{
 		public GoogleTextToSpeechApiSettings GoogleTextToSpeechApi { get; set; }
 
-		public PracticeSettings Practice { get; set; }
+		public ExercisesSettings Exercises { get; set; }
 	}
 }

@@ -6,7 +6,6 @@ using LanguageTutor.Models;
 using LanguageTutor.Services.Data;
 using LanguageTutor.Services.Interfaces;
 using LanguageTutor.Services.Interfaces.Repositories;
-using LanguageTutor.Services.Internal;
 
 namespace LanguageTutor.Services
 {

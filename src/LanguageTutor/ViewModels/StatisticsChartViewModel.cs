@@ -54,19 +54,19 @@ namespace LanguageTutor.ViewModels
 		{
 			return new[]
 			{
-				GetNumberOfTextsSeries(statistics.Select(x => x.TotalNumberOfTexts).ToList()),
-				GetNumberOfLearnedTextsSeries(statistics.Select(x => x.TotalNumberOfLearnedTexts).ToList()),
+				GetNumberOfExercisesSeries(statistics.Select(x => x.TotalNumberOfExercises).ToList()),
+				GetNumberOfLearnedExercisesSeries(statistics.Select(x => x.TotalNumberOfLearnedExercises).ToList()),
 			};
 		}
 
-		private static ISeries GetNumberOfTextsSeries(IEnumerable<int> values)
+		private static ISeries GetNumberOfExercisesSeries(IEnumerable<int> values)
 		{
-			return GetSeries("Number of texts", values, SKColors.Blue);
+			return GetSeries("Number of exercises", values, SKColors.Blue);
 		}
 
-		private static ISeries GetNumberOfLearnedTextsSeries(IEnumerable<int> values)
+		private static ISeries GetNumberOfLearnedExercisesSeries(IEnumerable<int> values)
 		{
-			return GetSeries("Number of learned texts", values, SKColors.Green);
+			return GetSeries("Number of learned exercises", values, SKColors.Green);
 		}
 
 		private static ISeries GetSeries(string name, IEnumerable<int> values, SKColor color)

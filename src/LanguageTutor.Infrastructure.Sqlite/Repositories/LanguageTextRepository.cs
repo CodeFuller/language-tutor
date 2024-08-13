@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LanguageTutor.Infrastructure.Sqlite.Entities;
 using LanguageTutor.Infrastructure.Sqlite.Extensions;
 using LanguageTutor.Infrastructure.Sqlite.Internal;
 using LanguageTutor.Models;
-using LanguageTutor.Services.Data;
 using LanguageTutor.Services.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,48 +39,13 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 			var language1DbId = language1Id.ToInt32();
 			var language2DbId = language2Id.ToInt32();
 
-			var translations = await GetTranslationsQueryable(dbContext, language1DbId, language2DbId)
-				.Concat(GetTranslationsQueryable(dbContext, language2DbId, language1DbId))
+			var translations = await dbContext.GetTranslationsQueryable(language1DbId, language2DbId)
+				.Concat(dbContext.GetTranslationsQueryable(language2DbId, language1DbId))
 				.ToListAsync(cancellationToken);
 
 			return translations
 				.Select(x => x.ToModel(language1DbId, language2DbId))
 				.ToList();
-		}
-
-		public async Task<IReadOnlyCollection<StudiedTranslationData>> GetStudiedTranslations(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken)
-		{
-			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
-
-			var studiedLanguageDbId = studiedLanguageId.ToInt32();
-			var knownLanguageDbId = knownLanguageId.ToInt32();
-
-			var translations1 = await GetTranslationsQueryable(dbContext, studiedLanguageDbId, knownLanguageDbId)
-				.Include(x => x.Text1)
-				.ToListAsync(cancellationToken);
-
-			var translations2 = await GetTranslationsQueryable(dbContext, knownLanguageDbId, studiedLanguageDbId)
-				.Include(x => x.Text2)
-				.ToListAsync(cancellationToken);
-
-			// We used to load CheckResults as JOIN with Texts, i.e. dbContext.Translations.Include(x => x.Text1).ThenInclude(x => x.CheckResults.Where(y => y.UserId == userId.ToInt32())).
-			// However this approach works very slow.
-			// That is why we replaced it with a trick: CheckResults are loaded with a separate query.
-			// This load will populate CheckResults property in TextEntity unless it has no check results yet.
-			await dbContext.CheckResults.Where(x => x.UserId == userId.ToInt32()).ToListAsync(cancellationToken);
-
-			return translations1.Concat(translations2)
-				.Select(x => x.ToStudiedTranslationData(studiedLanguageDbId, knownLanguageDbId))
-				.ToList();
-		}
-
-		private static IQueryable<TranslationEntity> GetTranslationsQueryable(LanguageTutorDbContext dbContext, int language1Id, int language2Id)
-		{
-			return dbContext.Translations
-				.Include(x => x.Text1).ThenInclude(x => x.Language)
-				.Include(x => x.Text2).ThenInclude(x => x.Language)
-				.Where(x => x.Text1.LanguageId == language1Id)
-				.Where(x => x.Text2.LanguageId == language2Id);
 		}
 
 		public async Task AddLanguageText(LanguageText languageText, CancellationToken cancellationToken)

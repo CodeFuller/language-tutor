@@ -20,13 +20,13 @@ namespace LanguageTutor.ViewModels
 
 		public IStartPageViewModel StartPageViewModel { get; }
 
-		public IPracticeLanguageViewModel PracticeLanguageViewModel { get; }
+		public IPerformExercisesViewModel PerformExercisesViewModel { get; }
 
-		public IPracticeResultsViewModel PracticeResultsViewModel { get; }
+		public IExerciseResultsViewModel ExerciseResultsViewModel { get; }
 
 		public IEditDictionaryViewModel EditDictionaryViewModel { get; }
 
-		public IProblematicTextsViewModel ProblematicTextsViewModel { get; }
+		public IProblematicExercisesViewModel ProblematicExercisesViewModel { get; }
 
 		public IStatisticsChartViewModel StatisticsChartViewModel { get; }
 
@@ -40,15 +40,15 @@ namespace LanguageTutor.ViewModels
 
 		public ICommand LoadCommand { get; }
 
-		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPracticeLanguageViewModel practiceLanguageViewModel,
-			IPracticeResultsViewModel practiceResultsViewModel, IEditDictionaryViewModel editDictionaryViewModel, IProblematicTextsViewModel problematicTextsViewModel,
+		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPerformExercisesViewModel performExercisesViewModel,
+			IExerciseResultsViewModel exerciseResultsViewModel, IEditDictionaryViewModel editDictionaryViewModel, IProblematicExercisesViewModel problematicExercisesViewModel,
 			IStatisticsChartViewModel statisticsChartViewModel, IMessenger messenger, IOptions<ApplicationSettings> options)
 		{
 			StartPageViewModel = startPageViewModel ?? throw new ArgumentNullException(nameof(startPageViewModel));
-			PracticeLanguageViewModel = practiceLanguageViewModel ?? throw new ArgumentNullException(nameof(practiceLanguageViewModel));
-			PracticeResultsViewModel = practiceResultsViewModel ?? throw new ArgumentNullException(nameof(practiceResultsViewModel));
+			PerformExercisesViewModel = performExercisesViewModel ?? throw new ArgumentNullException(nameof(performExercisesViewModel));
+			ExerciseResultsViewModel = exerciseResultsViewModel ?? throw new ArgumentNullException(nameof(exerciseResultsViewModel));
 			EditDictionaryViewModel = editDictionaryViewModel ?? throw new ArgumentNullException(nameof(editDictionaryViewModel));
-			ProblematicTextsViewModel = problematicTextsViewModel ?? throw new ArgumentNullException(nameof(problematicTextsViewModel));
+			ProblematicExercisesViewModel = problematicExercisesViewModel ?? throw new ArgumentNullException(nameof(problematicExercisesViewModel));
 			StatisticsChartViewModel = statisticsChartViewModel ?? throw new ArgumentNullException(nameof(statisticsChartViewModel));
 
 			var settings = options?.Value ?? throw new ArgumentNullException(nameof(options));
@@ -66,10 +66,10 @@ namespace LanguageTutor.ViewModels
 
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 			messenger.Register<SwitchToStartPageEventArgs>(this, (_, _) => SwitchToStartPage(CancellationToken.None));
-			messenger.Register<SwitchToPracticeLanguagePageEventArgs>(this, (_, e) => SwitchToPracticeLanguagePage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
-			messenger.Register<SwitchToPracticeResultsPageEventArgs>(this, (_, e) => SwitchToPracticeResultsPage(e.StudiedLanguage, e.KnownLanguage, e.PracticeResults, CancellationToken.None));
+			messenger.Register<SwitchToPerformExercisesPageEventArgs>(this, (_, e) => SwitchToPerformExercisesPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
+			messenger.Register<SwitchToExerciseResultsPageEventArgs>(this, (_, e) => SwitchToExerciseResultsPage(e.StudiedLanguage, e.KnownLanguage, e.ExerciseResults, CancellationToken.None));
 			messenger.Register<SwitchToEditDictionaryPageEventArgs>(this, (_, e) => SwitchToEditDictionaryPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
-			messenger.Register<SwitchToProblematicTextsPageEventArgs>(this, (_, e) => SwitchToProblematicTextsPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
+			messenger.Register<SwitchToProblematicExercisesPageEventArgs>(this, (_, e) => SwitchToProblematicExercisesPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 			messenger.Register<SwitchToStatisticsChartPageEventArgs>(this, (_, e) => SwitchToStatisticsChartPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 		}
 
@@ -90,18 +90,18 @@ namespace LanguageTutor.ViewModels
 			CurrentPage = StartPageViewModel;
 		}
 
-		private async void SwitchToPracticeLanguagePage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		private async void SwitchToPerformExercisesPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			await PracticeLanguageViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
+			await PerformExercisesViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
 
-			CurrentPage = PracticeLanguageViewModel;
+			CurrentPage = PerformExercisesViewModel;
 		}
 
-		private async void SwitchToPracticeResultsPage(Language studiedLanguage, Language knownLanguage, PracticeResults practiceResults, CancellationToken cancellationToken)
+		private async void SwitchToExerciseResultsPage(Language studiedLanguage, Language knownLanguage, ExerciseResults exerciseResults, CancellationToken cancellationToken)
 		{
-			await PracticeResultsViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, practiceResults, cancellationToken);
+			await ExerciseResultsViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, exerciseResults, cancellationToken);
 
-			CurrentPage = PracticeResultsViewModel;
+			CurrentPage = ExerciseResultsViewModel;
 		}
 
 		private async void SwitchToEditDictionaryPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
@@ -111,11 +111,11 @@ namespace LanguageTutor.ViewModels
 			CurrentPage = EditDictionaryViewModel;
 		}
 
-		private async void SwitchToProblematicTextsPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		private async void SwitchToProblematicExercisesPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			await ProblematicTextsViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
+			await ProblematicExercisesViewModel.Load(CurrentUser, studiedLanguage, knownLanguage, cancellationToken);
 
-			CurrentPage = ProblematicTextsViewModel;
+			CurrentPage = ProblematicExercisesViewModel;
 		}
 
 		private async void SwitchToStatisticsChartPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)

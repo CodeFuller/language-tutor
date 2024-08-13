@@ -19,7 +19,8 @@ namespace LanguageTutor.Infrastructure.Sqlite
 			services.AddSingleton<ILanguageRepository, LanguageRepository>();
 			services.AddSingleton<ILanguageTextRepository, LanguageTextRepository>();
 			services.AddSingleton<IPronunciationRecordRepository, PronunciationRecordRepository>();
-			services.AddSingleton<ICheckResultRepository, CheckResultRepository>();
+			services.AddSingleton<IExerciseRepository, ExerciseRepository>();
+			services.AddSingleton<IExerciseResultRepository, ExerciseResultRepository>();
 			services.AddSingleton<IStatisticsRepository, StatisticsRepository>();
 
 			services.AddSingleton<IChecksumCalculator, Crc32Calculator>();

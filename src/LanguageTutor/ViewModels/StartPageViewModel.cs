@@ -82,27 +82,27 @@ namespace LanguageTutor.ViewModels
 			{
 				SetProperty(ref userStatistics, value);
 
-				OnPropertyChanged(nameof(HasTextsForPractice));
-				OnPropertyChanged(nameof(HasProblematicTexts));
+				OnPropertyChanged(nameof(HasExercisesToPerform));
+				OnPropertyChanged(nameof(HasProblematicExercises));
 			}
 		}
 
-		public string RestNumberOfTextsToPracticeToday =>
-			UserStatistics.RestNumberOfTextsToPracticeTodayIfNoLimit == UserStatistics.RestNumberOfTextsToPracticeToday
-				? UserStatistics.RestNumberOfTextsToPracticeToday.ToString(CultureInfo.InvariantCulture)
-				: $"{UserStatistics.RestNumberOfTextsToPracticeToday} ({UserStatistics.RestNumberOfTextsToPracticeTodayIfNoLimit})";
+		public string RestNumberOfExercisesToPerformToday =>
+			UserStatistics.RestNumberOfExercisesToPerformTodayIfNoLimit == UserStatistics.RestNumberOfExercisesToPerformToday
+				? UserStatistics.RestNumberOfExercisesToPerformToday.ToString(CultureInfo.InvariantCulture)
+				: $"{UserStatistics.RestNumberOfExercisesToPerformToday} ({UserStatistics.RestNumberOfExercisesToPerformTodayIfNoLimit})";
 
 		public bool LanguagesAreSelected => SelectedStudiedLanguage != null && SelectedKnownLanguage != null;
 
-		public bool HasTextsForPractice => UserStatistics?.RestNumberOfTextsToPracticeToday > 0;
+		public bool HasExercisesToPerform => UserStatistics?.RestNumberOfExercisesToPerformToday > 0;
 
-		public bool HasProblematicTexts => UserStatistics?.NumberOfProblematicTexts > 0;
+		public bool HasProblematicExercises => UserStatistics?.NumberOfProblematicExercises > 0;
 
-		public ICommand PracticeLanguageCommand { get; }
+		public ICommand PerformExercisesCommand { get; }
 
 		public ICommand EditDictionaryCommand { get; }
 
-		public ICommand GoToProblematicTextsCommand { get; }
+		public ICommand GoToProblematicExercisesCommand { get; }
 
 		public ICommand ShowStatisticsChartCommand { get; }
 
@@ -112,9 +112,9 @@ namespace LanguageTutor.ViewModels
 			this.tutorService = tutorService ?? throw new ArgumentNullException(nameof(tutorService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			PracticeLanguageCommand = new RelayCommand(() => messenger.Send(new SwitchToPracticeLanguagePageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
+			PerformExercisesCommand = new RelayCommand(() => messenger.Send(new SwitchToPerformExercisesPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			EditDictionaryCommand = new RelayCommand(() => messenger.Send(new SwitchToEditDictionaryPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
-			GoToProblematicTextsCommand = new RelayCommand(() => messenger.Send(new SwitchToProblematicTextsPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
+			GoToProblematicExercisesCommand = new RelayCommand(() => messenger.Send(new SwitchToProblematicExercisesPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			ShowStatisticsChartCommand = new RelayCommand(() => messenger.Send(new SwitchToStatisticsChartPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 		}
 

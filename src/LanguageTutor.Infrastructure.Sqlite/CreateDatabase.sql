@@ -68,7 +68,7 @@ CREATE TABLE [PronunciationRecords] (
 
 CREATE INDEX [IX_PronunciationRecords_TextId] ON [PronunciationRecords] ([TextId]);
 
-CREATE TABLE [CheckResults] (
+CREATE TABLE [TranslateTextExerciseResults] (
   [Id] INTEGER NOT NULL,
   [UserId] int NOT NULL,
   [TextId] int NOT NULL,
@@ -76,32 +76,32 @@ CREATE TABLE [CheckResults] (
   [ResultType] int NOT NULL,
   [TypedText] ntext NULL,
 
-  CONSTRAINT [sqlite_master_PK_CheckResults] PRIMARY KEY ([Id]),
+  CONSTRAINT [sqlite_master_PK_TranslateTextExerciseResults] PRIMARY KEY ([Id]),
   FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([TextId]) REFERENCES [Texts] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE INDEX [IX_TranslateTextExerciseResults_UserId] ON [TranslateTextExerciseResults] ([UserId]);
+CREATE INDEX [IX_TranslateTextExerciseResults_TextId] ON [TranslateTextExerciseResults] ([TextId]);
 
 CREATE TABLE [UserStatistics] (
   [UserId] int NOT NULL,
   [StudiedLanguageId] int NOT NULL,
   [KnownLanguageId] int NOT NULL,
   [Date] datetime NOT NULL,
-  [TotalNumberOfTexts] int NOT NULL,
-  [TotalNumberOfLearnedTexts] int NOT NULL,
-  [NumberOfProblematicTexts] int NOT NULL,
-  [RestNumberOfTextsToPracticeToday] int NOT NULL,
-  [RestNumberOfTextsToPracticeTodayIfNoLimit] int NOT NULL,
-  [NumberOfTextsPracticedToday] int NOT NULL,
-  [NumberOfTextsLearnedToday] int NOT NULL,
+  [TotalNumberOfExercises] int NOT NULL,
+  [TotalNumberOfLearnedExercises] int NOT NULL,
+  [NumberOfProblematicExercises] int NOT NULL,
+  [RestNumberOfExercisesToPerformToday] int NOT NULL,
+  [RestNumberOfExercisesToPerformTodayIfNoLimit] int NOT NULL,
+  [NumberOfExercisesPerformedToday] int NOT NULL,
+  [NumberOfExercisesLearnedToday] int NOT NULL,
 
   CONSTRAINT [sqlite_master_PK_UserStatistics] PRIMARY KEY ([UserId], [StudiedLanguageId], [KnownLanguageId], [Date]),
   FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([StudiedLanguageId]) REFERENCES [Languages] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY ([KnownLanguageId]) REFERENCES [Languages] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-CREATE INDEX [IX_CheckResults_UserId] ON [CheckResults] ([UserId]);
-CREATE INDEX [IX_CheckResults_TextId] ON [CheckResults] ([TextId]);
 
 INSERT INTO [Users]([Id], [Name]) VALUES(1, 'Default User');
 

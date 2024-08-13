@@ -31,7 +31,7 @@ namespace LanguageTutor.UnitTests.ViewModels
 		[DataRow(123, 123, "123")]
 		[DataRow(123, 456, "123 (456)")]
 		[DataRow(0, 123, "0 (123)")]
-		public async Task RestNumberOfTextsToPracticeTodayGetter_ReturnsCorrectValue(int restNumberOfTextsToPracticeToday, int restNumberOfTextsToPracticeTodayIfNoLimit, string expectedValue)
+		public async Task RestNumberOfExercisesToPerformTodayGetter_ReturnsCorrectValue(int restNumberOfExercisesToPerformToday, int restNumberOfExercisesToPerformTodayIfNoLimit, string expectedValue)
 		{
 			// Arrange
 
@@ -45,8 +45,8 @@ namespace LanguageTutor.UnitTests.ViewModels
 
 			var userStatistics = new UserStatisticsData
 			{
-				RestNumberOfTextsToPracticeToday = restNumberOfTextsToPracticeToday,
-				RestNumberOfTextsToPracticeTodayIfNoLimit = restNumberOfTextsToPracticeTodayIfNoLimit,
+				RestNumberOfExercisesToPerformToday = restNumberOfExercisesToPerformToday,
+				RestNumberOfExercisesToPerformTodayIfNoLimit = restNumberOfExercisesToPerformTodayIfNoLimit,
 			};
 
 			var mocker = new AutoMocker();
@@ -64,7 +64,7 @@ namespace LanguageTutor.UnitTests.ViewModels
 
 			// Act
 
-			var result = target.RestNumberOfTextsToPracticeToday;
+			var result = target.RestNumberOfExercisesToPerformToday;
 
 			// Assert
 

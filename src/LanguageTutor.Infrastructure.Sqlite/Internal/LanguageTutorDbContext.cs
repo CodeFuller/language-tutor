@@ -13,7 +13,7 @@ namespace LanguageTutor.Infrastructure.Sqlite.Internal
 
 		public DbSet<PronunciationRecordEntity> PronunciationRecords { get; set; }
 
-		public DbSet<CheckResultEntity> CheckResults { get; set; }
+		public DbSet<TranslateTextExerciseResultEntity> TranslateTextExerciseResults { get; set; }
 
 		public DbSet<UserStatisticsEntity> UserStatistics { get; set; }
 
