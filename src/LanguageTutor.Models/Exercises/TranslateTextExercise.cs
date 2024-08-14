@@ -23,9 +23,9 @@ namespace LanguageTutor.Models.Exercises
 			this.results = results?.ToList() ?? throw new ArgumentNullException(nameof(results));
 		}
 
-		protected override BasicExercise WithLimitedResults(IEnumerable<BasicExerciseResult> limitedResults)
+		public override BasicExercise WithLimitedResults(DateOnly latestDate, int maxResultsCount)
 		{
-			return new TranslateTextExercise(limitedResults.Cast<TranslateTextExerciseResult>())
+			return new TranslateTextExercise(GetLimitedResults(results, latestDate, maxResultsCount))
 			{
 				TextInStudiedLanguage = TextInStudiedLanguage,
 				OtherSynonymsInStudiedLanguage = OtherSynonymsInStudiedLanguage,

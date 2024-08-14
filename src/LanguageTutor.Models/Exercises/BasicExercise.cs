@@ -14,8 +14,6 @@ namespace LanguageTutor.Models.Exercises
 		// The results order is from the latest (most significant) to the earliest (less significant).
 		public IReadOnlyList<BasicExerciseResult> SortedResults => Results.OrderByDescending(x => x.DateTime).ToList();
 
-		protected abstract BasicExercise WithLimitedResults(IEnumerable<BasicExerciseResult> limitedResults);
-
 		public BasicExercise WithLimitedResults(int maxResultsCount)
 		{
 			return WithLimitedResults(DateOnly.MaxValue, maxResultsCount);
@@ -26,19 +24,16 @@ namespace LanguageTutor.Models.Exercises
 			return WithLimitedResults(latestDate, Int32.MaxValue);
 		}
 
-		public BasicExercise WithLimitedResults(DateOnly latestDate, int maxResultsCount)
+		public abstract BasicExercise WithLimitedResults(DateOnly latestDate, int maxResultsCount);
+
+		protected static IEnumerable<TExerciseResult> GetLimitedResults<TExerciseResult>(IEnumerable<TExerciseResult> results, DateOnly latestDate, int maxResultsCount)
+			where TExerciseResult : BasicExerciseResult
 		{
-			var limitedResults = SortedResults
+			return results
 				.Where(x => x.DateTime.ToDateOnly() <= latestDate)
+				.OrderByDescending(x => x.DateTime)
 				.Take(maxResultsCount)
 				.ToList();
-
-			if (limitedResults.Count == SortedResults.Count)
-			{
-				return this;
-			}
-
-			return WithLimitedResults(limitedResults);
 		}
 
 		public abstract void Accept(IExerciseVisitor visitor);

@@ -27,9 +27,9 @@ namespace LanguageTutor.Models.UnitTests.Exercises
 				this.results = results?.ToList() ?? throw new ArgumentNullException(nameof(results));
 			}
 
-			protected override BasicExercise WithLimitedResults(IEnumerable<BasicExerciseResult> limitedResults)
+			public override BasicExercise WithLimitedResults(DateOnly latestDate, int maxResultsCount)
 			{
-				return new TestExercise(limitedResults.Cast<TestExerciseResult>());
+				return new TestExercise(GetLimitedResults(results, latestDate, maxResultsCount));
 			}
 
 			public override void Accept(IExerciseVisitor visitor)
