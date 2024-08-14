@@ -28,14 +28,14 @@ namespace LanguageTutor.Services.Internal
 				return Array.Empty<BasicExercise>();
 			}
 
-			var exercisesNotPerformedBefore = exercisesList
+			var untouchedExercises = exercisesList
 				.Where(x => !x.SortedResults.Any())
 				.OrderBy(x => x.CreationTimestamp)
 				.ToList();
 
-			var selectedExercises = new List<BasicExercise>();
+			var suitableExercises = new List<BasicExercise>();
 
-			var selectedPreviouslyPerformedExercises = exercisesList
+			var suitableTouchedExercises = exercisesList
 				.Where(x => x.SortedResults.Any())
 				.Select(x => new
 				{
@@ -49,31 +49,31 @@ namespace LanguageTutor.Services.Internal
 
 			// The logic is the following:
 			//
-			//   If there are a lot of exercises not performed before (i.e. this is a new user, who has a lot of exercises to learn),
-			//   then we add new exercises gradually, only if she has learned previous exercises already.
+			//   If there are a lot of untouched exercises (i.e. this is a new user, who has a lot of exercises to learn),
+			//   then we add untouched exercises gradually, only if she has learned previous exercises already.
 			//
-			//   If there are not too much exercises not performed before (i.e. this is an old user and just new exercises were added recently),
-			//   then we mix new exercises with the performed before.
-			if (exercisesNotPerformedBefore.Count > dailyLimit)
+			//   If there are not too much untouched exercises (i.e. this is an old user and just new exercises were added recently),
+			//   then we include all untouched exercises.
+			if (untouchedExercises.Count > dailyLimit)
 			{
-				selectedExercises.AddRange(selectedPreviouslyPerformedExercises);
+				suitableExercises.AddRange(suitableTouchedExercises);
 
-				if (selectedExercises.Count < numberOfRestExercisesForDay)
+				if (suitableExercises.Count < numberOfRestExercisesForDay)
 				{
-					// Taking first exercises that were not performed before.
-					var selectedExercisesNotPerformedBefore = exercisesNotPerformedBefore
-						.Take(numberOfRestExercisesForDay - selectedExercises.Count);
+					// Taking first untouched exercises.
+					var suitableUntouchedExercises = untouchedExercises
+						.Take(numberOfRestExercisesForDay - suitableExercises.Count);
 
-					selectedExercises.AddRange(selectedExercisesNotPerformedBefore);
+					suitableExercises.AddRange(suitableUntouchedExercises);
 				}
 			}
 			else
 			{
-				selectedExercises.AddRange(exercisesNotPerformedBefore);
-				selectedExercises.AddRange(selectedPreviouslyPerformedExercises);
+				suitableExercises.AddRange(untouchedExercises);
+				suitableExercises.AddRange(suitableTouchedExercises);
 			}
 
-			return selectedExercises
+			return suitableExercises
 				.Take(numberOfRestExercisesForDay)
 				.Randomize()
 				.ToList();
