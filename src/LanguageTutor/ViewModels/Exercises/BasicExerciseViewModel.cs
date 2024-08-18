@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using LanguageTutor.Models;
 using LanguageTutor.Models.Exercises;
 using LanguageTutor.Services.Interfaces;
 using LanguageTutor.ViewModels.Interfaces;
@@ -15,6 +16,8 @@ namespace LanguageTutor.ViewModels.Exercises
 		protected IExerciseResultService ExerciseResultService { get; }
 
 		protected DateTimeOffset CurrentTimestamp => systemClock.Now;
+
+		protected User User { get; private set; }
 
 		private bool exerciseWasChecked;
 
@@ -30,8 +33,9 @@ namespace LanguageTutor.ViewModels.Exercises
 			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
 		}
 
-		protected void Load()
+		protected void Load(User user)
 		{
+			User = user ?? throw new ArgumentNullException(nameof(user));
 			ExerciseWasChecked = false;
 		}
 

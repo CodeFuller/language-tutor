@@ -13,62 +13,47 @@ namespace LanguageTutor.Views.DesignInstances
 {
 	internal class ProblematicExercisesDesignData : IProblematicExercisesViewModel
 	{
-		public ObservableCollection<ProblematicExerciseViewModel> ProblematicExercises { get; } = new()
-		{
-			new ProblematicExerciseViewModel(new TranslateTextExercise(new TranslateTextExerciseResult[]
-			{
-				new()
-				{
-					ResultType = ExerciseResultType.Skipped,
-					DateTime = new DateTimeOffset(2023, 08, 17, 08, 16, 41, TimeSpan.FromHours(2)),
-				},
-
-				new()
-				{
-					ResultType = ExerciseResultType.Failed,
-					DateTime = new DateTimeOffset(2023, 08, 19, 11, 01, 09, TimeSpan.FromHours(2)),
-					TypedText = "źmęczony",
-				},
-
-				new()
-				{
-					ResultType = ExerciseResultType.Successful,
-					DateTime = new DateTimeOffset(2023, 08, 20, 10, 48, 05, TimeSpan.FromHours(2)),
-				},
-			})
+		public ObservableCollection<ProblematicExerciseViewModel> ProblematicExercises { get; } =
+		[
+			new ProblematicExerciseViewModel(new TranslateTextExercise(
+			[
+				new(new DateTimeOffset(2023, 08, 17, 08, 16, 41, TimeSpan.FromHours(2)), ExerciseResultType.Skipped, null),
+				new(new DateTimeOffset(2023, 08, 19, 11, 01, 09, TimeSpan.FromHours(2)), ExerciseResultType.Failed, "źmęczony"),
+				new(new DateTimeOffset(2023, 08, 20, 10, 48, 05, TimeSpan.FromHours(2)), ExerciseResultType.Successful, null),
+			])
 			{
 				TextInStudiedLanguage = new LanguageText
 				{
 					Text = "zmęczony",
 				},
 
-				SynonymsInKnownLanguage = new[]
-				{
+				SynonymsInKnownLanguage =
+				[
 					new LanguageText { Text = "уставший" },
 					new LanguageText { Text = "усталый" },
-				},
+				],
 			}),
 
-			new ProblematicExerciseViewModel(new TranslateTextExercise(new TranslateTextExerciseResult[]
-			{
-				new() { ResultType = ExerciseResultType.Skipped },
-				new() { ResultType = ExerciseResultType.Skipped },
-				new() { ResultType = ExerciseResultType.Failed },
-				new() { ResultType = ExerciseResultType.Failed },
-				new() { ResultType = ExerciseResultType.Failed },
-			})
+			new ProblematicExerciseViewModel(new TranslateTextExercise(
+			[
+				new(DateTimeOffset.Now, ExerciseResultType.Skipped, null),
+				new(DateTimeOffset.Now, ExerciseResultType.Skipped, null),
+				new(DateTimeOffset.Now, ExerciseResultType.Failed, null),
+				new(DateTimeOffset.Now, ExerciseResultType.Failed, null),
+				new(DateTimeOffset.Now, ExerciseResultType.Failed, null),
+			])
 			{
 				TextInStudiedLanguage = new LanguageText
 				{
 					Text = "pewny",
 				},
 
-				SynonymsInKnownLanguage = new[]
-				{
+				SynonymsInKnownLanguage =
+				[
 					new LanguageText { Text = "уверенный" },
-				},
+				],
 			}),
-		};
+		];
 
 		public ProblematicExerciseViewModel SelectedExercise { get; set; }
 

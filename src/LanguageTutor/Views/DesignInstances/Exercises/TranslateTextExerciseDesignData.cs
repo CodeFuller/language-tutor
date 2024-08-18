@@ -19,8 +19,8 @@ namespace LanguageTutor.Views.DesignInstances.Exercises
 				Text = "zamek",
 			},
 
-			OtherSynonymsInStudiedLanguage = new[]
-			{
+			OtherSynonymsInStudiedLanguage =
+			[
 				new LanguageText
 				{
 					Id = new ItemId("2"),
@@ -34,7 +34,7 @@ namespace LanguageTutor.Views.DesignInstances.Exercises
 					Language = DesignData.StudiedLanguage,
 					Text = "twierdza",
 				},
-			},
+			],
 
 			SynonymsInKnownLanguage = new[]
 			{

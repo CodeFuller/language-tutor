@@ -30,7 +30,7 @@ namespace LanguageTutor.Services
 
 			services.AddSingleton<IProblematicExercisesProvider, ProblematicExercisesProvider>();
 
-			services.AddSingleton<ITranslateTextExerciseFactory, TranslateTextExerciseFactory>();
+			services.AddSingleton<IExerciseFactory, ExerciseFactory>();
 			services.AddSingleton<ISystemClock, SystemClock>();
 
 			services.AddSingleton<ISpellCheckService, SpellCheckService>();

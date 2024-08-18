@@ -4,8 +4,10 @@ using LanguageTutor.Services.Data;
 
 namespace LanguageTutor.Services.Internal
 {
-	internal interface ITranslateTextExerciseFactory
+	internal interface IExerciseFactory
 	{
 		IEnumerable<TranslateTextExercise> CreateTranslateTextExercises(IReadOnlyCollection<TranslateTextExerciseData> exercisesData);
+
+		IEnumerable<InflectWordExercise> CreateInflectWordExercises(IReadOnlyCollection<InflectWordExerciseData> exercisesData);
 	}
 }

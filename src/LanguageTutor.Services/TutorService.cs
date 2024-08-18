@@ -25,7 +25,7 @@ namespace LanguageTutor.Services
 
 		private readonly IStatisticsRepository statisticsRepository;
 
-		private readonly ITranslateTextExerciseFactory translateTextExerciseFactory;
+		private readonly IExerciseFactory exerciseFactory;
 
 		private readonly IExercisesSelector exercisesSelector;
 
@@ -38,14 +38,14 @@ namespace LanguageTutor.Services
 		private DateOnly Today => systemClock.Today;
 
 		public TutorService(ILanguageRepository languageRepository, IPronunciationRecordRepository pronunciationRecordRepository, IExerciseRepository exerciseRepository,
-			IStatisticsRepository statisticsRepository, ITranslateTextExerciseFactory translateTextExerciseFactory, IExercisesSelector exercisesSelector,
+			IStatisticsRepository statisticsRepository, IExerciseFactory exerciseFactory, IExercisesSelector exercisesSelector,
 			IProblematicExercisesProvider problematicExercisesProvider, ISystemClock systemClock, IOptions<ExercisesSettings> options)
 		{
 			this.languageRepository = languageRepository ?? throw new ArgumentNullException(nameof(languageRepository));
 			this.pronunciationRecordRepository = pronunciationRecordRepository ?? throw new ArgumentNullException(nameof(pronunciationRecordRepository));
 			this.exerciseRepository = exerciseRepository ?? throw new ArgumentNullException(nameof(exerciseRepository));
 			this.statisticsRepository = statisticsRepository ?? throw new ArgumentNullException(nameof(statisticsRepository));
-			this.translateTextExerciseFactory = translateTextExerciseFactory ?? throw new ArgumentNullException(nameof(translateTextExerciseFactory));
+			this.exerciseFactory = exerciseFactory ?? throw new ArgumentNullException(nameof(exerciseFactory));
 			this.exercisesSelector = exercisesSelector ?? throw new ArgumentNullException(nameof(exercisesSelector));
 			this.problematicExercisesProvider = problematicExercisesProvider ?? throw new ArgumentNullException(nameof(problematicExercisesProvider));
 			this.systemClock = systemClock ?? throw new ArgumentNullException(nameof(systemClock));
@@ -75,14 +75,25 @@ namespace LanguageTutor.Services
 
 		private async Task<IEnumerable<BasicExercise>> GetExercises(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
-			return await GetTranslateTextExercises(user, studiedLanguage, knownLanguage, cancellationToken);
+			var translateTextExercises = await GetTranslateTextExercises(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+
+			var inflectWordExercises = await GetInflectWordExercises(user.Id, studiedLanguage.Id, cancellationToken);
+
+			return translateTextExercises.Concat<BasicExercise>(inflectWordExercises);
 		}
 
-		private async Task<IEnumerable<TranslateTextExercise>> GetTranslateTextExercises(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
+		private async Task<IEnumerable<TranslateTextExercise>> GetTranslateTextExercises(ItemId userId, ItemId studiedLanguageId, ItemId knownLanguageId, CancellationToken cancellationToken)
 		{
-			var exercisesData = await exerciseRepository.GetTranslateTextExercises(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
+			var exercisesData = await exerciseRepository.GetTranslateTextExercises(userId, studiedLanguageId, knownLanguageId, cancellationToken);
 
-			return translateTextExerciseFactory.CreateTranslateTextExercises(exercisesData);
+			return exerciseFactory.CreateTranslateTextExercises(exercisesData);
+		}
+
+		private async Task<IEnumerable<InflectWordExercise>> GetInflectWordExercises(ItemId userId, ItemId studiedLanguageId, CancellationToken cancellationToken)
+		{
+			var exercisesData = await exerciseRepository.GetInflectWordExercises(userId, studiedLanguageId, cancellationToken);
+
+			return exerciseFactory.CreateInflectWordExercises(exercisesData);
 		}
 
 		public Task<PronunciationRecord> GetPronunciationRecord(ItemId textId, CancellationToken cancellationToken)

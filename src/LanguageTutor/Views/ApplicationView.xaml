@@ -24,10 +24,10 @@
 
     <ContentControl Content="{Binding CurrentPage}" Margin="5">
         <ContentControl.Resources>
-            <DataTemplate DataType="{x:Type viewModels:StartPageViewModel}">
+            <DataTemplate DataType="{x:Type designInstances:StartPageDesignData}">
                 <views:StartPageView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type designInstances:StartPageDesignData}">
+            <DataTemplate DataType="{x:Type viewModels:StartPageViewModel}">
                 <views:StartPageView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:PerformExercisesViewModel}">

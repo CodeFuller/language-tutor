@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LanguageTutor.Models.Exercises
 {
-	public class TranslateTextExercise : BasicExercise
+	public class TranslateTextExercise : BasicExercise<TranslateTextExerciseResult>
 	{
-		private readonly List<TranslateTextExerciseResult> results;
-
 		public LanguageText TextInStudiedLanguage { get; init; }
 
 		public IReadOnlyCollection<LanguageText> OtherSynonymsInStudiedLanguage { get; init; }
@@ -16,16 +13,14 @@ namespace LanguageTutor.Models.Exercises
 
 		public override DateTimeOffset CreationTimestamp => TextInStudiedLanguage.CreationTimestamp;
 
-		protected override IEnumerable<BasicExerciseResult> Results => results;
-
 		public TranslateTextExercise(IEnumerable<TranslateTextExerciseResult> results)
+			: base(results)
 		{
-			this.results = results?.ToList() ?? throw new ArgumentNullException(nameof(results));
 		}
 
-		public override BasicExercise WithLimitedResults(DateOnly latestDate, int maxResultsCount)
+		protected override BasicExercise<TranslateTextExerciseResult> WithLimitedResults(IEnumerable<TranslateTextExerciseResult> limitedResults)
 		{
-			return new TranslateTextExercise(GetLimitedResults(results, latestDate, maxResultsCount))
+			return new TranslateTextExercise(limitedResults)
 			{
 				TextInStudiedLanguage = TextInStudiedLanguage,
 				OtherSynonymsInStudiedLanguage = OtherSynonymsInStudiedLanguage,
@@ -37,14 +32,9 @@ namespace LanguageTutor.Models.Exercises
 		{
 			var resultType = GetResultType(typedText);
 
-			var exerciseResult = new TranslateTextExerciseResult
-			{
-				DateTime = timestamp,
-				ResultType = resultType,
-				TypedText = resultType == ExerciseResultType.Failed ? typedText : null,
-			};
+			var exerciseResult = new TranslateTextExerciseResult(timestamp, resultType, resultType == ExerciseResultType.Failed ? typedText : null);
 
-			results.Add(exerciseResult);
+			AddResult(exerciseResult);
 
 			return exerciseResult;
 		}

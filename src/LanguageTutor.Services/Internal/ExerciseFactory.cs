@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LanguageTutor.Models.Exercises;
@@ -5,7 +6,7 @@ using LanguageTutor.Services.Data;
 
 namespace LanguageTutor.Services.Internal
 {
-	internal class TranslateTextExerciseFactory : ITranslateTextExerciseFactory
+	internal class ExerciseFactory : IExerciseFactory
 	{
 		public IEnumerable<TranslateTextExercise> CreateTranslateTextExercises(IReadOnlyCollection<TranslateTextExerciseData> exercisesData)
 		{
@@ -43,6 +44,22 @@ namespace LanguageTutor.Services.Internal
 					SynonymsInKnownLanguage = synonymsInKnownLanguage.ToList(),
 				};
 			}
+		}
+
+		public IEnumerable<InflectWordExercise> CreateInflectWordExercises(IReadOnlyCollection<InflectWordExerciseData> exercisesData)
+		{
+			return exercisesData.Select(x => new InflectWordExercise(x.CreationTimestamp, GetDescriptionForInflectWordExercise(x), x.BaseForm, x.WordForms, x.ExerciseResults));
+		}
+
+		private static string GetDescriptionForInflectWordExercise(InflectWordExerciseData exerciseData)
+		{
+			if (!String.IsNullOrEmpty(exerciseData.Description))
+			{
+				return exerciseData.Description;
+			}
+
+			// TODO: Implement filling of description based on template.
+			throw new NotSupportedException();
 		}
 	}
 }

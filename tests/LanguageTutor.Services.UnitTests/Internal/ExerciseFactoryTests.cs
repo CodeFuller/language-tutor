@@ -9,7 +9,7 @@ using Moq.AutoMock;
 namespace LanguageTutor.Services.UnitTests.Internal
 {
 	[TestClass]
-	public class TranslateTextExerciseFactoryTests
+	public class ExerciseFactoryTests
 	{
 		[TestMethod]
 		public void CreateTranslateTextExercises_ForTranslationsWithoutSynonyms_DoesNotGroupTranslations()
@@ -34,7 +34,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TranslateTextExerciseFactory>();
+			var target = mocker.CreateInstance<ExerciseFactory>();
 
 			// Act
 
@@ -92,7 +92,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TranslateTextExerciseFactory>();
+			var target = mocker.CreateInstance<ExerciseFactory>();
 
 			// Act
 
@@ -168,7 +168,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TranslateTextExerciseFactory>();
+			var target = mocker.CreateInstance<ExerciseFactory>();
 
 			// Act
 
@@ -236,7 +236,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TranslateTextExerciseFactory>();
+			var target = mocker.CreateInstance<ExerciseFactory>();
 
 			// Act
 
@@ -294,7 +294,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			};
 
 			var mocker = new AutoMocker();
-			var target = mocker.CreateInstance<TranslateTextExerciseFactory>();
+			var target = mocker.CreateInstance<ExerciseFactory>();
 
 			// Act
 

@@ -60,14 +60,17 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 				.ToList();
 		}
 
+		public Task<IReadOnlyCollection<InflectWordExerciseData>> GetInflectWordExercises(ItemId userId, ItemId studiedLanguageId, CancellationToken cancellationToken)
+		{
+			// TODO: Implement DAL for InflectWordExercise.
+			throw new NotImplementedException();
+		}
+
 		private static TranslateTextExerciseResult ToTranslateTextExerciseResult(TranslateTextExerciseResultEntity entity)
 		{
-			return new()
+			return new(entity.DateTime, entity.ResultType, entity.TypedText)
 			{
 				Id = entity.Id.ToItemId(),
-				DateTime = entity.DateTime,
-				ResultType = entity.ResultType,
-				TypedText = entity.TypedText,
 			};
 		}
 	}

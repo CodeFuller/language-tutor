@@ -20,11 +20,11 @@ namespace LanguageTutor.Views.Helpers
 
 		private static void OnIsFocusedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var uie = (UIElement)d;
+			var uiElement = (UIElement)d;
 
-			if ((bool)e.NewValue)
+			if (e.NewValue is true)
 			{
-				uie.Focus();
+				uiElement.Focus();
 			}
 		}
 	}

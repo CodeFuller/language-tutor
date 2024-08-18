@@ -1,0 +1,35 @@
+<UserControl x:Class="LanguageTutor.Views.Exercises.InflectWordExerciseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:exercises="clr-namespace:LanguageTutor.Views.DesignInstances.Exercises"
+             mc:Ignorable="d" 
+             d:DesignWidth="785" d:DesignHeight="291"
+             d:DataContext="{d:DesignInstance exercises:InflectWordExerciseDesignData, IsDesignTimeCreatable=True}"
+             d:DesignStyle="{StaticResource ApplicationWindowStyle}">
+
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Viewbox Grid.Row="0" Margin="0,0,0,10" StretchDirection="DownOnly" Stretch="Uniform">
+                <Label HorizontalAlignment="Center" FontSize="24" Content="{Binding Description}" />
+            </Viewbox>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Word forms are added in code-behind -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Name="WordForms" />
+            </Grid>
+        </Grid>
+    </Grid>
+
+</UserControl>

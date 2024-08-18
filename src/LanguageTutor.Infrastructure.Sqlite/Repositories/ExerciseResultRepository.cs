@@ -39,5 +39,11 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 
 			exerciseResult.Id = exerciseResultEntity.Id.ToItemId();
 		}
+
+		public Task AddInflectWordExerciseResult(ItemId userId, InflectWordExercise exercise, InflectWordExerciseResult exerciseResult, CancellationToken cancellationToken)
+		{
+			// TODO: Implement DAL for InflectWordExercise.
+			return Task.CompletedTask;
+		}
 	}
 }

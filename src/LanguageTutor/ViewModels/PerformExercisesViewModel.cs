@@ -37,6 +37,15 @@ namespace LanguageTutor.ViewModels
 				viewModel.CurrentExerciseViewModel = exerciseViewModel;
 			}
 
+			public void VisitInflectWordExercise(InflectWordExercise exercise)
+			{
+				var exerciseViewModel = GetExerciseViewModel<InflectWordExerciseViewModel>();
+
+				exerciseViewModel.Load(viewModel.User, exercise);
+
+				viewModel.CurrentExerciseViewModel = exerciseViewModel;
+			}
+
 			private TExerciseViewModel GetExerciseViewModel<TExerciseViewModel>()
 				where TExerciseViewModel : IExerciseViewModel
 			{
@@ -127,7 +136,7 @@ namespace LanguageTutor.ViewModels
 			SwitchToNextExerciseCommand = new RelayCommand(SwitchToNextExercise);
 			FinishExercisesCommand = new RelayCommand(FinishExercises);
 
-			messenger.Register<NextStepEventArgs>(this, (_, _) => CheckOrSwitchToNextExercise(CancellationToken.None));
+			messenger.Register<CheckOrSwitchToNextExerciseEventArgs>(this, (_, _) => CheckOrSwitchToNextExercise(CancellationToken.None));
 		}
 
 		public async Task Load(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)

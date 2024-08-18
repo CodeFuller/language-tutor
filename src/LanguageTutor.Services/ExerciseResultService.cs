@@ -21,5 +21,10 @@ namespace LanguageTutor.Services
 		{
 			return exerciseResultRepository.AddTranslateTextExerciseResult(user.Id, exercise, exerciseResult, cancellationToken);
 		}
+
+		public Task AddInflectWordExerciseResult(User user, InflectWordExercise exercise, InflectWordExerciseResult exerciseResult, CancellationToken cancellationToken)
+		{
+			return exerciseResultRepository.AddInflectWordExerciseResult(user.Id, exercise, exerciseResult, cancellationToken);
+		}
 	}
 }

@@ -20,24 +20,27 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
             <ContentControl Content="{Binding CurrentExerciseViewModel}" Margin="5">
                 <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type designInstancesExercises:TranslateTextExerciseDesignData}">
+                        <exercises:TranslateTextExerciseView />
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type viewModels:TranslateTextExerciseViewModel}">
                         <exercises:TranslateTextExerciseView />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type designInstancesExercises:TranslateTextExerciseDesignData}">
-                        <exercises:TranslateTextExerciseView />
+                    <DataTemplate DataType="{x:Type viewModels:InflectWordExerciseViewModel}">
+                        <exercises:InflectWordExerciseView />
                     </DataTemplate>
                 </ContentControl.Resources>
             </ContentControl>
         </Grid>
 
-        <Grid Grid.Row="1" Margin="20,0">
+        <Grid Grid.Row="1" Margin="20,10">
             <ProgressBar Height="30" Maximum="{Binding NumberOfExercisesToPerform}" Value="{Binding NumberOfPerformedExercises, Mode=OneWay}" />
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressInfo}" />
         </Grid>

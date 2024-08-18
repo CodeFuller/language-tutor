@@ -20,8 +20,6 @@ namespace LanguageTutor.ViewModels.Exercises
 
 		private readonly IPronunciationRecordPlayer pronunciationRecordPlayer;
 
-		private User User { get; set; }
-
 		private TranslateTextExercise exercise;
 
 		public TranslateTextExercise Exercise
@@ -100,15 +98,14 @@ namespace LanguageTutor.ViewModels.Exercises
 			this.pronunciationRecordPlayer = pronunciationRecordPlayer ?? throw new ArgumentNullException(nameof(pronunciationRecordPlayer));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
-			NextStepCommand = new RelayCommand(() => messenger.Send(new NextStepEventArgs()));
+			NextStepCommand = new RelayCommand(() => messenger.Send(new CheckOrSwitchToNextExerciseEventArgs()));
 			PlayPronunciationRecordCommand = new AsyncRelayCommand(PlayPronunciationRecord);
 		}
 
 		public void Load(User user, TranslateTextExercise exercise)
 		{
-			Load();
+			Load(user);
 
-			User = user ?? throw new ArgumentNullException(nameof(user));
 			Exercise = exercise ?? throw new ArgumentNullException(nameof(exercise));
 
 			SetFocus(() => TypedTextIsFocused);
@@ -125,10 +122,10 @@ namespace LanguageTutor.ViewModels.Exercises
 		{
 			var exerciseResult = Exercise.Check(TypedText, CurrentTimestamp);
 
-			await ExerciseResultService.AddTranslateTextExerciseResult(User, Exercise, exerciseResult, cancellationToken);
-
 			ExerciseWasPerformedCorrectly = exerciseResult.IsSuccessful;
 			ExerciseWasPerformedIncorrectly = exerciseResult.IsFailed;
+
+			await ExerciseResultService.AddTranslateTextExerciseResult(User, Exercise, exerciseResult, cancellationToken);
 
 			await PlayPronunciationRecord(cancellationToken);
 

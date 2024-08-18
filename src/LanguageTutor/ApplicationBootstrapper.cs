@@ -42,6 +42,7 @@ namespace LanguageTutor
 			services.AddSingleton<IStatisticsChartViewModel, StatisticsChartViewModel>();
 
 			services.AddSingleton<IExerciseViewModel, TranslateTextExerciseViewModel>();
+			services.AddSingleton<IExerciseViewModel, InflectWordExerciseViewModel>();
 
 			// We register ICreateOrPickTextViewModel as transient dependency, because two different instances must be injected into EditDictionaryViewModel.
 			services.AddTransient<ICreateOrPickTextViewModel, CreateOrPickTextViewModel>();

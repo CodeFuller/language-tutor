@@ -2,7 +2,7 @@ using System;
 
 namespace LanguageTutor.Events
 {
-	internal class NextStepEventArgs : EventArgs
+	public class InflectWordExerciseLoadedEventArgs : EventArgs
 	{
 	}
 }

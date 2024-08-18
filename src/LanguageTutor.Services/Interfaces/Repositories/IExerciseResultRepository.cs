@@ -8,5 +8,7 @@ namespace LanguageTutor.Services.Interfaces.Repositories
 	public interface IExerciseResultRepository
 	{
 		Task AddTranslateTextExerciseResult(ItemId userId, TranslateTextExercise exercise, TranslateTextExerciseResult exerciseResult, CancellationToken cancellationToken);
+
+		Task AddInflectWordExerciseResult(ItemId userId, InflectWordExercise exercise, InflectWordExerciseResult exerciseResult, CancellationToken cancellationToken);
 	}
 }

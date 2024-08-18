@@ -8,7 +8,7 @@ namespace LanguageTutor.Models.Exercises
 
 		public DateTimeOffset DateTime { get; init; }
 
-		public ExerciseResultType ResultType { get; init; }
+		public abstract ExerciseResultType ResultType { get; }
 
 		public bool IsSuccessful => ResultType == ExerciseResultType.Successful;
 

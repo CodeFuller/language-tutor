@@ -22,7 +22,7 @@ namespace LanguageTutor.ViewModels.Exercises
 
 		bool ExerciseWasPerformedIncorrectly { get; }
 
-		public ICommand NextStepCommand { get; }
+		ICommand NextStepCommand { get; }
 
 		ICommand PlayPronunciationRecordCommand { get; }
 	}
