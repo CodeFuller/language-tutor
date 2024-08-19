@@ -8,20 +8,12 @@ namespace LanguageTutor.Services.UnitTests.Helpers
 	{
 		public static TranslateTextExerciseResult ToSuccessfulExerciseResult(this DateTime dateTime)
 		{
-			return new TranslateTextExerciseResult
-			{
-				DateTime = dateTime,
-				ResultType = ExerciseResultType.Successful,
-			};
+			return new TranslateTextExerciseResult(dateTime, ExerciseResultType.Successful, typedText: null);
 		}
 
 		public static TranslateTextExerciseResult ToFailedExerciseResult(this DateTime dateTime)
 		{
-			return new TranslateTextExerciseResult
-			{
-				DateTime = dateTime,
-				ResultType = ExerciseResultType.Failed,
-			};
+			return new TranslateTextExerciseResult(dateTime, ExerciseResultType.Failed, typedText: null);
 		}
 	}
 }

@@ -402,7 +402,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 		private static TranslateTextExercise CreateExercise(string id, AutoMocker mocker, DateTimeOffset lastExerciseDate, DateOnly nextExerciseDate)
 		{
-			var exercise = new TranslateTextExercise(new[] { GetSuccessfulResult(lastExerciseDate) })
+			var exercise = new TranslateTextExercise(new[] { lastExerciseDate.DateTime.ToSuccessfulExerciseResult() })
 			{
 				TextInStudiedLanguage = new LanguageText
 				{
@@ -414,15 +414,6 @@ namespace LanguageTutor.Services.UnitTests.Internal
 				.Setup(x => x.GetNextExerciseDate(exercise)).Returns(nextExerciseDate);
 
 			return exercise;
-		}
-
-		private static TranslateTextExerciseResult GetSuccessfulResult(DateTimeOffset dateTime)
-		{
-			return new TranslateTextExerciseResult
-			{
-				DateTime = dateTime,
-				ResultType = ExerciseResultType.Successful,
-			};
 		}
 
 		private static TranslateTextExercise CreateExerciseWithNoResults(string id, AutoMocker mocker, DateTimeOffset createDate)

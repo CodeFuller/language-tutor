@@ -12,6 +12,7 @@ namespace LanguageTutor.Models.UnitTests.Exercises
 	{
 		private sealed class TestExerciseResult : BasicExerciseResult
 		{
+			public override ExerciseResultType ResultType { get; }
 		}
 
 		private sealed class TestExercise : BasicExercise

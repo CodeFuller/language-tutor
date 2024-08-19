@@ -27,11 +27,7 @@ namespace LanguageTutor.Models.UnitTests.Exercises
 
 			// Assert
 
-			var expectedResult = new TranslateTextExerciseResult
-			{
-				ResultType = ExerciseResultType.Successful,
-				DateTime = new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero),
-			};
+			var expectedResult = new TranslateTextExerciseResult(new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero), ExerciseResultType.Successful, typedText: null);
 
 			result.Should().BeEquivalentTo(expectedResult);
 			target.SortedResults.Should().BeEquivalentTo(new[] { expectedResult });
@@ -56,12 +52,7 @@ namespace LanguageTutor.Models.UnitTests.Exercises
 
 			// Assert
 
-			var expectedResult = new TranslateTextExerciseResult
-			{
-				ResultType = ExerciseResultType.Failed,
-				DateTime = new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero),
-				TypedText = "another thing",
-			};
+			var expectedResult = new TranslateTextExerciseResult(new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero), ExerciseResultType.Failed, typedText: "another thing");
 
 			result.Should().BeEquivalentTo(expectedResult);
 			target.SortedResults.Should().BeEquivalentTo(new[] { expectedResult });
@@ -86,12 +77,7 @@ namespace LanguageTutor.Models.UnitTests.Exercises
 
 			// Assert
 
-			var expectedResult = new TranslateTextExerciseResult
-			{
-				ResultType = ExerciseResultType.Failed,
-				DateTime = new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero),
-				TypedText = "something",
-			};
+			var expectedResult = new TranslateTextExerciseResult(new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero), ExerciseResultType.Failed, typedText: "something");
 
 			result.Should().BeEquivalentTo(expectedResult);
 			target.SortedResults.Should().BeEquivalentTo(new[] { expectedResult });
@@ -116,12 +102,7 @@ namespace LanguageTutor.Models.UnitTests.Exercises
 
 			// Assert
 
-			var expectedResult = new TranslateTextExerciseResult
-			{
-				ResultType = ExerciseResultType.Failed,
-				DateTime = new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero),
-				TypedText = "gora",
-			};
+			var expectedResult = new TranslateTextExerciseResult(new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero), ExerciseResultType.Failed, typedText: "gora");
 
 			result.Should().BeEquivalentTo(expectedResult);
 			target.SortedResults.Should().BeEquivalentTo(new[] { expectedResult });
@@ -146,12 +127,7 @@ namespace LanguageTutor.Models.UnitTests.Exercises
 
 			// Assert
 
-			var expectedResult = new TranslateTextExerciseResult
-			{
-				ResultType = ExerciseResultType.Skipped,
-				DateTime = new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero),
-				TypedText = null,
-			};
+			var expectedResult = new TranslateTextExerciseResult(new DateTimeOffset(2024, 08, 13, 17, 05, 48, TimeSpan.Zero), ExerciseResultType.Skipped, typedText: null);
 
 			result.Should().BeEquivalentTo(expectedResult);
 			target.SortedResults.Should().BeEquivalentTo(new[] { expectedResult });
