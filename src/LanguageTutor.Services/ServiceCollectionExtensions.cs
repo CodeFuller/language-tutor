@@ -17,6 +17,7 @@ namespace LanguageTutor.Services
 
 			services.AddSingleton<IUserService, UserService>();
 			services.AddSingleton<ITutorService, TutorService>();
+			services.AddSingleton<IExerciseService, ExerciseService>();
 			services.AddSingleton<IExerciseResultService, ExerciseResultService>();
 			services.AddSingleton<IDictionaryService, DictionaryService>();
 

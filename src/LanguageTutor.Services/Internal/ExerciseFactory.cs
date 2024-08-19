@@ -1,13 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LanguageTutor.Models;
 using LanguageTutor.Models.Exercises;
 using LanguageTutor.Services.Data;
+using LanguageTutor.Services.LanguageTraits;
 
 namespace LanguageTutor.Services.Internal
 {
 	internal class ExerciseFactory : IExerciseFactory
 	{
+		private readonly ISupportedLanguageTraits supportedLanguageTraits;
+
+		public ExerciseFactory(ISupportedLanguageTraits supportedLanguageTraits)
+		{
+			this.supportedLanguageTraits = supportedLanguageTraits ?? throw new ArgumentNullException(nameof(supportedLanguageTraits));
+		}
+
 		public IEnumerable<TranslateTextExercise> CreateTranslateTextExercises(IReadOnlyCollection<TranslateTextExerciseData> exercisesData)
 		{
 			var translationsFromStudiedLanguage = exercisesData.ToDictionary(x => x.TextInStudiedLanguage.Id, x => x.TextsInKnownLanguage);
@@ -46,20 +55,21 @@ namespace LanguageTutor.Services.Internal
 			}
 		}
 
-		public IEnumerable<InflectWordExercise> CreateInflectWordExercises(IReadOnlyCollection<InflectWordExerciseData> exercisesData)
+		public IEnumerable<InflectWordExercise> CreateInflectWordExercises(ItemId studiedLanguageId, IReadOnlyCollection<InflectWordExerciseData> exercisesData)
 		{
-			return exercisesData.Select(x => new InflectWordExercise(x.CreationTimestamp, GetDescriptionForInflectWordExercise(x), x.BaseForm, x.WordForms, x.ExerciseResults));
+			var languageTraits = supportedLanguageTraits.GetLanguageTraits(studiedLanguageId);
+			var templates = languageTraits.GetInflectWordExerciseTypes()
+				.Select(x => x.DescriptionTemplate)
+				.ToDictionary(x => x.Id);
+
+			return exercisesData.Select(x => new InflectWordExercise(x.ExerciseId, x.CreationTimestamp, GetDescriptionForInflectWordExercise(x, templates), x.BaseForm, x.WordForms, x.ExerciseResults));
 		}
 
-		private static string GetDescriptionForInflectWordExercise(InflectWordExerciseData exerciseData)
+		private static string GetDescriptionForInflectWordExercise(InflectWordExerciseData exerciseData, IReadOnlyDictionary<ItemId, InflectWordExerciseDescriptionTemplate> templates)
 		{
-			if (!String.IsNullOrEmpty(exerciseData.Description))
-			{
-				return exerciseData.Description;
-			}
-
-			// TODO: Implement filling of description based on template.
-			throw new NotSupportedException();
+			return !String.IsNullOrEmpty(exerciseData.Description)
+				? exerciseData.Description
+				: templates[exerciseData.DescriptionTemplateId].GetDescription(exerciseData.BaseForm);
 		}
 	}
 }

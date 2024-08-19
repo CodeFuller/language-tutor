@@ -24,6 +24,7 @@ namespace LanguageTutor.Infrastructure.Sqlite
 			services.AddSingleton<IStatisticsRepository, StatisticsRepository>();
 
 			services.AddSingleton<IChecksumCalculator, Crc32Calculator>();
+			services.AddSingleton<IJsonSerializer, JsonSerializer>();
 
 			return services;
 		}

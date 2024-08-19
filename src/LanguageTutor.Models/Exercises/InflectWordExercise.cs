@@ -7,6 +7,8 @@ namespace LanguageTutor.Models.Exercises
 {
 	public class InflectWordExercise : BasicExercise<InflectWordExerciseResult>
 	{
+		public ItemId Id { get; }
+
 		public override DateTimeOffset CreationTimestamp { get; }
 
 		public string Description { get; }
@@ -15,10 +17,11 @@ namespace LanguageTutor.Models.Exercises
 
 		public IReadOnlyCollection<InflectWordForm> WordForms { get; }
 
-		public InflectWordExercise(DateTimeOffset creationTimestamp, string description, string baseForm,
+		public InflectWordExercise(ItemId id, DateTimeOffset creationTimestamp, string description, string baseForm,
 			IReadOnlyCollection<InflectWordForm> wordForms, IEnumerable<InflectWordExerciseResult> results)
 			: base(results)
 		{
+			Id = id;
 			CreationTimestamp = creationTimestamp;
 			Description = description;
 			BaseForm = baseForm;
@@ -27,7 +30,7 @@ namespace LanguageTutor.Models.Exercises
 
 		protected override BasicExercise<InflectWordExerciseResult> WithLimitedResults(IEnumerable<InflectWordExerciseResult> limitedResults)
 		{
-			return new InflectWordExercise(CreationTimestamp, Description, BaseForm, WordForms, limitedResults);
+			return new InflectWordExercise(Id, CreationTimestamp, Description, BaseForm, WordForms, limitedResults);
 		}
 
 		public InflectWordExerciseResult Check(IEnumerable<InflectWordForm> typedWordForms, DateTimeOffset timestamp)

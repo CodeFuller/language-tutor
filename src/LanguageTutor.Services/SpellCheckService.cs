@@ -24,7 +24,7 @@ namespace LanguageTutor.Services
 		// It just opens corresponding page in wiktionary.org for a user check.
 		public Task<bool> PerformSpellCheck(LanguageText languageText, CancellationToken cancellationToken)
 		{
-			var urlForSpellCheck = supportedLanguageTraits.GetLanguageTraits(languageText.Language)
+			var urlForSpellCheck = supportedLanguageTraits.GetLanguageTraits(languageText.Language.Id)
 				.GetUrlForSpellCheck(languageText.Text);
 
 			webBrowser.OpenPage(urlForSpellCheck);

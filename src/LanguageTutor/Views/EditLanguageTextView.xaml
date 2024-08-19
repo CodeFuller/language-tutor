@@ -34,7 +34,7 @@
                 <ContentPresenter Content="{Binding}">
                     <ContentPresenter.Resources>
                         <DataTemplate DataType="{x:Type viewModels:CreateOrPickTextViewModel}">
-                            <!-- We enable search only when drop-down is open. Otherwise there is no way to add new synonym, because existing text is always picked. -->
+                            <!-- We enable search only when drop-down is open. Otherwise, there is no way to add new synonym, because existing text is always picked. -->
                             <ComboBox IsEditable="True" ItemsSource="{Binding ExistingTexts}" Text="{Binding Text}"
                                       SelectedItem="{Binding SelectedText}" helpers:FocusHelper.IsFocused="{Binding TextIsFocused}"
                                       IsTextSearchEnabled="{Binding RelativeSource={RelativeSource Self}, Path=IsDropDownOpen}"

@@ -84,6 +84,35 @@ CREATE TABLE [TranslateTextExerciseResults] (
 CREATE INDEX [IX_TranslateTextExerciseResults_UserId] ON [TranslateTextExerciseResults] ([UserId]);
 CREATE INDEX [IX_TranslateTextExerciseResults_TextId] ON [TranslateTextExerciseResults] ([TextId]);
 
+CREATE TABLE [InflectWordExercises] (
+  [Id] INTEGER NOT NULL,
+  [LanguageId] int NOT NULL,
+  [TemplateId] int NULL,
+  [Description] ntext NULL,
+  [BaseForm] ntext NOT NULL,
+  [WordForms] ntext NOT NULL,
+  [CreationTimestamp] datetime NOT NULL,
+
+  CONSTRAINT [sqlite_master_PK_InflectWordExercises] PRIMARY KEY ([Id]),
+  FOREIGN KEY ([LanguageId]) REFERENCES [Languages] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE INDEX [IX_InflectWordExercises_LanguageId] ON [InflectWordExercises] ([LanguageId]);
+
+CREATE TABLE [InflectWordExerciseResults] (
+  [Id] INTEGER NOT NULL,
+  [UserId] int NOT NULL,
+  [ExerciseId] int NOT NULL,
+  [DateTime] datetime NOT NULL,
+  [FormResults] ntext NOT NULL,
+
+  CONSTRAINT [sqlite_master_PK_InflectWordExerciseResults] PRIMARY KEY ([Id]),
+  FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY ([ExerciseId]) REFERENCES [InflectWordExercises] ([Id]) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE INDEX [IX_InflectWordExerciseResults_UserId] ON [InflectWordExerciseResults] ([UserId]);
+
 CREATE TABLE [UserStatistics] (
   [UserId] int NOT NULL,
   [StudiedLanguageId] int NOT NULL,

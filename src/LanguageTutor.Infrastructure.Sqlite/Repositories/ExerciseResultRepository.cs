@@ -15,16 +15,18 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 	{
 		private readonly IDbContextFactory<LanguageTutorDbContext> contextFactory;
 
-		public ExerciseResultRepository(IDbContextFactory<LanguageTutorDbContext> contextFactory)
+		private readonly IJsonSerializer jsonSerializer;
+
+		public ExerciseResultRepository(IDbContextFactory<LanguageTutorDbContext> contextFactory, IJsonSerializer jsonSerializer)
 		{
 			this.contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
+			this.jsonSerializer = jsonSerializer ?? throw new ArgumentNullException(nameof(jsonSerializer));
 		}
 
 		public async Task AddTranslateTextExerciseResult(ItemId userId, TranslateTextExercise exercise, TranslateTextExerciseResult exerciseResult, CancellationToken cancellationToken)
 		{
 			var exerciseResultEntity = new TranslateTextExerciseResultEntity
 			{
-				Id = exerciseResult.Id?.ToInt32() ?? default,
 				UserId = userId.ToInt32(),
 				TextId = exercise.TextInStudiedLanguage.Id.ToInt32(),
 				DateTime = exerciseResult.DateTime,
@@ -36,14 +38,22 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 
 			await dbContext.TranslateTextExerciseResults.AddAsync(exerciseResultEntity, cancellationToken);
 			await dbContext.SaveChangesAsync(cancellationToken);
-
-			exerciseResult.Id = exerciseResultEntity.Id.ToItemId();
 		}
 
-		public Task AddInflectWordExerciseResult(ItemId userId, InflectWordExercise exercise, InflectWordExerciseResult exerciseResult, CancellationToken cancellationToken)
+		public async Task AddInflectWordExerciseResult(ItemId userId, InflectWordExercise exercise, InflectWordExerciseResult exerciseResult, CancellationToken cancellationToken)
 		{
-			// TODO: Implement DAL for InflectWordExercise.
-			return Task.CompletedTask;
+			var exerciseResultEntity = new InflectWordExerciseResultEntity
+			{
+				UserId = userId.ToInt32(),
+				ExerciseId = exercise.Id.ToInt32(),
+				DateTime = exerciseResult.DateTime,
+				FormResults = jsonSerializer.Serialize(exerciseResult.FormResults),
+			};
+
+			await using var dbContext = await contextFactory.CreateDbContextAsync(cancellationToken);
+
+			await dbContext.InflectWordExerciseResults.AddAsync(exerciseResultEntity, cancellationToken);
+			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

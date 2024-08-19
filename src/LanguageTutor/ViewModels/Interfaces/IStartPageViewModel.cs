@@ -25,9 +25,13 @@ namespace LanguageTutor.ViewModels.Interfaces
 
 		bool HasProblematicExercises { get; }
 
+		bool CanEditExercises { get; }
+
 		ICommand PerformExercisesCommand { get; }
 
 		ICommand EditDictionaryCommand { get; }
+
+		ICommand EditExercisesCommand { get; }
 
 		ICommand GoToProblematicExercisesCommand { get; }
 

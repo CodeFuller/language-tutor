@@ -23,6 +23,8 @@ namespace LanguageTutor.ViewModels
 
 		private readonly ITutorService tutorService;
 
+		private readonly IExerciseService exerciseService;
+
 		private User CurrentUser { get; set; }
 
 		private UserSettingsData CurrentUserSettings { get; set; }
@@ -48,6 +50,7 @@ namespace LanguageTutor.ViewModels
 				OnLanguagesUpdated(CancellationToken.None).GetAwaiter().GetResult();
 
 				OnPropertyChanged(nameof(LanguagesAreSelected));
+				OnPropertyChanged(nameof(CanEditExercises));
 			}
 		}
 
@@ -70,6 +73,7 @@ namespace LanguageTutor.ViewModels
 				OnLanguagesUpdated(CancellationToken.None).GetAwaiter().GetResult();
 
 				OnPropertyChanged(nameof(LanguagesAreSelected));
+				OnPropertyChanged(nameof(CanEditExercises));
 			}
 		}
 
@@ -98,22 +102,28 @@ namespace LanguageTutor.ViewModels
 
 		public bool HasProblematicExercises => UserStatistics?.NumberOfProblematicExercises > 0;
 
+		public bool CanEditExercises => LanguagesAreSelected && exerciseService.InflectWordExercisesAreSupported(SelectedStudiedLanguage);
+
 		public ICommand PerformExercisesCommand { get; }
 
 		public ICommand EditDictionaryCommand { get; }
+
+		public ICommand EditExercisesCommand { get; }
 
 		public ICommand GoToProblematicExercisesCommand { get; }
 
 		public ICommand ShowStatisticsChartCommand { get; }
 
-		public StartPageViewModel(IUserService userService, ITutorService tutorService, IMessenger messenger)
+		public StartPageViewModel(IUserService userService, ITutorService tutorService, IExerciseService exerciseService, IMessenger messenger)
 		{
 			this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
 			this.tutorService = tutorService ?? throw new ArgumentNullException(nameof(tutorService));
+			this.exerciseService = exerciseService ?? throw new ArgumentNullException(nameof(exerciseService));
 			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			PerformExercisesCommand = new RelayCommand(() => messenger.Send(new SwitchToPerformExercisesPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			EditDictionaryCommand = new RelayCommand(() => messenger.Send(new SwitchToEditDictionaryPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
+			EditExercisesCommand = new RelayCommand(() => messenger.Send(new SwitchToEditExercisesPageEventArgs(SelectedStudiedLanguage)));
 			GoToProblematicExercisesCommand = new RelayCommand(() => messenger.Send(new SwitchToProblematicExercisesPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 			ShowStatisticsChartCommand = new RelayCommand(() => messenger.Send(new SwitchToStatisticsChartPageEventArgs(SelectedStudiedLanguage, SelectedKnownLanguage)));
 		}

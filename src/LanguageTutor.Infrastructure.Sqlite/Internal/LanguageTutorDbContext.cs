@@ -15,6 +15,10 @@ namespace LanguageTutor.Infrastructure.Sqlite.Internal
 
 		public DbSet<TranslateTextExerciseResultEntity> TranslateTextExerciseResults { get; set; }
 
+		public DbSet<InflectWordExerciseEntity> InflectWordExercises { get; set; }
+
+		public DbSet<InflectWordExerciseResultEntity> InflectWordExerciseResults { get; set; }
+
 		public DbSet<UserStatisticsEntity> UserStatistics { get; set; }
 
 		public DbSet<UserSettingsEntity> UserSettings { get; set; }

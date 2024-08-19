@@ -41,9 +41,13 @@ namespace LanguageTutor.Views.DesignInstances
 
 		public bool HasProblematicExercises => true;
 
+		public bool CanEditExercises => true;
+
 		public ICommand PerformExercisesCommand => null;
 
 		public ICommand EditDictionaryCommand => null;
+
+		public ICommand EditExercisesCommand => null;
 
 		public ICommand GoToProblematicExercisesCommand => null;
 

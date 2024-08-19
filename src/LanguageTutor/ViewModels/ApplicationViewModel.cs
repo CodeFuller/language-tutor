@@ -26,6 +26,8 @@ namespace LanguageTutor.ViewModels
 
 		public IEditDictionaryViewModel EditDictionaryViewModel { get; }
 
+		public IEditExercisesViewModel EditExercisesViewModel { get; }
+
 		public IProblematicExercisesViewModel ProblematicExercisesViewModel { get; }
 
 		public IStatisticsChartViewModel StatisticsChartViewModel { get; }
@@ -41,13 +43,14 @@ namespace LanguageTutor.ViewModels
 		public ICommand LoadCommand { get; }
 
 		public ApplicationViewModel(IStartPageViewModel startPageViewModel, IPerformExercisesViewModel performExercisesViewModel,
-			IExerciseResultsViewModel exerciseResultsViewModel, IEditDictionaryViewModel editDictionaryViewModel, IProblematicExercisesViewModel problematicExercisesViewModel,
-			IStatisticsChartViewModel statisticsChartViewModel, IMessenger messenger, IOptions<ApplicationSettings> options)
+			IExerciseResultsViewModel exerciseResultsViewModel, IEditDictionaryViewModel editDictionaryViewModel, IEditExercisesViewModel editExercisesViewModel,
+			IProblematicExercisesViewModel problematicExercisesViewModel, IStatisticsChartViewModel statisticsChartViewModel, IMessenger messenger, IOptions<ApplicationSettings> options)
 		{
 			StartPageViewModel = startPageViewModel ?? throw new ArgumentNullException(nameof(startPageViewModel));
 			PerformExercisesViewModel = performExercisesViewModel ?? throw new ArgumentNullException(nameof(performExercisesViewModel));
 			ExerciseResultsViewModel = exerciseResultsViewModel ?? throw new ArgumentNullException(nameof(exerciseResultsViewModel));
 			EditDictionaryViewModel = editDictionaryViewModel ?? throw new ArgumentNullException(nameof(editDictionaryViewModel));
+			EditExercisesViewModel = editExercisesViewModel ?? throw new ArgumentNullException(nameof(editExercisesViewModel));
 			ProblematicExercisesViewModel = problematicExercisesViewModel ?? throw new ArgumentNullException(nameof(problematicExercisesViewModel));
 			StatisticsChartViewModel = statisticsChartViewModel ?? throw new ArgumentNullException(nameof(statisticsChartViewModel));
 
@@ -69,6 +72,7 @@ namespace LanguageTutor.ViewModels
 			messenger.Register<SwitchToPerformExercisesPageEventArgs>(this, (_, e) => SwitchToPerformExercisesPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 			messenger.Register<SwitchToExerciseResultsPageEventArgs>(this, (_, e) => SwitchToExerciseResultsPage(e.StudiedLanguage, e.KnownLanguage, e.ExerciseResults, CancellationToken.None));
 			messenger.Register<SwitchToEditDictionaryPageEventArgs>(this, (_, e) => SwitchToEditDictionaryPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
+			messenger.Register<SwitchToEditExercisesPageEventArgs>(this, (_, e) => SwitchToEditExercisesPage(e.StudiedLanguage, CancellationToken.None));
 			messenger.Register<SwitchToProblematicExercisesPageEventArgs>(this, (_, e) => SwitchToProblematicExercisesPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 			messenger.Register<SwitchToStatisticsChartPageEventArgs>(this, (_, e) => SwitchToStatisticsChartPage(e.StudiedLanguage, e.KnownLanguage, CancellationToken.None));
 		}
@@ -109,6 +113,13 @@ namespace LanguageTutor.ViewModels
 			await EditDictionaryViewModel.Load(studiedLanguage, knownLanguage, cancellationToken);
 
 			CurrentPage = EditDictionaryViewModel;
+		}
+
+		private async void SwitchToEditExercisesPage(Language studiedLanguage, CancellationToken cancellationToken)
+		{
+			await EditExercisesViewModel.Load(studiedLanguage, cancellationToken);
+
+			CurrentPage = EditExercisesViewModel;
 		}
 
 		private async void SwitchToProblematicExercisesPage(Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)

@@ -38,6 +38,7 @@ namespace LanguageTutor
 			services.AddSingleton<IPerformExercisesViewModel, PerformExercisesViewModel>();
 			services.AddSingleton<IExerciseResultsViewModel, ExerciseResultsViewModel>();
 			services.AddSingleton<IEditDictionaryViewModel, EditDictionaryViewModel>();
+			services.AddSingleton<IEditExercisesViewModel, EditExercisesViewModel>();
 			services.AddSingleton<IProblematicExercisesViewModel, ProblematicExercisesViewModel>();
 			services.AddSingleton<IStatisticsChartViewModel, StatisticsChartViewModel>();
 

@@ -76,7 +76,6 @@ namespace LanguageTutor.Services
 		private async Task<IEnumerable<BasicExercise>> GetExercises(User user, Language studiedLanguage, Language knownLanguage, CancellationToken cancellationToken)
 		{
 			var translateTextExercises = await GetTranslateTextExercises(user.Id, studiedLanguage.Id, knownLanguage.Id, cancellationToken);
-
 			var inflectWordExercises = await GetInflectWordExercises(user.Id, studiedLanguage.Id, cancellationToken);
 
 			return translateTextExercises.Concat<BasicExercise>(inflectWordExercises);
@@ -93,7 +92,7 @@ namespace LanguageTutor.Services
 		{
 			var exercisesData = await exerciseRepository.GetInflectWordExercises(userId, studiedLanguageId, cancellationToken);
 
-			return exerciseFactory.CreateInflectWordExercises(exercisesData);
+			return exerciseFactory.CreateInflectWordExercises(studiedLanguageId, exercisesData);
 		}
 
 		public Task<PronunciationRecord> GetPronunciationRecord(ItemId textId, CancellationToken cancellationToken)

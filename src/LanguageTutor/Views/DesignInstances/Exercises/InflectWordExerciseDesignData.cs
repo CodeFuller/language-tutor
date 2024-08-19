@@ -12,7 +12,7 @@ namespace LanguageTutor.Views.DesignInstances.Exercises
 	{
 		public IMessenger Messenger => null;
 
-		public InflectWordExercise Exercise { get; } = new(new DateTimeOffset(2024, 08, 14, 18, 07, 21, TimeSpan.Zero), "Proszę odmienić czasownik \"być\" w czasie teraźniejszym", "być", [], []);
+		public InflectWordExercise Exercise { get; } = new(new("1"), new DateTimeOffset(2024, 08, 14, 18, 07, 21, TimeSpan.Zero), "Proszę odmienić czasownik \"być\" w czasie teraźniejszym", "być", [], []);
 
 		public string Description => Exercise.Description;
 

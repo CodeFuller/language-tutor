@@ -4,6 +4,6 @@ namespace LanguageTutor.Services.LanguageTraits
 {
 	internal interface ISupportedLanguageTraits
 	{
-		ILanguageTraits GetLanguageTraits(Language language);
+		ILanguageTraits GetLanguageTraits(ItemId languageId);
 	}
 }

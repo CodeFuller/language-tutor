@@ -14,11 +14,11 @@ namespace LanguageTutor.Services.LanguageTraits
 			this.languagesTraits = languagesTraits?.ToDictionary(x => x.Language.Id, x => x) ?? throw new ArgumentNullException(nameof(languagesTraits));
 		}
 
-		public ILanguageTraits GetLanguageTraits(Language language)
+		public ILanguageTraits GetLanguageTraits(ItemId languageId)
 		{
-			if (!languagesTraits.TryGetValue(language.Id, out var languageTraits))
+			if (!languagesTraits.TryGetValue(languageId, out var languageTraits))
 			{
-				throw new NotSupportedException($"Language is not supported: {language}");
+				throw new NotSupportedException($"Language with id {languageId} is not supported");
 			}
 
 			return languageTraits;

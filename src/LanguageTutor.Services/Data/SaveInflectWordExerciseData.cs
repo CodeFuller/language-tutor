@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using LanguageTutor.Models;
-using LanguageTutor.Models.Exercises;
 using LanguageTutor.Models.Exercises.Inflection;
 
 namespace LanguageTutor.Services.Data
 {
-	public class InflectWordExerciseData
+	public class SaveInflectWordExerciseData
 	{
-		public ItemId ExerciseId { get; init; }
+		public ItemId LanguageId { get; init; }
 
 		public ItemId DescriptionTemplateId { get; init; }
 
@@ -17,8 +16,6 @@ namespace LanguageTutor.Services.Data
 		public string BaseForm { get; init; }
 
 		public IReadOnlyCollection<InflectWordForm> WordForms { get; init; }
-
-		public IReadOnlyCollection<InflectWordExerciseResult> ExerciseResults { get; init; }
 
 		public DateTimeOffset CreationTimestamp { get; init; }
 	}

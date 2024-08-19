@@ -39,6 +39,9 @@
             <DataTemplate DataType="{x:Type viewModels:EditDictionaryViewModel}">
                 <views:EditDictionaryView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:EditExercisesViewModel}">
+                <views:EditExercisesView />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:ProblematicExercisesViewModel}">
                 <views:ProblematicExercisesView />
             </DataTemplate>

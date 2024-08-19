@@ -1,0 +1,61 @@
+<UserControl x:Class="LanguageTutor.Views.EditExercisesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:designInstances="clr-namespace:LanguageTutor.Views.DesignInstances"
+             mc:Ignorable="d"
+             d:DesignWidth="785" d:DesignHeight="460"
+             d:DataContext="{d:DesignInstance designInstances:EditExercisesDesignData, IsDesignTimeCreatable=True}"
+             d:DesignStyle="{StaticResource ApplicationWindowStyle}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Margin="0,10,0,0" Padding="0" VerticalContentAlignment="Center" Content="Type:" />
+                <ComboBox Grid.Row="0" Grid.Column="2" Margin="0,10,0,0" ItemsSource="{Binding ExerciseTypes}" SelectedItem="{Binding SelectedExerciseType}"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Padding="0" VerticalContentAlignment="Center" Content="Base Form:" />
+                <TextBox Grid.Row="1" Grid.Column="2" Margin="0,10,0,0" Text="{Binding BaseForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Label Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Padding="0" VerticalContentAlignment="Center" Content="Description:" />
+                <TextBox Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" Text="{Binding Description}" />
+
+                <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,10,0,0" Padding="10" BorderThickness="2" BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                    <!-- Word forms are added in code-behind -->
+                    <StackPanel Name="WordForms" VerticalAlignment="Center" />
+                </Border>
+            </Grid>
+        </Grid>
+
+        <UniformGrid Grid.Row="1" Margin="20" Rows="1" Columns="3" HorizontalAlignment="Center">
+            <Button Margin="0,0,20,0" Width="120" Content="Save" Command="{Binding SaveChangesCommand}" />
+            <Button Margin="0,0,20,0" Width="120" Content="Clear" Command="{Binding ClearChangesCommand}"/>
+            <Button Margin="0,0,20,0" Width="120" Content="Go to Start" Command="{Binding GoToStartPageCommand}"/>
+        </UniformGrid>
+    </Grid>
+</UserControl>

@@ -35,7 +35,7 @@ namespace LanguageTutor.Services.GoogleTextToSpeech
 					Text = text,
 				},
 
-				Voice = supportedLanguageTraits.GetLanguageTraits(language).GetSynthesisVoiceConfiguration(),
+				Voice = supportedLanguageTraits.GetLanguageTraits(language.Id).GetSynthesisVoiceConfiguration(),
 
 				AudioConfig = new AudioConfig
 				{

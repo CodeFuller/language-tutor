@@ -103,10 +103,11 @@
             </Grid>
         </Grid>
 
-        <UniformGrid Grid.Row="2" Margin="20" Rows="1" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Button Margin="0,0,20,0" Width="160" Content="Perform Exercises" IsEnabled="{Binding HasExercisesToPerform}" Command="{Binding PerformExercisesCommand}" />
-            <Button Margin="20,0,20,0" Width="160" Content="Edit Dictionary" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding EditDictionaryCommand}" />
-            <Button Margin="20,0,0,0" Width="160" Content="Statistics Chart" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding ShowStatisticsChartCommand}" />
+        <UniformGrid Grid.Row="2" Margin="0,20,0,0" Rows="1" Columns="4" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Button Margin="15,0,15,0" Width="150" Content="Perform Exercises" IsEnabled="{Binding HasExercisesToPerform}" Command="{Binding PerformExercisesCommand}" />
+            <Button Margin="15,0,15,0" Width="150" Content="Edit Dictionary" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding EditDictionaryCommand}" />
+            <Button Margin="15,0,15,0" Width="150" Content="Edit Exercises" IsEnabled="{Binding CanEditExercises}" Command="{Binding EditExercisesCommand}" />
+            <Button Margin="15,0,15,0" Width="150" Content="Statistics Chart" IsEnabled="{Binding LanguagesAreSelected}" Command="{Binding ShowStatisticsChartCommand}" />
         </UniformGrid>
     </Grid>
 </UserControl>
