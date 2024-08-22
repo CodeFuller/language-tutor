@@ -81,7 +81,7 @@ namespace LanguageTutor.Infrastructure.Sqlite.Repositories
 
 			var results = resultEntities
 				.Where(x => exerciseIds.Contains(x.ExerciseId))
-				.ToLookup(x => x.Id, x => new InflectWordExerciseResult
+				.ToLookup(x => x.ExerciseId, x => new InflectWordExerciseResult
 				{
 					DateTime = x.DateTime,
 					FormResults = jsonSerializer.Deserialize<IReadOnlyCollection<InflectWordResult>>(x.FormResults),
