@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:exercises="clr-namespace:LanguageTutor.Views.DesignInstances.Exercises"
+             xmlns:exercisesViews="clr-namespace:LanguageTutor.Views.Exercises"
              mc:Ignorable="d" 
              d:DesignWidth="785" d:DesignHeight="291"
              d:DataContext="{d:DesignInstance exercises:InflectWordExerciseDesignData, IsDesignTimeCreatable=True}"
@@ -26,8 +27,19 @@
                     <ColumnDefinition Width="4*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Word forms are added in code-behind -->
-                <StackPanel Name="WordForms" Grid.Column="1" VerticalAlignment="Center" />
+                <ItemsControl Grid.Column="1" VerticalAlignment="Center" ItemsSource="{Binding WordFormViewModels}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <exercisesViews:InflectWordFormView DataContext="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
             </Grid>
         </Grid>
     </Grid>

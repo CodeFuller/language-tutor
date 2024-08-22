@@ -16,7 +16,7 @@ namespace LanguageTutor.ViewModels.Exercises
 {
 	public class InflectWordExerciseViewModel : BasicExerciseViewModel, IInflectWordExerciseViewModel
 	{
-		public IMessenger Messenger { get; }
+		private readonly IMessenger messenger;
 
 		private InflectWordExercise exercise;
 
@@ -39,7 +39,7 @@ namespace LanguageTutor.ViewModels.Exercises
 		public InflectWordExerciseViewModel(IExerciseResultService exerciseResultService, IMessenger messenger, ISystemClock systemClock)
 			: base(exerciseResultService, systemClock)
 		{
-			Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			this.messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			messenger.Register<NextStepWithinExerciseEventArgs>(this, (_, _) => SwitchToNextFormOrCheckExercise());
 		}
@@ -51,22 +51,20 @@ namespace LanguageTutor.ViewModels.Exercises
 			Exercise = exercise ?? throw new ArgumentNullException(nameof(exercise));
 
 			WordFormViewModelList = exercise.WordForms
-				.Select(x => new InflectWordFormViewModel(Messenger, x.FormHint, x.WordForm))
+				.Select(x => new InflectWordFormViewModel(messenger, x.FormHint, x.WordForm))
 				.ToList();
 
 			WordFormViewModels.Clear();
 			WordFormViewModels.AddRange(WordFormViewModelList);
 
 			WordFormViewModels[0].Load();
-
-			Messenger.Send(new InflectWordExerciseLoadedEventArgs());
 		}
 
 		private void SwitchToNextFormOrCheckExercise()
 		{
 			if (ExerciseWasChecked)
 			{
-				Messenger.Send(new CheckOrSwitchToNextExerciseEventArgs());
+				messenger.Send(new CheckOrSwitchToNextExerciseEventArgs());
 				return;
 			}
 
@@ -79,7 +77,7 @@ namespace LanguageTutor.ViewModels.Exercises
 
 			if (index == WordFormViewModels.Count - 1)
 			{
-				Messenger.Send(new CheckOrSwitchToNextExerciseEventArgs());
+				messenger.Send(new CheckOrSwitchToNextExerciseEventArgs());
 				return;
 			}
 
