@@ -15,6 +15,7 @@ using LanguageTutor.Services.Interfaces;
 using LanguageTutor.ViewModels.Exercises;
 using LanguageTutor.ViewModels.Extensions;
 using LanguageTutor.ViewModels.Interfaces;
+using static LanguageTutor.ViewModels.Extensions.FocusHelpers;
 
 namespace LanguageTutor.ViewModels
 {
@@ -54,6 +55,14 @@ namespace LanguageTutor.ViewModels
 			}
 		}
 
+		private bool baseFormIsFocused;
+
+		public bool BaseFormIsFocused
+		{
+			get => baseFormIsFocused;
+			set => SetProperty(ref baseFormIsFocused, value);
+		}
+
 		private string description;
 
 		public string Description
@@ -91,6 +100,8 @@ namespace LanguageTutor.ViewModels
 
 			SelectedExerciseType = ExerciseTypes.First();
 			BaseForm = String.Empty;
+
+			SetFocus(() => BaseFormIsFocused);
 		}
 
 		private async Task SaveChanges(CancellationToken cancellationToken)
@@ -117,6 +128,7 @@ namespace LanguageTutor.ViewModels
 		private void ClearFilledData()
 		{
 			BaseForm = String.Empty;
+			SetFocus(() => BaseFormIsFocused);
 
 			foreach (var wordForm in WordFormViewModels)
 			{

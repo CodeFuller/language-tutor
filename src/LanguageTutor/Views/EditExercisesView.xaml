@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:designInstances="clr-namespace:LanguageTutor.Views.DesignInstances"
              xmlns:exercises="clr-namespace:LanguageTutor.Views.Exercises"
+             xmlns:helpers="clr-namespace:LanguageTutor.Views.Helpers"
              mc:Ignorable="d"
              d:DesignWidth="785" d:DesignHeight="460"
              d:DataContext="{d:DesignInstance designInstances:EditExercisesDesignData, IsDesignTimeCreatable=True}"
@@ -41,7 +42,8 @@
                 <ComboBox Grid.Row="0" Grid.Column="2" Margin="0,10,0,0" ItemsSource="{Binding ExerciseTypes}" SelectedItem="{Binding SelectedExerciseType}"/>
 
                 <Label Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Padding="0" VerticalContentAlignment="Center" Content="Base Form:" />
-                <TextBox Grid.Row="1" Grid.Column="2" Margin="0,10,0,0" Text="{Binding BaseForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="1" Grid.Column="2" Margin="0,10,0,0" Text="{Binding BaseForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         helpers:FocusHelper.IsFocused="{Binding BaseFormIsFocused}" />
 
                 <Label Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" Padding="0" VerticalContentAlignment="Center" Content="Description:" />
                 <TextBox Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" Text="{Binding Description}" />

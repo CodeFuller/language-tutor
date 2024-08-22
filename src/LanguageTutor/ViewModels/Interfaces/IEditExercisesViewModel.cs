@@ -16,6 +16,8 @@ namespace LanguageTutor.ViewModels.Interfaces
 
 		string BaseForm { get; set; }
 
+		bool BaseFormIsFocused { get; }
+
 		string Description { get; set; }
 
 		ObservableCollection<IEditInflectWordFormViewModel> WordFormViewModels { get; }
