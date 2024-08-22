@@ -22,8 +22,6 @@ namespace LanguageTutor.ViewModels
 	{
 		private readonly IExerciseService exerciseService;
 
-		public IMessenger Messenger { get; }
-
 		private Language StudiedLanguage { get; set; }
 
 		public ObservableCollection<InflectWordExerciseTypeViewModel> ExerciseTypes { get; } = new();
@@ -41,8 +39,6 @@ namespace LanguageTutor.ViewModels
 
 				WordFormViewModels.Clear();
 				WordFormViewModels.AddRange(SelectedExerciseType.ExerciseTypeDescriptor.FormHints.Select(x => new EditInflectWordFormViewModel(x)));
-
-				Messenger.Send(new InflectWordExerciseTypeSelectedEventArgs(SelectedExerciseType));
 			}
 		}
 
@@ -77,7 +73,7 @@ namespace LanguageTutor.ViewModels
 		public EditExercisesViewModel(IExerciseService exerciseService, IMessenger messenger)
 		{
 			this.exerciseService = exerciseService ?? throw new ArgumentNullException(nameof(exerciseService));
-			Messenger = messenger ?? throw new ArgumentNullException(nameof(messenger));
+			_ = messenger ?? throw new ArgumentNullException(nameof(messenger));
 
 			SaveChangesCommand = new AsyncRelayCommand(SaveChanges);
 			ClearChangesCommand = new RelayCommand(ClearFilledData);

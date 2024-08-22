@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using LanguageTutor.Models;
 using LanguageTutor.ViewModels.Exercises;
 
@@ -11,8 +10,6 @@ namespace LanguageTutor.ViewModels.Interfaces
 {
 	public interface IEditExercisesViewModel : IPageViewModel
 	{
-		IMessenger Messenger { get; }
-
 		ObservableCollection<InflectWordExerciseTypeViewModel> ExerciseTypes { get; }
 
 		InflectWordExerciseTypeViewModel SelectedExerciseType { get; set; }

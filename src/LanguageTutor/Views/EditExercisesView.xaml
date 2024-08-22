@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:designInstances="clr-namespace:LanguageTutor.Views.DesignInstances"
+             xmlns:exercises="clr-namespace:LanguageTutor.Views.Exercises"
              mc:Ignorable="d"
              d:DesignWidth="785" d:DesignHeight="460"
              d:DataContext="{d:DesignInstance designInstances:EditExercisesDesignData, IsDesignTimeCreatable=True}"
@@ -46,8 +47,18 @@
                 <TextBox Grid.Row="2" Grid.Column="2" Margin="0,10,0,0" Text="{Binding Description}" />
 
                 <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,10,0,0" Padding="10" BorderThickness="2" BorderBrush="{DynamicResource PrimaryHueLightBrush}">
-                    <!-- Word forms are added in code-behind -->
-                    <StackPanel Name="WordForms" VerticalAlignment="Center" />
+                    <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding WordFormViewModels}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <exercises:EditInflectWordFormView DataContext="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Border>
             </Grid>
         </Grid>

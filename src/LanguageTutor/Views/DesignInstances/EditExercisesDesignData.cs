@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using LanguageTutor.Models;
 using LanguageTutor.Services.Data;
 using LanguageTutor.ViewModels;
@@ -16,8 +15,6 @@ namespace LanguageTutor.Views.DesignInstances
 {
 	internal class EditExercisesDesignData : IEditExercisesViewModel
 	{
-		public IMessenger Messenger => null;
-
 		public ObservableCollection<InflectWordExerciseTypeViewModel> ExerciseTypes { get; }
 
 		public InflectWordExerciseTypeViewModel SelectedExerciseType { get; set; }
