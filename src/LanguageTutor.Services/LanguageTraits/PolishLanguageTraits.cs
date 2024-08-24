@@ -53,6 +53,13 @@ namespace LanguageTutor.Services.LanguageTraits
 				"wołacz",
 			};
 
+			var comparisonFormHints = new[]
+			{
+				"równy",
+				"wyższy",
+				"najwyższy",
+			};
+
 			return
 			[
 				new InflectWordExerciseTypeDescriptor
@@ -128,18 +135,24 @@ namespace LanguageTutor.Services.LanguageTraits
 
 				new InflectWordExerciseTypeDescriptor
 				{
-					Title = "Stopniowanie przymiotników i przysłówków",
+					Title = "Stopniowanie przymiotników",
 					DescriptionTemplate = new()
 					{
 						Id = new("6"),
-						Template = "Proszę odmienić słowo \"{BaseForm}\" w stopniach porównania",
+						Template = "Proszę odmienić przymiotnik \"{BaseForm}\" w stopniach porównania",
 					},
-					FormHints =
-					[
-						"równy",
-						"wyższy",
-						"najwyższy",
-					],
+					FormHints = comparisonFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Stopniowanie przysłówków",
+					DescriptionTemplate = new()
+					{
+						Id = new("7"),
+						Template = "Proszę odmienić przysłówiek \"{BaseForm}\" w stopniach porównania",
+					},
+					FormHints = comparisonFormHints,
 				},
 			];
 		}
