@@ -68,13 +68,40 @@ namespace LanguageTutor.Services.LanguageTraits
 
 				new InflectWordExerciseTypeDescriptor
 				{
-					Title = "Odmiana czasownika w czasie przeszłym",
+					Title = "Odmiana czasownika w czasie przeszłym, r.m.",
 					DescriptionTemplate = new()
 					{
 						Id = new("2"),
-						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przeszłym",
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przeszłym, r.m.",
 					},
-					FormHints = verbFormHints,
+					FormHints =
+					[
+						"ja",
+						"ty",
+						"on",
+						"my",
+						"wy",
+						"oni",
+					],
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana czasownika w czasie przeszłym, r.ż.",
+					DescriptionTemplate = new()
+					{
+						Id = new("3"),
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przeszłym, r.ż.",
+					},
+					FormHints =
+					[
+						"ja",
+						"ty",
+						"ona",
+						"my",
+						"wy",
+						"one",
+					],
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -82,7 +109,7 @@ namespace LanguageTutor.Services.LanguageTraits
 					Title = "Odmiana czasownika w trybie rozkazującym",
 					DescriptionTemplate = new()
 					{
-						Id = new("3"),
+						Id = new("4"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie rozkazującym",
 					},
 					FormHints = verbFormHints,
@@ -93,7 +120,7 @@ namespace LanguageTutor.Services.LanguageTraits
 					Title = "Odmiana słowa przez przypadki",
 					DescriptionTemplate = new()
 					{
-						Id = new("4"),
+						Id = new("5"),
 						Template = "Proszę odmienić słowo \"{BaseForm}\" przez przypadki",
 					},
 					FormHints = caseFormHints,
@@ -104,7 +131,7 @@ namespace LanguageTutor.Services.LanguageTraits
 					Title = "Stopniowanie przymiotników i przysłówków",
 					DescriptionTemplate = new()
 					{
-						Id = new("5"),
+						Id = new("6"),
 						Template = "Proszę odmienić słowo \"{BaseForm}\" w stopniach porównania",
 					},
 					FormHints =
