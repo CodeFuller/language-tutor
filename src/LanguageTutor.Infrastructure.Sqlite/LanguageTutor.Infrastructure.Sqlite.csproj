@@ -13,4 +13,8 @@
     <ProjectReference Include="..\LanguageTutor.Services\LanguageTutor.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="LanguageTutor.MergeDatabases" />
+  </ItemGroup>
+
 </Project>
