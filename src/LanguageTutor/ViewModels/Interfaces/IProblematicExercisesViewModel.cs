@@ -3,14 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageTutor.Models;
+using LanguageTutor.ViewModels.Exercises;
 
 namespace LanguageTutor.ViewModels.Interfaces
 {
 	public interface IProblematicExercisesViewModel : IPageViewModel
 	{
-		ObservableCollection<ProblematicExerciseViewModel> ProblematicExercises { get; }
+		ObservableCollection<BasicProblematicExerciseViewModel> ProblematicExercises { get; }
 
-		ProblematicExerciseViewModel SelectedExercise { get; set; }
+		BasicProblematicExerciseViewModel SelectedExercise { get; set; }
 
 		ICommand GoToStartPageCommand { get; }
 

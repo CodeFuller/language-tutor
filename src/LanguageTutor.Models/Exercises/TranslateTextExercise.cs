@@ -13,6 +13,8 @@ namespace LanguageTutor.Models.Exercises
 
 		public override DateTimeOffset CreationTimestamp => TextInStudiedLanguage.CreationTimestamp;
 
+		public IEnumerable<TranslateTextExerciseResult> TranslateTextExerciseResults => StronglyTypedSortedResults;
+
 		public TranslateTextExercise(IEnumerable<TranslateTextExerciseResult> results)
 			: base(results)
 		{

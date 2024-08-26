@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
 
         <lvc:CartesianChart Grid.Row="0" LegendPosition="Top" Series="{Binding Series}" XAxes="{Binding XAxes}" YAxes="{Binding YAxes}" />
-        <Button Grid.Row="1" Margin="0,10,0,20"  HorizontalAlignment="Center" Content="Go to Start" Command="{Binding GoToStartPageCommand}" />
+        <Button Grid.Row="1" Margin="0,10,0,20" HorizontalAlignment="Center" Content="Go to Start" Command="{Binding GoToStartPageCommand}" />
     </Grid>
 
 </UserControl>

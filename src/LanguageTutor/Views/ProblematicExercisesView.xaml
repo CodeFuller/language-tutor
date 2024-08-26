@@ -5,17 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:designInstances="clr-namespace:LanguageTutor.Views.DesignInstances"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:exercises="clr-namespace:LanguageTutor.Views.Exercises"
+             xmlns:viewModels1="clr-namespace:LanguageTutor.ViewModels.Exercises"
              mc:Ignorable="d" 
              d:DesignWidth="785" d:DesignHeight="460"
              d:DataContext="{d:DesignInstance designInstances:ProblematicExercisesDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="7*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        <ListBox Grid.Column="0" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch"
+        <ListBox Grid.Row="0" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding ProblematicExercises}" SelectedItem="{Binding SelectedExercise}"
                  BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}">
             <ListBox.ItemTemplate>
@@ -25,8 +28,8 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding TextInStudiedLanguage.Text}" VerticalAlignment="Center" />
-                        <ItemsControl Grid.Column="1" ItemsSource="{Binding ExerciseResults}">
+                        <TextBlock Grid.Column="0" Text="{Binding Title}" VerticalAlignment="Center" />
+                        <ItemsControl Grid.Column="1" ItemsSource="{Binding OrderedExerciseResults}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"/>
@@ -41,35 +44,26 @@
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="4,0,4,0"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <Grid Grid.Column="1" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="5*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Viewbox Grid.Row="0" StretchDirection="DownOnly" Stretch="Uniform">
-                <Label HorizontalAlignment="Center" FontSize="32" Content="{Binding SelectedExercise.TextInStudiedLanguage.Text}" />
-            </Viewbox>
-            <Viewbox Grid.Row="1" StretchDirection="DownOnly" Stretch="Uniform">
-                <Label HorizontalAlignment="Center" FontSize="24" Content="{Binding SelectedExercise.TranslationsInKnownLanguage}" />
-            </Viewbox>
-            <ListBox Grid.Row="2" HorizontalContentAlignment="Stretch" ItemsSource="{Binding SelectedExercise.ExerciseResults}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel>
-                            <TextBlock DockPanel.Dock="Left" Margin="0,0,10,0" Text="{Binding DateTime}" VerticalAlignment="Center" />
-                            <materialDesign:PackIcon DockPanel.Dock="Left" Margin="0,0,10,0" Width="24" Height="24" Kind="{Binding IconKind}" Foreground="{Binding IconColor}" />
-                            <Viewbox StretchDirection="DownOnly" Stretch="Uniform" HorizontalAlignment="Left">
-                                <TextBlock Text="{Binding TypedText}" />
-                            </Viewbox>
-                        </DockPanel>
+        <Grid Grid.Row="1">
+            <ContentControl Content="{Binding SelectedExercise}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type viewModels1:ProblematicTranslateTextExerciseViewModel}">
+                        <exercises:ProblematicTranslateTextExerciseResultsView />
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Button Grid.Row="3" HorizontalAlignment="Center" Content="Go to Start" Command="{Binding GoToStartPageCommand}" />
+                    <DataTemplate DataType="{x:Type viewModels1:ProblematicInflectWordExerciseViewModel}">
+                        <exercises:ProblematicInflectWordExerciseResultsView />
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
         </Grid>
+
+        <Button Grid.Row="2" Margin="0,10,0,20" HorizontalAlignment="Center" Content="Go to Start" Command="{Binding GoToStartPageCommand}" />
     </Grid>
 </UserControl>

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LanguageTutor.Models;
 using LanguageTutor.Models.Exercises;
-using LanguageTutor.ViewModels;
+using LanguageTutor.ViewModels.Exercises;
 using LanguageTutor.ViewModels.Interfaces;
 
 namespace LanguageTutor.Views.DesignInstances
 {
 	internal class ProblematicExercisesDesignData : IProblematicExercisesViewModel
 	{
-		public ObservableCollection<ProblematicExerciseViewModel> ProblematicExercises { get; } =
+		public ObservableCollection<BasicProblematicExerciseViewModel> ProblematicExercises { get; } =
 		[
-			new ProblematicExerciseViewModel(new TranslateTextExercise(
+			new ProblematicTranslateTextExerciseViewModel(new TranslateTextExercise(
 			[
 				new(new DateTimeOffset(2023, 08, 17, 08, 16, 41, TimeSpan.FromHours(2)), ExerciseResultType.Skipped, null),
 				new(new DateTimeOffset(2023, 08, 19, 11, 01, 09, TimeSpan.FromHours(2)), ExerciseResultType.Failed, "źmęczony"),
@@ -34,7 +34,7 @@ namespace LanguageTutor.Views.DesignInstances
 				],
 			}),
 
-			new ProblematicExerciseViewModel(new TranslateTextExercise(
+			new ProblematicTranslateTextExerciseViewModel(new TranslateTextExercise(
 			[
 				new(DateTimeOffset.Now, ExerciseResultType.Skipped, null),
 				new(DateTimeOffset.Now, ExerciseResultType.Skipped, null),
@@ -55,7 +55,7 @@ namespace LanguageTutor.Views.DesignInstances
 			}),
 		];
 
-		public ProblematicExerciseViewModel SelectedExercise { get; set; }
+		public BasicProblematicExerciseViewModel SelectedExercise { get; set; }
 
 		public ICommand GoToStartPageCommand => null;
 

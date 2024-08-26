@@ -8,7 +8,9 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using LanguageTutor.Events;
 using LanguageTutor.Models;
+using LanguageTutor.Models.Exercises;
 using LanguageTutor.Services.Interfaces;
+using LanguageTutor.ViewModels.Exercises;
 using LanguageTutor.ViewModels.Extensions;
 using LanguageTutor.ViewModels.Interfaces;
 
@@ -16,11 +18,26 @@ namespace LanguageTutor.ViewModels
 {
 	public class ProblematicExercisesViewModel : IProblematicExercisesViewModel
 	{
+		private class CreateProblematicExerciseViewModelVisitor : IExerciseVisitor
+		{
+			public BasicProblematicExerciseViewModel ProblematicExerciseViewModel { get; private set; }
+
+			public void VisitTranslateTextExercise(TranslateTextExercise exercise)
+			{
+				ProblematicExerciseViewModel = new ProblematicTranslateTextExerciseViewModel(exercise);
+			}
+
+			public void VisitInflectWordExercise(InflectWordExercise exercise)
+			{
+				ProblematicExerciseViewModel = new ProblematicInflectWordExerciseViewModel(exercise);
+			}
+		}
+
 		private readonly ITutorService tutorService;
 
-		public ObservableCollection<ProblematicExerciseViewModel> ProblematicExercises { get; } = new();
+		public ObservableCollection<BasicProblematicExerciseViewModel> ProblematicExercises { get; } = new();
 
-		public ProblematicExerciseViewModel SelectedExercise { get; set; }
+		public BasicProblematicExerciseViewModel SelectedExercise { get; set; }
 
 		public ICommand GoToStartPageCommand { get; }
 
@@ -38,9 +55,17 @@ namespace LanguageTutor.ViewModels
 			var problematicExercises = await tutorService.GetProblematicExercises(user, studiedLanguage, knownLanguage, cancellationToken);
 
 			ProblematicExercises.Clear();
-			ProblematicExercises.AddRange(problematicExercises.Select(x => new ProblematicExerciseViewModel(x)));
+			ProblematicExercises.AddRange(problematicExercises.Select(CreateProblematicExerciseViewModel));
 
 			SelectedExercise = ProblematicExercises.FirstOrDefault();
+		}
+
+		private static BasicProblematicExerciseViewModel CreateProblematicExerciseViewModel(BasicExercise exercise)
+		{
+			var visitor = new CreateProblematicExerciseViewModelVisitor();
+			exercise.Accept(visitor);
+
+			return visitor.ProblematicExerciseViewModel;
 		}
 	}
 }

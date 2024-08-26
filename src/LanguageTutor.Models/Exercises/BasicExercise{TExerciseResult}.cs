@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,6 +10,8 @@ namespace LanguageTutor.Models.Exercises
 		private readonly List<TExerciseResult> results;
 
 		protected override IEnumerable<BasicExerciseResult> Results => results;
+
+		protected IEnumerable<TExerciseResult> StronglyTypedSortedResults => results.OrderByDescending(x => x.DateTime);
 
 		protected BasicExercise(IEnumerable<TExerciseResult> results)
 		{

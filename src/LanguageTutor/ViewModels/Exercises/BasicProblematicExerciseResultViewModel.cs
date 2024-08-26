@@ -5,19 +5,19 @@ using LanguageTutor.Models;
 using LanguageTutor.Models.Exercises;
 using MaterialDesignThemes.Wpf;
 
-namespace LanguageTutor.ViewModels
+namespace LanguageTutor.ViewModels.Exercises
 {
-	public class ProblematicExerciseResultViewModel
+	public abstract class BasicProblematicExerciseResultViewModel
 	{
 		public PackIconKind IconKind { get; }
 
 		public Brush IconColor { get; }
 
-		public string DateTime { get; }
+		public DateTimeOffset DateTime { get; }
 
-		public string TypedText { get; }
+		public string DateTimeString => DateTime.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
 
-		public ProblematicExerciseResultViewModel(TranslateTextExerciseResult exerciseResult)
+		protected BasicProblematicExerciseResultViewModel(BasicExerciseResult exerciseResult)
 		{
 			switch (exerciseResult.ResultType)
 			{
@@ -40,8 +40,7 @@ namespace LanguageTutor.ViewModels
 					throw new NotSupportedException($"Exercise result type is not supported: {exerciseResult.ResultType}");
 			}
 
-			DateTime = exerciseResult.DateTime.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
-			TypedText = exerciseResult.TypedText;
+			DateTime = exerciseResult.DateTime;
 		}
 	}
 }

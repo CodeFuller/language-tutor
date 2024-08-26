@@ -17,6 +17,8 @@ namespace LanguageTutor.Models.Exercises
 
 		public IReadOnlyCollection<InflectWordForm> WordForms { get; }
 
+		public IEnumerable<InflectWordExerciseResult> InflectWordExerciseResults => StronglyTypedSortedResults;
+
 		public InflectWordExercise(ItemId id, DateTimeOffset creationTimestamp, string description, string baseForm,
 			IReadOnlyCollection<InflectWordForm> wordForms, IEnumerable<InflectWordExerciseResult> results)
 			: base(results)
