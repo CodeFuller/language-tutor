@@ -154,6 +154,25 @@ namespace LanguageTutor.Services.LanguageTraits
 					},
 					FormHints = comparisonFormHints,
 				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana zaimka przez przypadki",
+					DescriptionTemplate = new()
+					{
+						Id = new("8"),
+						Template = "Proszę odmienić zaimek \"{BaseForm}\" przez przypadki",
+					},
+					FormHints = new[]
+					{
+						"mianownik",
+						"dopełniacz",
+						"celownik",
+						"biernik",
+						"narzędnik",
+						"miejscownik",
+					},
+				},
 			];
 		}
 	}
