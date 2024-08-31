@@ -46,10 +46,10 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			var exercises = new[]
 			{
-				CreateExercise("Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 12)),
-				CreateExercise("Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 4", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 12)),
+				CreateTranslateTextExercise("Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 12)),
+				CreateTranslateTextExercise("Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 4", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 12)),
 			};
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -78,9 +78,9 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			var exercises = new[]
 			{
-				CreateExercise("Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
 			};
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -103,13 +103,13 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			var exercises = new[]
 			{
-				CreateExercise("Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
-				CreateExercise("Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
-				CreateExercise("Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 4", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 5", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 6", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Exercise 7", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
+				CreateTranslateTextExercise("Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
+				CreateTranslateTextExercise("Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 4", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 5", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 6", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Exercise 7", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
 			};
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -135,17 +135,17 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			var exercises = new[]
 			{
-				CreateExercise("Group 3 - Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 14)),
-				CreateExercise("Group 3 - Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 14)),
-				CreateExercise("Group 3 - Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 14)),
+				CreateTranslateTextExercise("Group 3 - Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 14)),
+				CreateTranslateTextExercise("Group 3 - Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 14)),
+				CreateTranslateTextExercise("Group 3 - Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 14)),
 
-				CreateExercise("Group 1 - Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
-				CreateExercise("Group 1 - Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
-				CreateExercise("Group 1 - Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
+				CreateTranslateTextExercise("Group 1 - Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
+				CreateTranslateTextExercise("Group 1 - Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
+				CreateTranslateTextExercise("Group 1 - Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 12)),
 
-				CreateExercise("Group 2 - Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 13)),
-				CreateExercise("Group 2 - Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 13)),
-				CreateExercise("Group 2 - Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 13)),
+				CreateTranslateTextExercise("Group 2 - Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 13)),
+				CreateTranslateTextExercise("Group 2 - Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 13)),
+				CreateTranslateTextExercise("Group 2 - Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 11), nextExerciseDate: new DateOnly(2023, 07, 13)),
 			};
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -188,11 +188,11 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			// Since exercises are returned in random order, we take quite a big number of such exercises,
 			// so that we can check that items are actually randomized, i.e. exercises are returned from both halves.
 			var exercises1 = Enumerable.Range(1, 100)
-				.Select(n => CreateExercise($"Touched Exercise - 1st Half - {n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)))
+				.Select(n => CreateTranslateTextExercise($"Touched Exercise - 1st Half - {n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)))
 				.ToList();
 
 			var exercises2 = Enumerable.Range(1, 100)
-				.Select(n => CreateExercise($"Touched Exercise - 2nd Half - {n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)))
+				.Select(n => CreateTranslateTextExercise($"Touched Exercise - 2nd Half - {n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)))
 				.ToList();
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -208,7 +208,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectExercisesToPerform_IfNumberOfUntouchedExercisesExceedsDailyLimitAndSuitableTouchedExercisesIsEnough_ReturnsOnlyTouchedExercises()
+		public void SelectExercisesToPerform_IfNumberOfUntouchedTranslateTextExercisesExceedsDailyLimitAndSuitableTouchedExercisesIsEnough_ReturnsOnlyTouchedExercises()
 		{
 			// Arrange
 
@@ -216,13 +216,13 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			var touchedExercises = new[]
 			{
-				CreateExercise("Touched Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
 			};
 
 			var untouchedExercises = Enumerable.Range(1, 100)
-				.Select(n => CreateExerciseWithNoResults($"Untouched Exercise {n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
+				.Select(n => CreateTranslateTextExerciseWithNoResults($"Untouched Exercise {n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
 				.ToList();
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -237,7 +237,41 @@ namespace LanguageTutor.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectExercisesToPerform_IfNumberOfUntouchedExercisesExceedsDailyLimitAndSuitableTouchedExercisesIsNotEnough_ReturnsAllTouchedExercisesAndFirstUntouchedExercises()
+		public void SelectExercisesToPerform_IfNumberOfUntouchedInflectWordExercisesExceedsDailyLimitAndSuitableTouchedExercisesIsEnough_ReturnsSomeUntouchedInflectWordExercises()
+		{
+			// Arrange
+
+			var mocker = new AutoMocker();
+
+			var touchedTranslateTextExercises = Enumerable.Range(1, 100)
+				.Select(n => CreateTranslateTextExercise($"Touched Translate Text Exercise - {n}", mocker, lastExerciseDate: new DateTime(2024, 08, 30), nextExerciseDate: new DateOnly(2024, 08, 31)))
+				.ToList();
+
+			var untouchedTranslateTextExercises = Enumerable.Range(1, 100)
+				.Select(n => CreateTranslateTextExerciseWithNoResults($"Untouched Translate Text Exercise - {n}", mocker, createDate: new DateTime(2024, 01, 01).AddDays(n)))
+				.ToList();
+
+			var untouchedInflectWordExercises = Enumerable.Range(1, 100)
+				.Select(n => CreateInflectWordExerciseWithNoResults($"Untouched Inflect Word Exercise {n}", mocker, createDate: new DateTime(2024, 01, 01).AddDays(n)))
+				.ToList();
+
+			var target = mocker.CreateInstance<ExercisesSelector>();
+
+			// Act
+
+			var allExercises = touchedTranslateTextExercises
+				.Concat(untouchedTranslateTextExercises)
+				.Concat<BasicExercise>(untouchedInflectWordExercises);
+
+			var result = target.SelectExercisesToPerform(new DateOnly(2024, 08, 31), allExercises, 50);
+
+			// Assert
+
+			result.Should().Contain(x => untouchedInflectWordExercises.Any(y => ReferenceEquals(x, y)));
+		}
+
+		[TestMethod]
+		public void SelectExercisesToPerform_IfNumberOfUntouchedTranslateTextExercisesExceedsDailyLimitAndSuitableTouchedExercisesIsNotEnough_ReturnsAllTouchedExercisesAndFirstUntouchedExercises()
 		{
 			// Arrange
 
@@ -245,13 +279,13 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			var touchedExercises = new[]
 			{
-				CreateExercise("Touched Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
 			};
 
 			var untouchedExercises = Enumerable.Range(1, 100)
-				.Select(n => CreateExerciseWithNoResults($"Untouched Exercise {n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
+				.Select(n => CreateTranslateTextExerciseWithNoResults($"Untouched Exercise {n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
 				.ToList();
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -275,7 +309,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 		}
 
 		[TestMethod]
-		public void SelectExercisesToPerform_IfNumberOfPreviouslyUntouchedExercisesDoesNotExceedDailyLimit_ReturnsAllSuchExercises()
+		public void SelectExercisesToPerform_IfNumberOfUntouchedTranslateTextExercisesDoesNotExceedDailyLimit_ReturnsAllSuchExercises()
 		{
 			// Arrange
 
@@ -283,30 +317,30 @@ namespace LanguageTutor.Services.UnitTests.Internal
 
 			var touchedExercises = new[]
 			{
-				CreateExercise("Touched Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 4", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 5", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 6", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 7", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 8", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 9", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
-				CreateExercise("Touched Exercise 10", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 1", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 2", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 3", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 4", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 5", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 6", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 7", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 8", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 9", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
+				CreateTranslateTextExercise("Touched Exercise 10", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11)),
 			};
 
 			var untouchedExercises = new[]
 			{
-				CreateExerciseWithNoResults("Untouched Exercise 1", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 2", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 3", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 4", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 5", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 6", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 7", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 8", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 9", mocker, createDate: new DateTime(2023, 07, 03)),
-				CreateExerciseWithNoResults("Untouched Exercise 10", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 1", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 2", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 3", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 4", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 5", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 6", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 7", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 8", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 9", mocker, createDate: new DateTime(2023, 07, 03)),
+				CreateTranslateTextExerciseWithNoResults("Untouched Exercise 10", mocker, createDate: new DateTime(2023, 07, 03)),
 			};
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -330,7 +364,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			var mocker = new AutoMocker();
 
 			var exercises = Enumerable.Range(1, 100)
-				.Select(n => CreateExercise($"{n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11).AddDays(n)))
+				.Select(n => CreateTranslateTextExercise($"{n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11).AddDays(n)))
 				.ToList();
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -354,7 +388,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			var mocker = new AutoMocker();
 
 			var exercises = Enumerable.Range(1, 100)
-				.Select(n => CreateExerciseWithNoResults($"{n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
+				.Select(n => CreateTranslateTextExerciseWithNoResults($"{n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
 				.ToList();
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -378,11 +412,11 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			var mocker = new AutoMocker();
 
 			var touchedExercises = Enumerable.Range(1, 100)
-				.Select(n => CreateExercise($"{n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11).AddDays(n)))
+				.Select(n => CreateTranslateTextExercise($"{n}", mocker, lastExerciseDate: new DateTime(2023, 07, 10), nextExerciseDate: new DateOnly(2023, 07, 11).AddDays(n)))
 				.ToList();
 
 			var untouchedExercises = Enumerable.Range(101, 100)
-				.Select(n => CreateExerciseWithNoResults($"{n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
+				.Select(n => CreateTranslateTextExerciseWithNoResults($"{n}", mocker, createDate: new DateTime(2023, 07, 11).AddDays(n)))
 				.ToList();
 
 			var target = mocker.CreateInstance<ExercisesSelector>();
@@ -400,7 +434,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			resultIds.Skip(100).Take(100).Should().NotBeInAscendingOrder();
 		}
 
-		private static TranslateTextExercise CreateExercise(string id, AutoMocker mocker, DateTimeOffset lastExerciseDate, DateOnly nextExerciseDate)
+		private static TranslateTextExercise CreateTranslateTextExercise(string id, AutoMocker mocker, DateTimeOffset lastExerciseDate, DateOnly nextExerciseDate)
 		{
 			var exercise = new TranslateTextExercise(new[] { lastExerciseDate.DateTime.ToSuccessfulExerciseResult() })
 			{
@@ -416,7 +450,7 @@ namespace LanguageTutor.Services.UnitTests.Internal
 			return exercise;
 		}
 
-		private static TranslateTextExercise CreateExerciseWithNoResults(string id, AutoMocker mocker, DateTimeOffset createDate)
+		private static TranslateTextExercise CreateTranslateTextExerciseWithNoResults(string id, AutoMocker mocker, DateTimeOffset createDate)
 		{
 			var exercise = new TranslateTextExercise([])
 			{
@@ -426,6 +460,16 @@ namespace LanguageTutor.Services.UnitTests.Internal
 					CreationTimestamp = createDate,
 				},
 			};
+
+			mocker.GetMock<INextExerciseDateProvider>()
+				.Setup(x => x.GetNextExerciseDate(exercise)).Returns(DateOnly.MinValue);
+
+			return exercise;
+		}
+
+		private static InflectWordExercise CreateInflectWordExerciseWithNoResults(string id, AutoMocker mocker, DateTimeOffset createDate)
+		{
+			var exercise = new InflectWordExercise(new ItemId(id), createDate, "test description", "test base form", [], []);
 
 			mocker.GetMock<INextExerciseDateProvider>()
 				.Setup(x => x.GetNextExerciseDate(exercise)).Returns(DateOnly.MinValue);

@@ -9,6 +9,21 @@ namespace LanguageTutor.Services.Internal
 {
 	internal class ExercisesSelector : IExercisesSelector
 	{
+		private class IsForcedAsTouchedExerciseVisitor : IExerciseVisitor
+		{
+			public bool IsForcedAsTouchedExercise { get; private set; }
+
+			public void VisitTranslateTextExercise(TranslateTextExercise exercise)
+			{
+				IsForcedAsTouchedExercise = false;
+			}
+
+			public void VisitInflectWordExercise(InflectWordExercise exercise)
+			{
+				IsForcedAsTouchedExercise = true;
+			}
+		}
+
 		private readonly INextExerciseDateProvider nextExerciseDateProvider;
 
 		public ExercisesSelector(INextExerciseDateProvider nextExerciseDateProvider)
@@ -28,15 +43,10 @@ namespace LanguageTutor.Services.Internal
 				return Array.Empty<BasicExercise>();
 			}
 
-			var untouchedExercises = exercisesList
-				.Where(x => !x.SortedResults.Any())
-				.OrderBy(x => x.CreationTimestamp)
-				.ToList();
-
 			var suitableExercises = new List<BasicExercise>();
 
 			var suitableTouchedExercises = exercisesList
-				.Where(x => x.SortedResults.Any())
+				.Where(IsTouchedExercise)
 				.Select(x => new
 				{
 					Exercise = x,
@@ -46,6 +56,11 @@ namespace LanguageTutor.Services.Internal
 				.GroupBy(x => x.NextExerciseDateTime, x => x.Exercise)
 				.OrderBy(x => x.Key)
 				.SelectMany(x => x.Randomize());
+
+			var untouchedExercises = exercisesList
+				.Where(x => !IsTouchedExercise(x))
+				.OrderBy(x => x.CreationTimestamp)
+				.ToList();
 
 			// The logic is the following:
 			//
@@ -77,6 +92,19 @@ namespace LanguageTutor.Services.Internal
 				.Take(numberOfRestExercisesForDay)
 				.Randomize()
 				.ToList();
+		}
+
+		private static bool IsTouchedExercise(BasicExercise exercise)
+		{
+			if (exercise.SortedResults.Any())
+			{
+				return true;
+			}
+
+			var visitor = new IsForcedAsTouchedExerciseVisitor();
+			exercise.Accept(visitor);
+
+			return visitor.IsForcedAsTouchedExercise;
 		}
 	}
 }
