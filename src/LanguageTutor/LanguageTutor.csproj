@@ -5,7 +5,7 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>3.0.6</Version>
+    <Version>3.0.7</Version>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>LanguageTutor.ico</ApplicationIcon>

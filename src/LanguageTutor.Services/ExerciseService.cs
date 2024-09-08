@@ -52,7 +52,7 @@ namespace LanguageTutor.Services
 			{
 				LanguageId = createExerciseData.LanguageId,
 				DescriptionTemplateId = hasDescriptionFromTemplate ? exerciseTypeDescriptor.DescriptionTemplate.Id : null,
-				Description = hasDescriptionFromTemplate ? null : descriptionFilledFromTemplate,
+				Description = hasDescriptionFromTemplate ? null : createExerciseData.Description,
 				BaseForm = createExerciseData.BaseForm,
 				WordForms = createExerciseData.WordForms,
 				CreationTimestamp = systemClock.Now,
