@@ -42,26 +42,6 @@ namespace LanguageTutor.Services.LanguageTraits
 				"oni, one",
 			};
 
-			var masculineGenderVerbFormHints = new[]
-			{
-				"ja",
-				"ty",
-				"on",
-				"my",
-				"wy",
-				"oni",
-			};
-
-			var feminineGenderVerbFormHints = new[]
-			{
-				"ja",
-				"ty",
-				"ona",
-				"my",
-				"wy",
-				"one",
-			};
-
 			var caseFormHints = new[]
 			{
 				"mianownik",
@@ -101,7 +81,15 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("2"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przeszłym, r.m.",
 					},
-					FormHints = masculineGenderVerbFormHints,
+					FormHints =
+					[
+						"ja",
+						"ty",
+						"on",
+						"my",
+						"wy",
+						"oni",
+					],
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -112,34 +100,20 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("3"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przeszłym, r.ż.",
 					},
-					FormHints = feminineGenderVerbFormHints,
+					FormHints =
+					[
+						"ja",
+						"ty",
+						"ona",
+						"my",
+						"wy",
+						"one",
+					],
 				},
 
 				new InflectWordExerciseTypeDescriptor
 				{
-					Title = "Odmiana czasownika w czasie przyszłym złożonym, r.m.",
-					DescriptionTemplate = new()
-					{
-						Id = new("9"),
-						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przyszłym złożonym, r.m.",
-					},
-					FormHints = masculineGenderVerbFormHints,
-				},
-
-				new InflectWordExerciseTypeDescriptor
-				{
-					Title = "Odmiana czasownika w czasie przyszłym złożonym, r.ż.",
-					DescriptionTemplate = new()
-					{
-						Id = new("10"),
-						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przyszłym złożonym, r.ż.",
-					},
-					FormHints = feminineGenderVerbFormHints,
-				},
-
-				new InflectWordExerciseTypeDescriptor
-				{
-					Title = "Odmiana czasownika w czasie przyszłym prostym",
+					Title = "Odmiana czasownika w czasie przyszłym",
 					DescriptionTemplate = new()
 					{
 						Id = new("11"),
