@@ -117,7 +117,7 @@ namespace LanguageTutor.Services.LanguageTraits
 					DescriptionTemplate = new()
 					{
 						Id = new("11"),
-						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przyszłym prostym",
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przyszłym",
 					},
 					FormHints = verbFormHints,
 				},
@@ -135,6 +135,50 @@ namespace LanguageTutor.Services.LanguageTraits
 
 				new InflectWordExerciseTypeDescriptor
 				{
+					Title = "Odmiana czasownika w trybie przypuszczającym, r.m.",
+					DescriptionTemplate = new()
+					{
+						Id = new("12"),
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie przypuszczającym, r.m.",
+					},
+					FormHints = verbFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana czasownika w trybie przypuszczającym, r.ż.",
+					DescriptionTemplate = new()
+					{
+						Id = new("13"),
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie przypuszczającym, r.ż.",
+					},
+					FormHints = verbFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana czasownika w trybie oznajmującym, r.m.",
+					DescriptionTemplate = new()
+					{
+						Id = new("14"),
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie oznajmującym, r.m.",
+					},
+					FormHints = verbFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana czasownika w trybie oznajmującym, r.ż.",
+					DescriptionTemplate = new()
+					{
+						Id = new("15"),
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie oznajmującym, r.ż.",
+					},
+					FormHints = verbFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
 					Title = "Odmiana słowa przez przypadki",
 					DescriptionTemplate = new()
 					{
@@ -142,6 +186,36 @@ namespace LanguageTutor.Services.LanguageTraits
 						Template = "Proszę odmienić słowo \"{BaseForm}\" przez przypadki",
 					},
 					FormHints = caseFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana frazy przez przypadki",
+					DescriptionTemplate = new()
+					{
+						Id = new("9"),
+						Template = "Proszę odmienić frazę \"{BaseForm}\" przez przypadki",
+					},
+					FormHints = caseFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana zaimka przez przypadki",
+					DescriptionTemplate = new()
+					{
+						Id = new("8"),
+						Template = "Proszę odmienić zaimek \"{BaseForm}\" przez przypadki",
+					},
+					FormHints =
+					[
+						"mianownik",
+						"dopełniacz",
+						"celownik",
+						"biernik",
+						"narzędnik",
+						"miejscownik",
+					],
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -164,25 +238,6 @@ namespace LanguageTutor.Services.LanguageTraits
 						Template = "Proszę odmienić przysłówiek \"{BaseForm}\" w stopniach porównania",
 					},
 					FormHints = comparisonFormHints,
-				},
-
-				new InflectWordExerciseTypeDescriptor
-				{
-					Title = "Odmiana zaimka przez przypadki",
-					DescriptionTemplate = new()
-					{
-						Id = new("8"),
-						Template = "Proszę odmienić zaimek \"{BaseForm}\" przez przypadki",
-					},
-					FormHints = new[]
-					{
-						"mianownik",
-						"dopełniacz",
-						"celownik",
-						"biernik",
-						"narzędnik",
-						"miejscownik",
-					},
 				},
 			];
 		}
