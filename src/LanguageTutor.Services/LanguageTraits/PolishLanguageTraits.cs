@@ -42,6 +42,26 @@ namespace LanguageTutor.Services.LanguageTraits
 				"oni, one",
 			};
 
+			var masculineVerbFormHints = new[]
+			{
+				"ja",
+				"ty",
+				"on",
+				"my",
+				"wy",
+				"oni",
+			};
+
+			var feminineVerbFormHints = new[]
+			{
+				"ja",
+				"ty",
+				"ona",
+				"my",
+				"wy",
+				"one",
+			};
+
 			var caseFormHints = new[]
 			{
 				"mianownik",
@@ -81,15 +101,7 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("2"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przeszłym, r.m.",
 					},
-					FormHints =
-					[
-						"ja",
-						"ty",
-						"on",
-						"my",
-						"wy",
-						"oni",
-					],
+					FormHints = masculineVerbFormHints,
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -100,15 +112,7 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("3"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w czasie przeszłym, r.ż.",
 					},
-					FormHints =
-					[
-						"ja",
-						"ty",
-						"ona",
-						"my",
-						"wy",
-						"one",
-					],
+					FormHints = feminineVerbFormHints,
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -141,7 +145,7 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("12"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie przypuszczającym, r.m.",
 					},
-					FormHints = verbFormHints,
+					FormHints = masculineVerbFormHints,
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -152,7 +156,7 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("13"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie przypuszczającym, r.ż.",
 					},
-					FormHints = verbFormHints,
+					FormHints = feminineVerbFormHints,
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -163,7 +167,7 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("14"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie oznajmującym, r.m.",
 					},
-					FormHints = verbFormHints,
+					FormHints = masculineVerbFormHints,
 				},
 
 				new InflectWordExerciseTypeDescriptor
@@ -174,7 +178,7 @@ namespace LanguageTutor.Services.LanguageTraits
 						Id = new("15"),
 						Template = "Proszę odmienić czasownik \"{BaseForm}\" w trybie oznajmującym, r.ż.",
 					},
-					FormHints = verbFormHints,
+					FormHints = feminineVerbFormHints,
 				},
 
 				new InflectWordExerciseTypeDescriptor
