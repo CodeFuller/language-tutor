@@ -6,7 +6,7 @@
              xmlns:designInstances="clr-namespace:LanguageTutor.Views.DesignInstances"
              xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
              mc:Ignorable="d" 
-             d:DesignWidth="785" d:DesignHeight="460"
+             d:DesignWidth="785" d:DesignHeight="510"
              d:DataContext="{d:DesignInstance designInstances:StartPageDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
 

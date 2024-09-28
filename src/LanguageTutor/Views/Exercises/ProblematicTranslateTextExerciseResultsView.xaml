@@ -6,7 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:exercises="clr-namespace:LanguageTutor.Views.DesignInstances.Exercises"
              mc:Ignorable="d" 
-             d:DesignWidth="785" d:DesignHeight="300"
+             d:DesignWidth="785" d:DesignHeight="290"
              d:DataContext="{d:DesignInstance exercises:ProblematicTranslateTextExerciseDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <Grid>

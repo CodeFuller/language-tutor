@@ -6,7 +6,7 @@
              xmlns:designInstances="clr-namespace:LanguageTutor.Views.DesignInstances"
              xmlns:views="clr-namespace:LanguageTutor.Views"
              mc:Ignorable="d"
-             d:DesignWidth="785" d:DesignHeight="460"
+             d:DesignWidth="785" d:DesignHeight="510"
              d:DataContext="{d:DesignInstance designInstances:EditDictionaryDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <Grid>
@@ -45,6 +45,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -52,7 +53,7 @@
 
             <views:EditLanguageTextView Grid.Row="1" Margin="0,10,0,0" DataContext="{Binding CurrentTextInKnownLanguageViewModel}" IsEnabled="{Binding DataContext.EditTextInKnownLanguageIsEnabled, RelativeSource={RelativeSource AncestorType=views:EditDictionaryView}}" />
 
-            <UniformGrid Grid.Row="2" Margin="20" Rows="1" Columns="3" HorizontalAlignment="Center">
+            <UniformGrid Grid.Row="3" Margin="20" Rows="1" Columns="3" HorizontalAlignment="Center">
                 <Button Margin="0,0,20,0" Width="120" Content="Save" Command="{Binding SaveChangesCommand}" />
                 <Button Margin="0,0,20,0" Width="120" Content="Clear" Command="{Binding ClearChangesCommand}"/>
                 <Button Margin="0,0,20,0" Width="120" Content="Go to Start" Command="{Binding GoToStartPageCommand}"/>

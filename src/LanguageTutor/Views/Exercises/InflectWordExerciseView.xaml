@@ -6,7 +6,7 @@
              xmlns:exercises="clr-namespace:LanguageTutor.Views.DesignInstances.Exercises"
              xmlns:exercisesViews="clr-namespace:LanguageTutor.Views.Exercises"
              mc:Ignorable="d" 
-             d:DesignWidth="785" d:DesignHeight="291"
+             d:DesignWidth="785" d:DesignHeight="340"
              d:DataContext="{d:DesignInstance exercises:InflectWordExerciseDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
 

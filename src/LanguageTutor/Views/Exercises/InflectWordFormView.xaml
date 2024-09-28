@@ -7,7 +7,7 @@
              xmlns:exercises="clr-namespace:LanguageTutor.Views.DesignInstances.Exercises"
              xmlns:helpers="clr-namespace:LanguageTutor.Views.Helpers"
              mc:Ignorable="d" 
-             d:DesignWidth="400" d:DesignHeight="35"
+             d:DesignWidth="400" d:DesignHeight="44"
              d:DataContext="{d:DesignInstance exercises:InflectWordFormDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <Grid>
@@ -17,9 +17,9 @@
             <ColumnDefinition Width="7*" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Column="0" Margin="0,5,0,5" Padding="0" VerticalAlignment="Center" FontSize="16" Content="{Binding Path=FormHint}" ContentStringFormat="{}{0}:" />
+        <Label Grid.Column="0" Margin="0,5,0,5" Padding="0" VerticalAlignment="Center" FontSize="18" Content="{Binding Path=FormHint}" ContentStringFormat="{}{0}:" />
 
-        <TextBox Grid.Column="1" Margin="10,5,10,5" FontSize="16" HorizontalContentAlignment="Center" VerticalAlignment="Center"
+        <TextBox Grid.Column="1" Margin="10,5,10,5" FontSize="18" HorizontalContentAlignment="Center" VerticalAlignment="Center"
                  Text="{Binding TypedWordForm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding WordFormWasChecked}" IsReadOnlyCaretVisible="True"
                  helpers:FocusHelper.IsFocused="{Binding TypedWordIsFocused}"
                  GotKeyboardFocus="TypedWordGotKeyboardFocus" LostKeyboardFocus="TypedWordLostKeyboardFocus">
@@ -35,7 +35,7 @@
                 <materialDesign:PackIcon Width="24" Height="24" Kind="CancelCircle" Foreground="Red" 
                                          Visibility="{Binding WordFormIsTypedIncorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </StackPanel>
-            <Label Margin="5,0,0,0" FontSize="16" ClipToBounds="False" VerticalContentAlignment="Center" Content="{Binding CorrectWordForm}"
+            <Label Margin="5,0,0,0" FontSize="18" ClipToBounds="False" VerticalContentAlignment="Center" Content="{Binding CorrectWordForm}"
                    Visibility="{Binding WordFormIsTypedIncorrectly, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
 

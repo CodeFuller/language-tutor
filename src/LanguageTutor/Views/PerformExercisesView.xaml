@@ -9,7 +9,7 @@
              xmlns:designInstancesExercises="clr-namespace:LanguageTutor.Views.DesignInstances.Exercises"
              xmlns:valueConverters="clr-namespace:CodeFuller.Library.Wpf.ValueConverters;assembly=CodeFuller.Library.Wpf"
              mc:Ignorable="d" 
-             d:DesignWidth="785" d:DesignHeight="460"
+             d:DesignWidth="785" d:DesignHeight="510"
              d:DataContext="{d:DesignInstance designInstances:PerformExercisesDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
 
@@ -19,7 +19,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>

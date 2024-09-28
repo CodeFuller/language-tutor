@@ -7,7 +7,7 @@
              xmlns:exercises="clr-namespace:LanguageTutor.Views.Exercises"
              xmlns:helpers="clr-namespace:LanguageTutor.Views.Helpers"
              mc:Ignorable="d"
-             d:DesignWidth="785" d:DesignHeight="460"
+             d:DesignWidth="785" d:DesignHeight="510"
              d:DataContext="{d:DesignInstance designInstances:EditExercisesDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
     <Grid>
