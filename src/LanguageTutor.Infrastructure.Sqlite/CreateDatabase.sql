@@ -89,7 +89,7 @@ CREATE TABLE [InflectWordExercises] (
   [LanguageId] int NOT NULL,
   [TemplateId] int NULL,
   [Description] ntext NULL,
-  [BaseForm] ntext NOT NULL,
+  [BaseForm] ntext NULL,
   [WordForms] ntext NOT NULL,
   [CreationTimestamp] datetime NOT NULL,
 
