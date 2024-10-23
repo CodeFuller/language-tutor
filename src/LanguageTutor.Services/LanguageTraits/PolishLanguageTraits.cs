@@ -243,6 +243,28 @@ namespace LanguageTutor.Services.LanguageTraits
 					},
 					FormHints = comparisonFormHints,
 				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana czasownika przez przypadki, r.mos.",
+					DescriptionTemplate = new()
+					{
+						Id = new("16"),
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" przez przypadki, r.mos.",
+					},
+					FormHints = caseFormHints,
+				},
+
+				new InflectWordExerciseTypeDescriptor
+				{
+					Title = "Odmiana czasownika przez przypadki, r.nmos.",
+					DescriptionTemplate = new()
+					{
+						Id = new("17"),
+						Template = "Proszę odmienić czasownik \"{BaseForm}\" przez przypadki, r.nmos.",
+					},
+					FormHints = caseFormHints,
+				},
 			];
 		}
 	}
