@@ -246,22 +246,22 @@ namespace LanguageTutor.Services.LanguageTraits
 
 				new InflectWordExerciseTypeDescriptor
 				{
-					Title = "Odmiana czasownika przez przypadki, r.mos.",
+					Title = "Odmiana liczebnika przez przypadki, r.mos.",
 					DescriptionTemplate = new()
 					{
 						Id = new("16"),
-						Template = "Proszę odmienić czasownik \"{BaseForm}\" przez przypadki, r.mos.",
+						Template = "Proszę odmienić liczebnik \"{BaseForm}\" przez przypadki, r.mos.",
 					},
 					FormHints = caseFormHints,
 				},
 
 				new InflectWordExerciseTypeDescriptor
 				{
-					Title = "Odmiana czasownika przez przypadki, r.nmos.",
+					Title = "Odmiana liczebnika przez przypadki, r.nmos.",
 					DescriptionTemplate = new()
 					{
 						Id = new("17"),
-						Template = "Proszę odmienić czasownik \"{BaseForm}\" przez przypadki, r.nmos.",
+						Template = "Proszę odmienić liczebnik \"{BaseForm}\" przez przypadki, r.nmos.",
 					},
 					FormHints = caseFormHints,
 				},
