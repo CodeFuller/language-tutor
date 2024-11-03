@@ -39,7 +39,7 @@ namespace LanguageTutor.MergeDatabases
 			await GetChangesForTexts(sourceDbContext, targetDbContext, mergeUpdate, cancellationToken);
 			await GetChangesForTranslations(sourceDbContext, targetDbContext, mergeUpdate, cancellationToken);
 			await GetChangesForInflectWordExercises(sourceDbContext, targetDbContext, mergeUpdate, cancellationToken);
-			GetChangesForPronunciationRecords(commandLineOptions.SourceDatabaseDirectory, commandLineOptions.TargetDatabaseDirectory, mergeUpdate);
+			await GetChangesForPronunciationRecords(sourceDbContext, targetDbContext, commandLineOptions.SourceDatabaseDirectory, commandLineOptions.TargetDatabaseDirectory, mergeUpdate, cancellationToken);
 
 			if (mergeUpdate.IsEmpty)
 			{
@@ -50,16 +50,19 @@ namespace LanguageTutor.MergeDatabases
 			var sb = new StringBuilder();
 			sb.AppendLine("The following changes will be applied:");
 			sb.AppendLine();
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added texts: ",-36}{mergeUpdate.AddedTexts,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Updated texts: ",-36}{mergeUpdate.UpdatedTexts,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted texts: ",-36}{mergeUpdate.DeletedTexts,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added translations: ",-36}{mergeUpdate.AddedTranslations,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted translations: ",-36}{mergeUpdate.DeletedTranslations,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added Inflect Word exercises: ",-36}{mergeUpdate.AddedInflectWordExercises,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Updated Inflect Word exercises: ",-36}{mergeUpdate.UpdatedInflectWordExercises,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted Inflect Word exercises: ",-36}{mergeUpdate.DeletedInflectWordExercises,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added pronunciation records: ",-36}{mergeUpdate.PronunciationRecordsToAdd.Count,6:N0}");
-			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted pronunciation records: ",-36}{mergeUpdate.PronunciationRecordsToDelete.Count,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added texts: ",-50}{mergeUpdate.AddedTexts,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Updated texts: ",-50}{mergeUpdate.UpdatedTexts,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted texts: ",-50}{mergeUpdate.DeletedTexts,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added translations: ",-50}{mergeUpdate.AddedTranslations,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted translations: ",-50}{mergeUpdate.DeletedTranslations,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added Inflect Word exercises: ",-50}{mergeUpdate.AddedInflectWordExercises,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Updated Inflect Word exercises: ",-50}{mergeUpdate.UpdatedInflectWordExercises,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted Inflect Word exercises: ",-50}{mergeUpdate.DeletedInflectWordExercises,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added pronunciation records: ",-50}{mergeUpdate.AddedPronunciationRecords,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Updated pronunciation records: ",-50}{mergeUpdate.UpdatedPronunciationRecords,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted pronunciation records: ",-50}{mergeUpdate.DeletedPronunciationRecords,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Added pronunciation records to file storage: ",-50}{mergeUpdate.PronunciationRecordsToAddToFileStorage.Count,6:N0}");
+			sb.AppendLine(CultureInfo.InvariantCulture, $"{"Deleted pronunciation records from file storage: ",-50}{mergeUpdate.PronunciationRecordsToDeleteFromFileStorage.Count,6:N0}");
 			sb.AppendLine();
 			sb.Append("Do you want to continue? [y/N] ");
 
@@ -269,7 +272,101 @@ namespace LanguageTutor.MergeDatabases
 			return updated;
 		}
 
-		private static void GetChangesForPronunciationRecords(string sourceDatabaseDirectory, string targetDatabaseDirectory, MergeUpdate mergeUpdate)
+		private static async Task GetChangesForPronunciationRecords(LanguageTutorDbContext sourceDbContext, LanguageTutorDbContext targetDbContext,
+			string sourceDatabaseDirectory, string targetDatabaseDirectory, MergeUpdate mergeUpdate, CancellationToken cancellationToken)
+		{
+			await GetChangesForPronunciationRecordsInDatabase(sourceDbContext, targetDbContext, mergeUpdate, cancellationToken);
+
+			GetChangesForPronunciationRecordsInFileStorage(sourceDatabaseDirectory, targetDatabaseDirectory, mergeUpdate);
+		}
+
+		private static async Task GetChangesForPronunciationRecordsInDatabase(LanguageTutorDbContext sourceDbContext, LanguageTutorDbContext targetDbContext, MergeUpdate mergeUpdate, CancellationToken cancellationToken)
+		{
+			var sourcePronunciationRecords = (await sourceDbContext.PronunciationRecords.ToListAsync(cancellationToken)).ToDictionary(x => x.Id);
+			var targetPronunciationRecords = (await targetDbContext.PronunciationRecords.ToListAsync(cancellationToken)).ToDictionary(x => x.Id);
+
+			foreach (var sourcePronunciationRecordItem in sourcePronunciationRecords.OrderBy(x => x.Key))
+			{
+				var sourcePronunciationRecord = sourcePronunciationRecordItem.Value;
+
+				if (targetPronunciationRecords.TryGetValue(sourcePronunciationRecordItem.Key, out var targetPronunciationRecord))
+				{
+					if (UpdatePronunciationRecord(sourcePronunciationRecord, targetPronunciationRecord))
+					{
+						++mergeUpdate.UpdatedPronunciationRecords;
+					}
+				}
+				else
+				{
+					targetDbContext.PronunciationRecords.Add(new PronunciationRecordEntity
+					{
+						Id = sourcePronunciationRecord.Id,
+						TextId = sourcePronunciationRecord.TextId,
+						Format = sourcePronunciationRecord.Format,
+						Source = sourcePronunciationRecord.Source,
+						Path = sourcePronunciationRecord.Path,
+						DataLength = sourcePronunciationRecord.DataLength,
+						DataChecksum = sourcePronunciationRecord.DataChecksum,
+					});
+
+					++mergeUpdate.AddedPronunciationRecords;
+				}
+			}
+
+			foreach (var targetPronunciationRecordItem in targetPronunciationRecords.OrderBy(x => x.Key))
+			{
+				if (!sourcePronunciationRecords.ContainsKey(targetPronunciationRecordItem.Key))
+				{
+					targetDbContext.PronunciationRecords.Remove(targetPronunciationRecordItem.Value);
+					++mergeUpdate.DeletedPronunciationRecords;
+				}
+			}
+		}
+
+		private static bool UpdatePronunciationRecord(PronunciationRecordEntity sourcePronunciationRecord, PronunciationRecordEntity targetPronunciationRecord)
+		{
+			var updated = false;
+
+			if (targetPronunciationRecord.TextId != sourcePronunciationRecord.TextId)
+			{
+				targetPronunciationRecord.TextId = sourcePronunciationRecord.TextId;
+				updated = true;
+			}
+
+			if (targetPronunciationRecord.Format != sourcePronunciationRecord.Format)
+			{
+				targetPronunciationRecord.Format = sourcePronunciationRecord.Format;
+				updated = true;
+			}
+
+			if (targetPronunciationRecord.Source != sourcePronunciationRecord.Source)
+			{
+				targetPronunciationRecord.Source = sourcePronunciationRecord.Source;
+				updated = true;
+			}
+
+			if (targetPronunciationRecord.Path != sourcePronunciationRecord.Path)
+			{
+				targetPronunciationRecord.Path = sourcePronunciationRecord.Path;
+				updated = true;
+			}
+
+			if (targetPronunciationRecord.DataLength != sourcePronunciationRecord.DataLength)
+			{
+				targetPronunciationRecord.DataLength = sourcePronunciationRecord.DataLength;
+				updated = true;
+			}
+
+			if (targetPronunciationRecord.DataChecksum != sourcePronunciationRecord.DataChecksum)
+			{
+				targetPronunciationRecord.DataChecksum = sourcePronunciationRecord.DataChecksum;
+				updated = true;
+			}
+
+			return updated;
+		}
+
+		private static void GetChangesForPronunciationRecordsInFileStorage(string sourceDatabaseDirectory, string targetDatabaseDirectory, MergeUpdate mergeUpdate)
 		{
 			var sourcePronunciationRecordsPath = Path.Combine(sourceDatabaseDirectory, "PronunciationRecords");
 			var targetPronunciationRecordsPath = Path.Combine(targetDatabaseDirectory, "PronunciationRecords");
@@ -281,7 +378,7 @@ namespace LanguageTutor.MergeDatabases
 			{
 				if (!targetPronunciationRecords.Contains(sourcePronunciationRecord))
 				{
-					mergeUpdate.PronunciationRecordsToAdd.Add((SourcePath: Path.Combine(sourcePronunciationRecordsPath, sourcePronunciationRecord), Path.Combine(targetPronunciationRecordsPath, sourcePronunciationRecord)));
+					mergeUpdate.PronunciationRecordsToAddToFileStorage.Add((SourcePath: Path.Combine(sourcePronunciationRecordsPath, sourcePronunciationRecord), Path.Combine(targetPronunciationRecordsPath, sourcePronunciationRecord)));
 				}
 			}
 
@@ -289,19 +386,19 @@ namespace LanguageTutor.MergeDatabases
 			{
 				if (!sourcePronunciationRecords.Contains(targetPronunciationRecord))
 				{
-					mergeUpdate.PronunciationRecordsToDelete.Add(Path.Combine(targetPronunciationRecordsPath, targetPronunciationRecord));
+					mergeUpdate.PronunciationRecordsToDeleteFromFileStorage.Add(Path.Combine(targetPronunciationRecordsPath, targetPronunciationRecord));
 				}
 			}
 		}
 
 		private static void SavePronunciationRecordsChanges(MergeUpdate mergeUpdate)
 		{
-			foreach (var pronunciationRecordsToAdd in mergeUpdate.PronunciationRecordsToAdd)
+			foreach (var pronunciationRecordsToAdd in mergeUpdate.PronunciationRecordsToAddToFileStorage)
 			{
 				File.Copy(pronunciationRecordsToAdd.SourcePath, pronunciationRecordsToAdd.TargetPath);
 			}
 
-			foreach (var pronunciationRecordsToDelete in mergeUpdate.PronunciationRecordsToDelete)
+			foreach (var pronunciationRecordsToDelete in mergeUpdate.PronunciationRecordsToDeleteFromFileStorage)
 			{
 				File.Delete(pronunciationRecordsToDelete);
 			}

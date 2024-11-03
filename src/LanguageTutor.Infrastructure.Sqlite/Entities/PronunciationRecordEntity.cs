@@ -17,5 +17,10 @@ namespace LanguageTutor.Infrastructure.Sqlite.Entities
 		public int DataLength { get; set; }
 
 		public int DataChecksum { get; set; }
+
+		// This navigation property was added to let EF Core know about foreign key dependency from PronunciationRecords table to Texts table.
+		// Without it the MergeDatabases utility fails, because EF Core tries to add new PronunciationRecords entries before adding new Texts entries.
+		// As result, the error "FOREIGN KEY constraint failed" is thrown.
+		public TextEntity Text { get; set; }
 	}
 }
