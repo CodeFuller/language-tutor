@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using LanguageTutor.Events;
 using LanguageTutor.Models;
 using LanguageTutor.Services.Interfaces;
+using LanguageTutor.ViewModels.Collections;
 using LanguageTutor.ViewModels.ContextMenu;
 using LanguageTutor.ViewModels.Extensions;
 using LanguageTutor.ViewModels.Interfaces;
@@ -89,7 +89,7 @@ namespace LanguageTutor.ViewModels
 			}
 		}
 
-		private ObservableCollection<TranslationViewModel> Translations { get; } = new();
+		private SmartObservableCollection<TranslationViewModel> Translations { get; } = new();
 
 		public IReadOnlyCollection<TranslationViewModel> FilteredTranslations => Translations.Where(TranslationMatchesFilter).ToList();
 
