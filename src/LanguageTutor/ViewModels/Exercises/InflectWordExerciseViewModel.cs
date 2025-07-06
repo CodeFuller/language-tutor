@@ -32,7 +32,7 @@ namespace LanguageTutor.ViewModels.Exercises
 
 		public string Description => exercise.Description;
 
-		private IReadOnlyList<InflectWordFormViewModel> WordFormViewModelList { get; set; }
+		private List<InflectWordFormViewModel> WordFormViewModelList { get; set; }
 
 		public ObservableCollection<IInflectWordFormViewModel> WordFormViewModels { get; } = new();
 

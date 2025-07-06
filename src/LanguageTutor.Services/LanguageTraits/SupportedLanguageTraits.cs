@@ -7,7 +7,7 @@ namespace LanguageTutor.Services.LanguageTraits
 {
 	internal class SupportedLanguageTraits : ISupportedLanguageTraits
 	{
-		private readonly IReadOnlyDictionary<ItemId, ILanguageTraits> languagesTraits;
+		private readonly Dictionary<ItemId, ILanguageTraits> languagesTraits;
 
 		public SupportedLanguageTraits(IEnumerable<ILanguageTraits> languagesTraits)
 		{

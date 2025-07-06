@@ -7,6 +7,8 @@
     <Rule Id="CA1707" Action="None" /> <!-- Identifiers should not contain underscores -->
     <Rule Id="CA1812" Action="None" /> <!-- Avoid uninstantiated internal classes -->
     <Rule Id="CA1848" Action="None" /> <!-- For improved performance, use the LoggerMessage delegates -->
+    <Rule Id="CA1859" Action="None" /> <!-- Use concrete types when possible for improved performance -->
+    <Rule Id="CA1861" Action="None" /> <!-- Avoid constant arrays as arguments -->
     <Rule Id="CA2007" Action="None" /> <!-- Do not directly await a Task -->
     <Rule Id="CA2254" Action="None" /> <!-- The logging message template should not vary between calls -->
   </Rules>

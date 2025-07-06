@@ -65,7 +65,7 @@ namespace LanguageTutor.ViewModels
 
 		private Language KnownLanguage { get; set; }
 
-		private IReadOnlyList<BasicExercise> Exercises { get; set; }
+		private List<BasicExercise> Exercises { get; set; }
 
 		public int NumberOfExercisesToPerform => Exercises.Count;
 

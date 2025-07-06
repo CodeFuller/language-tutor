@@ -35,6 +35,6 @@ namespace LanguageTutor.MergeDatabases
 							   AddedTranslations == 0 && DeletedTranslations == 0 &&
 							   AddedInflectWordExercises == 0 && UpdatedInflectWordExercises == 0 && DeletedInflectWordExercises == 0 &&
 							   AddedPronunciationRecords == 0 && UpdatedPronunciationRecords == 0 && DeletedPronunciationRecords == 0 &&
-							   !PronunciationRecordsToAddToFileStorage.Any() && !PronunciationRecordsToDeleteFromFileStorage.Any();
+							   PronunciationRecordsToAddToFileStorage.Count == 0 && PronunciationRecordsToDeleteFromFileStorage.Count == 0;
 	}
 }

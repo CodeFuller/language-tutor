@@ -13,7 +13,7 @@ namespace LanguageTutor.Models.Exercises
 		{
 			get
 			{
-				if (!FormResults.Any())
+				if (FormResults.Count == 0)
 				{
 					throw new InvalidOperationException("InflectWordExerciseResult does not contain form results");
 				}

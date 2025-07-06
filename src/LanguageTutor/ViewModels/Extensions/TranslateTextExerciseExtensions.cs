@@ -45,7 +45,7 @@ namespace LanguageTutor.ViewModels.Extensions
 
 		public static string GetHintForOtherSynonyms(this TranslateTextExercise translateTextExercise)
 		{
-			if (!translateTextExercise.OtherSynonymsInStudiedLanguage.Any())
+			if (translateTextExercise.OtherSynonymsInStudiedLanguage.Count == 0)
 			{
 				return String.Empty;
 			}

@@ -142,7 +142,7 @@ namespace LanguageTutor.Services
 
 			var today = Today;
 
-			var firstDateForUpdate = existingUserStatistics.Any() && existingUserStatistics.Last().Date < today ? existingUserStatistics.Last().Date.AddDays(1) : today;
+			var firstDateForUpdate = existingUserStatistics.Count > 0 && existingUserStatistics.Last().Date < today ? existingUserStatistics.Last().Date.AddDays(1) : today;
 
 			for (var date = firstDateForUpdate; date <= today; date = date.AddDays(1))
 			{

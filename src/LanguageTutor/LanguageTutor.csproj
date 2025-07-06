@@ -5,19 +5,24 @@
   </ImportGroup>
 
   <PropertyGroup>
-    <Version>3.0.14</Version>
+    <Version>3.1.0</Version>
     <OutputType>WinExe</OutputType>
+    <!--
+    SelfContained property is required because publish is executed with no-build switch.
+    For more details see https://stackoverflow.com/a/78708163/5740031
+    -->
+    <SelfContained>true</SelfContained>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>LanguageTutor.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeFuller.Library.Logging" Version="8.2.0" />
-    <PackageReference Include="CodeFuller.Library.Wpf" Version="8.2.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="CodeFuller.Library.Logging" Version="9.0.0" />
+    <PackageReference Include="CodeFuller.Library.Wpf" Version="9.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.950" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
-    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
   </ItemGroup>
 

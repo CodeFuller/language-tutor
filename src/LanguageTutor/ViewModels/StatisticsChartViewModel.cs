@@ -52,24 +52,24 @@ namespace LanguageTutor.ViewModels
 
 		internal static IReadOnlyCollection<ISeries> GetSeries(IReadOnlyCollection<UserStatisticsData> statistics)
 		{
-			return new[]
-			{
+			return
+			[
 				GetNumberOfExercisesSeries(statistics.Select(x => x.TotalNumberOfExercises).ToList()),
-				GetNumberOfLearnedExercisesSeries(statistics.Select(x => x.TotalNumberOfLearnedExercises).ToList()),
-			};
+				GetNumberOfLearnedExercisesSeries(statistics.Select(x => x.TotalNumberOfLearnedExercises).ToList())
+			];
 		}
 
-		private static ISeries GetNumberOfExercisesSeries(IEnumerable<int> values)
+		private static LineSeries<int, SquareGeometry> GetNumberOfExercisesSeries(IEnumerable<int> values)
 		{
 			return GetSeries("Number of exercises", values, SKColors.Blue);
 		}
 
-		private static ISeries GetNumberOfLearnedExercisesSeries(IEnumerable<int> values)
+		private static LineSeries<int, SquareGeometry> GetNumberOfLearnedExercisesSeries(IEnumerable<int> values)
 		{
 			return GetSeries("Number of learned exercises", values, SKColors.Green);
 		}
 
-		private static ISeries GetSeries(string name, IEnumerable<int> values, SKColor color)
+		private static LineSeries<int, SquareGeometry> GetSeries(string name, IEnumerable<int> values, SKColor color)
 		{
 			return new LineSeries<int, SquareGeometry>
 			{

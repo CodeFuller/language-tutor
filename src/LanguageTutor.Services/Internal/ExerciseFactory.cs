@@ -65,7 +65,7 @@ namespace LanguageTutor.Services.Internal
 			return exercisesData.Select(x => new InflectWordExercise(x.ExerciseId, x.CreationTimestamp, GetDescriptionForInflectWordExercise(x, templates), x.BaseForm, x.WordForms, x.ExerciseResults));
 		}
 
-		private static string GetDescriptionForInflectWordExercise(InflectWordExerciseData exerciseData, IReadOnlyDictionary<ItemId, InflectWordExerciseDescriptionTemplate> templates)
+		private static string GetDescriptionForInflectWordExercise(InflectWordExerciseData exerciseData, Dictionary<ItemId, InflectWordExerciseDescriptionTemplate> templates)
 		{
 			return !String.IsNullOrEmpty(exerciseData.Description)
 				? exerciseData.Description

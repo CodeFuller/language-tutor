@@ -8,7 +8,7 @@ namespace LanguageTutor.Services.Internal
 {
 	internal class NextExerciseDateProvider : INextExerciseDateProvider
 	{
-		private static readonly IReadOnlyList<int> ExerciseIntervals = new List<int>
+		private static readonly List<int> ExerciseIntervals = new()
 		{
 			// If the last (^1) exercise was failed, we add 1 day to the last exercise date.
 			+1,
