@@ -9,5 +9,11 @@ namespace LanguageTutor.Services.LanguageTraits
 			Id = new ItemId("2"),
 			Name = "Polish",
 		};
+
+		public static Language English { get; } = new()
+		{
+			Id = new ItemId("3"),
+			Name = "English",
+		};
 	}
 }

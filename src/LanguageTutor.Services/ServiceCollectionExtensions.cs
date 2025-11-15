@@ -22,6 +22,7 @@ namespace LanguageTutor.Services
 			services.AddSingleton<IDictionaryService, DictionaryService>();
 
 			services.AddSingleton<ILanguageTraits, PolishLanguageTraits>();
+			services.AddSingleton<ILanguageTraits, EnglishLanguageTraits>();
 			services.AddSingleton<ISupportedLanguageTraits, SupportedLanguageTraits>();
 
 			services.AddHttpClient<IPronunciationRecordSynthesizer, GoogleTextToSpeechSynthesizer>();
