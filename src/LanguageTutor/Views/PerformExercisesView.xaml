@@ -15,6 +15,7 @@
 
     <UserControl.Resources>
         <valueConverters:VisibilityCollapsedValueConverter x:Key="InvertedVisibilityCollapsedValueConverter" InvertedVisibility="True" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid>

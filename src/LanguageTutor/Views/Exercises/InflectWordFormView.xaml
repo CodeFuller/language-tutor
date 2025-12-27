@@ -10,6 +10,11 @@
              d:DesignWidth="400" d:DesignHeight="44"
              d:DataContext="{d:DesignInstance exercises:InflectWordFormDesignData, IsDesignTimeCreatable=True}"
              d:DesignStyle="{StaticResource ApplicationWindowStyle}">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" />
