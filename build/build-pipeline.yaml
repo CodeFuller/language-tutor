@@ -32,6 +32,11 @@ stages:
             throw 'The application version is missing in cpsroj file'
         }
 
+        # $appVersion is array if csproj contains multiple PropertyGroup elements.
+        if ($appVersion -is [object[]]) {
+            $appVersion = $appVersion[0]
+        }
+
         if ('$(Build.SourceBranchName)' -ine '$(ReleaseBranchName)') {
             $buildVersionSuffix = '-preview'
         }
