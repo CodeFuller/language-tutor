@@ -38,7 +38,7 @@
             </Grid>
             <ListBox Grid.Row="1" Name="TranslationsListBox" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ItemsSource="{Binding FilteredTranslations}" SelectedItem="{Binding SelectedTranslation}"
-                     BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}" />
+                     BorderThickness="1" BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
         </Grid>
 
         <Grid Grid.Column="1" Margin="5">

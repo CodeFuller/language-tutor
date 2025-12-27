@@ -20,7 +20,7 @@
 
         <ListBox Grid.Row="0" Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding ProblematicExercises}" SelectedItem="{Binding SelectedExercise}"
-                 BorderThickness="1" BorderBrush="{DynamicResource PrimaryHueLightBrush}">
+                 BorderThickness="1" BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>

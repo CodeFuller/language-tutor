@@ -6,7 +6,6 @@
         https://stackoverflow.com/a/40866918/5740031
     -->
     <Style x:Key="ApplicationWindowStyle" TargetType="{x:Type Control}">
-        <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
         <Setter Property="FontFamily" Value="{materialDesign:MaterialDesignFont}" />
         <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}" />
         <Setter Property="TextElement.FontWeight" Value="Regular" />
