@@ -576,13 +576,13 @@ namespace LanguageTutor.UnitTests.ViewModels
 			validationErrors.Single().Should().Be("Please type text");
 		}
 
-		[DataTestMethod]
 		[DataRow(" new text", "Please remove leading whitespaces")]
 		[DataRow("\tnew text", "Please remove leading whitespaces")]
 		[DataRow("new text ", "Please remove trailing whitespaces")]
 		[DataRow("new text\t", "Please remove trailing whitespaces")]
 		[DataRow("new  text", "Please remove duplicated whitespaces")]
 		[DataRow("new\t\ttext", "Please remove duplicated whitespaces")]
+		[TestMethod]
 		public async Task GetErrors_ForTextPropertyIfTextContentIsInvalid_ReturnsCorrectError(string textValue, string expectedValidationError)
 		{
 			// Arrange
@@ -781,13 +781,13 @@ namespace LanguageTutor.UnitTests.ViewModels
 			validationErrors.Should().BeEmpty();
 		}
 
-		[DataTestMethod]
 		[DataRow(" new note", "Please remove leading whitespaces")]
 		[DataRow("\tnew note", "Please remove leading whitespaces")]
 		[DataRow("new note ", "Please remove trailing whitespaces")]
 		[DataRow("new note\t", "Please remove trailing whitespaces")]
 		[DataRow("new  note", "Please remove duplicated whitespaces")]
 		[DataRow("new\t\tnote", "Please remove duplicated whitespaces")]
+		[TestMethod]
 		public async Task GetErrors_ForNotePropertyIfNoteContentIsInvalid_ReturnsCorrectError(string noteValue, string expectedValidationError)
 		{
 			// Arrange

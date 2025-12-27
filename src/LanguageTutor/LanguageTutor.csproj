@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ImportGroup Label="Properties">
     <Import Project="..\..\LanguageTutor.src.props" />
@@ -17,8 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CodeFuller.Library.Logging" Version="9.0.0" />
-    <PackageReference Include="CodeFuller.Library.Wpf" Version="9.0.0" />
+    <PackageReference Include="CodeFuller.Library.Logging" Version="10.0.0" />
+    <PackageReference Include="CodeFuller.Library.Wpf" Version="10.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.950" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
@@ -46,5 +46,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU1903</NoWarn>
+  </PropertyGroup>
 
 </Project>

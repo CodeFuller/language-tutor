@@ -34,7 +34,7 @@ namespace LanguageTutor.UnitTests.Helpers
 
 		public ICommand GoToStartPageCommand => null;
 
-		public static Func<EquivalencyAssertionOptions<EditDictionaryViewModelData>, EquivalencyAssertionOptions<EditDictionaryViewModelData>> ExcludingCommands
+		public static Func<EquivalencyOptions<EditDictionaryViewModelData>, EquivalencyOptions<EditDictionaryViewModelData>> ExcludingCommands
 		{
 			get
 			{

@@ -49,7 +49,7 @@ namespace LanguageTutor.UnitTests.Helpers
 
 		public ICommand ProcessEnterKeyCommand => null;
 
-		public static Func<EquivalencyAssertionOptions<EditExistingTextViewModelData>, EquivalencyAssertionOptions<EditExistingTextViewModelData>> ExcludingCommands
+		public static Func<EquivalencyOptions<EditExistingTextViewModelData>, EquivalencyOptions<EditExistingTextViewModelData>> ExcludingCommands
 		{
 			get
 			{

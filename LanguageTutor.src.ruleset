@@ -4,6 +4,7 @@
     <Rule Id="CA1014" Action="None" /> <!-- Mark assemblies with CLSCompliantAttribute -->
     <Rule Id="CA1062" Action="None" /> <!-- Validate arguments of public methods -->
     <Rule Id="CA1303" Action="None" /> <!-- Do not pass literals as localized parameters -->
+    <Rule Id="CA1515" Action="None" /> <!-- Consider making public types internal -->
     <Rule Id="CA1812" Action="None" /> <!-- Avoid uninstantiated internal classes -->
     <Rule Id="CA1848" Action="None" /> <!-- For improved performance, use the LoggerMessage delegates -->
     <Rule Id="CA2007" Action="None" /> <!-- Do not directly await a Task -->

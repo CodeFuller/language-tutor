@@ -26,11 +26,11 @@ namespace LanguageTutor.UnitTests.ViewModels
 			Name = "Test Known Language",
 		};
 
-		[DataTestMethod]
 		[DataRow(0, 0, "0")]
 		[DataRow(123, 123, "123")]
 		[DataRow(123, 456, "123 (456)")]
 		[DataRow(0, 123, "0 (123)")]
+		[TestMethod]
 		public async Task RestNumberOfExercisesToPerformTodayGetter_ReturnsCorrectValue(int restNumberOfExercisesToPerformToday, int restNumberOfExercisesToPerformTodayIfNoLimit, string expectedValue)
 		{
 			// Arrange
